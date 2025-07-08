@@ -15,8 +15,8 @@ router.route('/').get(async (req, res) => {
 
 // Add a new deck
 router.route('/add').post(async (req, res) => {
-  const name = req.body.name;
-  const newDeck = new Deck({ name });
+  const { name, color, cards_id, userId, firstCardNextReview } = req.body;
+  const newDeck = new Deck({ name, color, cards_id, userId, firstCardNextReview });
 
   try {
     await newDeck.save();
@@ -51,7 +51,11 @@ router.route('/update/:id').post(async (req, res) => {
   try {
     const deck = await Deck.findById(req.params.id);
     if (deck) {
-      deck.name = req.body.name;
+      deck.name = req.body.name || deck.name;
+      deck.color = req.body.color || deck.color;
+      deck.cards_id = req.body.cards_id || deck.cards_id;
+      deck.userId = req.body.userId || deck.userId;
+      deck.firstCardNextReview = req.body.firstCardNextReview || deck.firstCardNextReview;
       await deck.save();
       res.json('Deck updated!');
     } else {

@@ -26,7 +26,7 @@ router.route('/deck/:deckId').get(async (req, res) => {
 
 // Add a new card to a deck
 router.route('/add').post(async (req, res) => {
-  const { deckId, question, answer } = req.body;
+  const { deckId, front, back, cardType, lastReview, nextReview, gameOptions } = req.body;
 
   try {
     const deck = await Deck.findById(deckId);
@@ -36,8 +36,12 @@ router.route('/add').post(async (req, res) => {
 
     const newCard = new Card({
       deck: deckId,
-      question,
-      answer
+      front,
+      back,
+      cardType,
+      lastReview,
+      nextReview,
+      gameOptions
     });
 
     await newCard.save();
@@ -72,8 +76,12 @@ router.route('/update/:id').post(async (req, res) => {
   try {
     const card = await Card.findById(req.params.id);
     if (card) {
-      card.question = req.body.question;
-      card.answer = req.body.answer;
+      card.front = req.body.front;
+      card.back = req.body.back;
+      card.cardType = req.body.cardType || card.cardType;
+      card.lastReview = req.body.lastReview || card.lastReview;
+      card.nextReview = req.body.nextReview || card.nextReview;
+      card.gameOptions = req.body.gameOptions || card.gameOptions;
       await card.save();
       res.json('Card updated!');
     } else {
