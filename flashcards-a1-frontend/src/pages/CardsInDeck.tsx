@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+import RemarkGfm from 'remark-gfm';
+import { htmlToMarkdown } from '../utils/htmlToMarkdown';
 
 interface Card {
   _id: string;
@@ -70,8 +73,16 @@ const CardsInDeck: React.FC = () => {
         {cards.length > 0 ? (
           cards.map(card => (
             <div key={card._id} className="bg-[#f0f2f4] rounded-lg p-4 shadow-md flex flex-col justify-between min-h-[120px]">
-              <h3 className="text-lg font-semibold mb-2 text-[#111418]">{card.front}</h3>
-              <p className="text-[#637488]">{card.back}</p>
+              <h3 className="text-lg font-semibold mb-2 text-[#111418]">
+                <ReactMarkdown remarkPlugins={[RemarkGfm]}>
+                  {htmlToMarkdown(card.front)}
+                </ReactMarkdown>
+              </h3>
+              <p className="text-[#637488]">
+                <ReactMarkdown remarkPlugins={[RemarkGfm]}>
+                  {htmlToMarkdown(card.back)}
+                </ReactMarkdown>
+              </p>
               <div className="flex justify-end mt-4">
                 <Link to={`/edit-card/${card._id}`} className="text-[#007bff] hover:underline text-sm">
                   Edit
