@@ -5,6 +5,7 @@ const router = express.Router();
 
 // Get all decks
 router.route('/').get(async (req, res) => {
+  console.log('Solicitud recibida para obtener todos los mazos');
   try {
     const decks = await Deck.find();
     res.json(decks);

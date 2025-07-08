@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 interface Deck {
   _id: string;
@@ -15,6 +16,7 @@ interface Deck {
 
 const Decks: React.FC = () => {
   const [decks, setDecks] = useState<Deck[]>([]);
+  const [newDeckColor, setNewDeckColor] = useState<string>('');
 
   useEffect(() => {
     axios.get('http://localhost:5000/decks/')
@@ -27,25 +29,27 @@ const Decks: React.FC = () => {
   }, []);
 
   const DeckItem: React.FC<{ deck: Deck }> = ({ deck }) => (
-    <div className="flex items-center gap-4 bg-white px-4 min-h-14 justify-between">
-      <div className="flex items-center gap-4">
-        <div className="text-[#111418] flex items-center justify-center rounded-lg bg-[#f0f2f4] shrink-0 size-10" data-icon="Folder" data-size="24px" data-weight="regular">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-            <path
-              d="M216,72H131.31L104,44.69A15.86,15.86,0,0,0,92.69,40H40A16,16,0,0,0,24,56V200.62A15.4,15.4,0,0,0,39.38,216H216.89A15.13,15.13,0,0,0,232,200.89V88A16,16,0,0,0,216,72ZM40,56H92.69l16,16H40ZM216,200H40V88H216Z"
-            ></path>
-          </svg>
+    <Link to={`/decks/${deck._id}/cards`}>
+      <div className="flex items-center gap-4 bg-white px-4 min-h-14 justify-between">
+        <div className="flex items-center gap-4">
+          <div className="text-[#111418] flex items-center justify-center rounded-lg bg-[#f0f2f4] shrink-0 size-10" data-icon="Folder" data-size="24px" data-weight="regular">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+              <path
+                d="M216,72H131.31L104,44.69A15.86,15.86,0,0,0,92.69,40H40A16,16,0,0,0,24,56V200.62A15.4,15.4,0,0,0,39.38,216H216.89A15.13,15.13,0,0,0,232,200.89V88A16,16,0,0,0,216,72ZM40,56H92.69l16,16H40ZM216,200H40V88H216Z"
+              ></path>
+            </svg>
+          </div>
+          <p className="text-[#111418] text-base font-normal leading-normal flex-1 truncate">{deck.name}</p>
         </div>
-        <p className="text-[#111418] text-base font-normal leading-normal flex-1 truncate">{deck.name}</p>
-      </div>
-      <div className="shrink-0">
-        <div className="text-[#111418] flex size-7 items-center justify-center" data-icon="CaretRight" data-size="24px" data-weight="regular">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-            <path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path>
-          </svg>
+        <div className="shrink-0">
+          <div className="text-[#111418] flex size-7 items-center justify-center" data-icon="CaretRight" data-size="24px" data-weight="regular">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+              <path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path>
+            </svg>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 
   return (
@@ -80,7 +84,8 @@ const Decks: React.FC = () => {
             <input
               placeholder="Deck color"
               className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border-none bg-[#f0f2f4] focus:border-none h-14 placeholder:text-[#637488] p-4 text-base font-normal leading-normal"
-              value=""
+              value={newDeckColor}
+              onChange={(e) => setNewDeckColor(e.target.value)}
             />
           </label>
         </div>
@@ -90,7 +95,7 @@ const Decks: React.FC = () => {
       </div>
       <div>
         <div className="flex flex-row gap-2 border-t border-[#f0f2f4] bg-white px-4 pb-3 pt-2">
-          <a className="flex items-center justify-end gap-1 text-[#637488]" href="#">
+          <Link className="flex items-center justify-end gap-1 text-[#637488]" to="/">
             <div className="text-[#637488] flex h-8 items-center justify-center" data-icon="House" data-size="24px" data-weight="regular">
               <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
                 <path
@@ -99,8 +104,8 @@ const Decks: React.FC = () => {
               </svg>
             </div>
             <p className="text-[#637488] text-xs font-medium leading-normal tracking-[0.015em]">Home</p>
-          </a>
-          <a className="flex items-center justify-end gap-1 rounded-full text-[#111418]" href="#">
+          </Link>
+          <Link className="flex items-center justify-end gap-1 rounded-full text-[#111418]" to="/decks">
             <div className="text-[#111418] flex h-8 items-center justify-center" data-icon="Folder" data-size="24px" data-weight="fill">
               <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
                 <path
@@ -109,8 +114,8 @@ const Decks: React.FC = () => {
               </svg>
             </div>
             <p className="text-[#111418] text-xs font-medium leading-normal tracking-[0.015em]">Decks</p>
-          </a>
-          <a className="flex items-center justify-end gap-1 text-[#637488]" href="#">
+          </Link>
+          <Link className="flex items-center justify-end gap-1 text-[#637488]" to="/study">
             <div className="text-[#637488] flex h-8 items-center justify-center" data-icon="Cards" data-size="24px" data-weight="regular">
               <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
                 <path
@@ -119,8 +124,8 @@ const Decks: React.FC = () => {
               </svg>
             </div>
             <p className="text-[#637488] text-xs font-medium leading-normal tracking-[0.015em]">Study</p>
-          </a>
-          <a className="flex items-center justify-end gap-1 text-[#637488]" href="#">
+          </Link>
+          <Link className="flex items-center justify-end gap-1 text-[#637488]" to="/profile">
             <div className="text-[#637488] flex h-8 items-center justify-center" data-icon="User" data-size="24px" data-weight="regular">
               <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
                 <path
@@ -129,7 +134,7 @@ const Decks: React.FC = () => {
               </svg>
             </div>
             <p className="text-[#637488] text-xs font-medium leading-normal tracking-[0.015em]">Profile</p>
-          </a>
+          </Link>
         </div>
         <div className="h-5 bg-white"></div>
       </div>

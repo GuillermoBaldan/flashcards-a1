@@ -15,8 +15,8 @@ const gameOptionsSchema = new Schema({
 }, { _id: false });
 
 const cardSchema = new Schema({
-  deck: {
-    type: Schema.Types.ObjectId,
+  deckId: {
+    type: String,
     ref: 'Deck',
     required: true
   },

@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import Deck from './models/deck.model.js'; // Importar el modelo Deck
 
 import decksRouter from './routes/decks.js';
 import cardsRouter from './routes/cards.js';
@@ -11,12 +12,29 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const uri = process.env.ATLAS_URI || 'mongodb://localhost/flashcards';
+const uri = process.env.ATLAS_URI || 'mongodb://localhost/Flashcards';
 mongoose.connect(uri);
 
 const connection = mongoose.connection;
-connection.once('open', () => {
+connection.once('open', async () => {
   console.log('MongoDB database connection established successfully');
+  try {
+    const collections = await mongoose.connection.db.listCollections().toArray();
+    console.log('Colecciones encontradas en la base de datos Flashcards:');
+    collections.forEach(col => console.log(`- ${col.name}`));
+
+    const decks = await Deck.find();
+    if (decks.length > 0) {
+      console.log('Mazos encontrados al iniciar el servidor:');
+      decks.forEach(deck => {
+        console.log(`- ${deck.name}`);
+      });
+    } else {
+      console.log('No se encontraron mazos en la base de datos al iniciar el servidor.');
+    }
+  } catch (err) {
+    console.error('Error al obtener colecciones/mazos al iniciar el servidor:', err);
+  }
 })
 
 // app.get('/', (req, res) => {

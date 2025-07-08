@@ -1,6 +1,7 @@
 import express from 'express';
 import Card from '../models/card.model.js';
 import Deck from '../models/deck.model.js';
+import mongoose from 'mongoose'; // Importa mongoose
 
 const router = express.Router();
 
@@ -15,11 +16,15 @@ router.route('/').get(async (req, res) => {
 });
 
 // Get cards by deck ID
-router.route('/deck/:deckId').get(async (req, res) => {
+router.route('/deck/:deckId').get(async (req, res) => { // Revertido a /deck/:deckId
+  console.log(`Solicitud recibida para /cards/deck/${req.params.deckId}`);
   try {
-    const cards = await Card.find({ deck: req.params.deckId });
+    // Ya no es necesario convertir a ObjectId, el campo deckId en el modelo es String
+    const cards = await Card.find({ deckId: req.params.deckId });
+    console.log(cards)
     res.json(cards);
   } catch (err) {
+    console.error(`Error al obtener tarjetas para el mazo ${req.params.deckId}:`, err);
     res.status(400).json('Error: ' + err);
   }
 });
