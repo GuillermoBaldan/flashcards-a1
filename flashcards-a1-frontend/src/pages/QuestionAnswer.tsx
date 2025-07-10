@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import useAdjustFontSize from '../utils/dynamicFontSize';
 
 interface Deck {
   _id: string;
@@ -27,11 +28,24 @@ const QuestionAnswer: React.FC = () => {
       });
   }, []);
 
-  const DeckTile: React.FC<{ deck: Deck }> = ({ deck }) => (
+  const DeckTile: React.FC<{ deck: Deck }> = ({ deck }) => {
+    const deckTileRef = useRef<HTMLAnchorElement>(null);
+    const [containerWidth, setContainerWidth] = useState(0);
+
+    useEffect(() => {
+      if (deckTileRef.current) {
+        setContainerWidth(deckTileRef.current.offsetWidth);
+      }
+    }, []);
+
+    const { fontSize, textRef } = useAdjustFontSize(deck.name, containerWidth, 32); // Start with a larger initial font size
+
+    return (
     <Link
       to={`/decks/${deck._id}/cards`}
       className="flex flex-col items-start gap-2 rounded-2xl p-4 shadow-sm border h-36 "
       style={{ borderColor: 'black', backgroundColor: deck.color || '#ffffff', borderWidth: '3px', margin: "1rem", borderRadius: '1rem' }}
+      ref={deckTileRef}
     >
       <div className="flex items-center justify-center rounded-lg bg-[#f0f2f4] shrink-0 size-10" >
         <svg
@@ -53,11 +67,11 @@ const QuestionAnswer: React.FC = () => {
           </g>
         </svg>
       </div>
-      <p className="text-[#111418] text-base font-bold leading-normal truncate w-full">{deck.name}</p>
-      <p className="text-[#637488] text-sm">{deck.cards_id.length} cards</p>
+      <p ref={textRef} className="text-[#111418] font-bold leading-normal truncate w-full" style={{ fontSize: `${fontSize}px` }}>{deck.name}</p>
+      <p className="text-[black] text-sm">{deck.cards_id.length} cards</p>
     </Link>
-  );
-
+    );
+  };
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-white justify-between group/design-root overflow-x-hidden" style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}>
       <div>
