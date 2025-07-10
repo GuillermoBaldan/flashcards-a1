@@ -146,21 +146,21 @@ const EditCard: React.FC = () => {
 
       {/* Botones de acción inferiores */}
       <div className="w-full max-w-screen-xl mx-auto p-4 flex justify-center">
-        <div className="flex justify-stretch">
-          <div className="flex flex-1 gap-8 flex-wrap px-4 py-3 justify-between">
-            <button
-              className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#f0f2f4] text-[#111418] text-sm font-bold leading-normal tracking-[0.015em]"
-              onClick={handleDelete}
-            >
-              <span className="truncate">Delete</span>
-            </button>
-            <button
-              className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#166cce] text-white text-sm font-bold leading-normal tracking-[0.015em]"
-              onClick={handleSave}
-            >
-              <span className="truncate">Save</span>
-            </button>
-          </div>
+        <div className="flex flex-1 gap-16 flex-wrap px-4 py-3 justify-center">
+          <button
+            className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#f0f2f4] text-[#111418] text-sm font-bold leading-normal tracking-[0.015em]"
+            onClick={handleDelete}
+            style={{ margin: '1rem' }}
+          >
+            <span className="truncate">Delete</span>
+          </button>
+          <button
+            className="m-16 block flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#166cce] text-white text-sm font-bold leading-normal tracking-[0.015em]"
+            onClick={handleSave}
+            style={{ margin: '1rem' }}
+          >
+            <span className="truncate">Save</span>
+          </button>
         </div>
         <div className="h-5 bg-white"></div>
       </div>
