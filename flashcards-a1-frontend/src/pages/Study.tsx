@@ -178,7 +178,7 @@ const Study: React.FC = () => {
       {deck.cardsForStudy && deck.cardsForStudy > 0 ? (
         <p className="text-white text-sm" style={{ color: 'red' }}>{deck.cardsForStudy} cards for study</p>
       ) : (
-        <p className="text-white text-sm">{deck.nextReviewTimeRemaining || 'No hay cartas para estudiar'}</p>
+        <p className="text-white text-sm">Próximo repaso {deck.nextReviewTimeRemaining || 'No hay cartas para estudiar'}</p>
       )}
       <p className="text-white text-sm">{deck.cardsReviewed || 0} cards reviewed</p>
     </Link>
