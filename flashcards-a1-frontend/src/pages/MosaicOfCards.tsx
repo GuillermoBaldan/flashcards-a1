@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import CardItem from '../components/CardItem'; // Importar el nuevo componente
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { htmlToMarkdown } from '../utils/htmlToMarkdown';
@@ -38,6 +39,19 @@ const MosaicOfCards: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [deckName, setDeckName] = useState<string>('');
 
+  const fetchCards = useCallback(async () => {
+    try {
+      setLoading(true);
+      const cardsResponse = await axios.get<Card[]>(`http://localhost:5000/cards/deck/${deckId}`);
+      setCards(cardsResponse.data);
+    } catch (err) {
+      console.error('Error fetching cards:', err);
+      setError('Error al cargar las tarjetas.');
+    } finally {
+      setLoading(false);
+    }
+  }, [deckId]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -46,8 +60,7 @@ const MosaicOfCards: React.FC = () => {
         const deckResponse = await axios.get(`http://localhost:5000/decks/${deckId}`);
         setDeckName(deckResponse.data.name);
 
-        const cardsResponse = await axios.get<Card[]>(`http://localhost:5000/cards/deck/${deckId}`);
-        setCards(cardsResponse.data);
+        fetchCards(); // Usar la nueva función para obtener las tarjetas
       } catch (err) {
         console.error('Error fetching data:', err);
         setError('Error al cargar los datos.');
@@ -59,7 +72,7 @@ const MosaicOfCards: React.FC = () => {
     if (deckId) {
       fetchData();
     }
-  }, [deckId]);
+  }, [deckId, fetchCards]);
 
   if (loading) {
     return <div className="text-center mt-8">Cargando cartas...</div>;
@@ -84,22 +97,7 @@ const MosaicOfCards: React.FC = () => {
       </button>
       <div className="w-full max-w-screen-xl gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
         {cards.map(card => (
-          <Link to={`/edit-card/${card._id}`} key={card._id}>
-            <div className="bg-white rounded-lg shadow-lg p-6 text-center border-solid border-3 border-black rounded-xl" style={{ height: 'auto', borderRadius: '0.5rem', cursor: 'pointer' }}>
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {htmlToMarkdown(card.front)}
-              </ReactMarkdown>
-              <p className="text-sm text-gray-600 mt-2">
-                <strong>lastReview:</strong> {formatTimestampToDateTime(card.lastReview)}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>nextReview:</strong> {formatTimestampToDateTime(card.nextReview)}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>ID:</strong> {card._id}
-              </p>
-            </div>
-          </Link>
+          <CardItem key={card._id} card={card} onCardDeleted={fetchCards} />
         ))}
       </div>
     </div>
