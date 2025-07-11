@@ -40,7 +40,7 @@ router.route('/add').post(async (req, res) => {
     }
 
     const newCard = new Card({
-      deck: deckId,
+      deckId: deckId,
       front,
       back,
       cardType,

@@ -9,7 +9,7 @@ import { htmlToMarkdown } from '../utils/htmlToMarkdown';
 const formatTimestampToDateTime = (ms: number): string => {
   if (ms <= 0) return 'N/A';
 
-  const date = new Date(ms);
+  const date = new Date(ms * 1000); // Multiplicar por 1000 para convertir segundos a milisegundos
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
