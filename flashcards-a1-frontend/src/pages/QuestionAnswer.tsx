@@ -5,6 +5,23 @@ import ReactMarkdown from 'react-markdown'; // Importa ReactMarkdown
 import remarkGfm from 'remark-gfm'; // Importa remarkGfm para soporte de tablas, etc.
 import { htmlToMarkdown } from '../utils/htmlToMarkdown'; // Importa la función de conversión
 
+// Función para formatear un timestamp a dd:hh:mm:ss
+const formatTimestampToDHMS = (ms: number): string => {
+  if (ms <= 0) return '00:00:00:00';
+
+  const totalSeconds = Math.floor(ms / 1000);
+  const seconds = totalSeconds % 60;
+  const totalMinutes = Math.floor(totalSeconds / 60);
+  const minutes = totalMinutes % 60;
+  const totalHours = Math.floor(totalMinutes / 60);
+  const hours = totalHours % 24;
+  const days = Math.floor(totalHours / 24);
+
+  const pad = (num: number) => num.toString().padStart(2, '0');
+
+  return `${pad(days)}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+};
+
 interface Card {
   _id: string;
   deckId: string;
@@ -80,11 +97,22 @@ const QuestionAnswer: React.FC = () => {
     const currentCard = cards[currentCardIndex];
     if (!currentCard) return;
 
-    const newNextReview = Date.now() + (correct ? 24 * 60 * 60 * 1000 : 5 * 60 * 1000);
+    const currentTime = Date.now(); // Obtener la hora actual una vez para consistencia
+
+    console.log("currentCard.lastReview:", currentCard.lastReview);
+    console.log("currentTime:", currentTime);
+
+    const newNextReview = correct
+      ? (currentCard.nextReview < 10000 // Si nextReview es un valor muy pequeño (prácticamente 0 o no inicializado)
+        ? currentTime + (30 * 1000) // Intervalo de 30 segundos para la primera revisión
+        : (currentCard.nextReview > currentTime
+          ? currentTime + (2 * (currentCard.nextReview - currentTime)) // nextReview > currentTime (carta programada a futuro)
+          : currentTime + (2 * (currentTime - currentCard.nextReview)))) // nextReview <= currentTime (carta vencida)
+      : currentTime + (5 * 60 * 1000); // Fórmula existente para fallos
 
     axios.post(`http://localhost:5000/cards/update/${currentCard._id}`, {
       ...currentCard,
-      lastReview: Date.now(),
+      lastReview: currentTime, // Asegurar que lastReview se actualice a la hora actual
       nextReview: newNextReview,
     })
     .then(() => {
@@ -156,7 +184,11 @@ const QuestionAnswer: React.FC = () => {
         )}
       </div>
       <div className="mt-4 text-gray-600">
-        Cartas restantes: {cards.length - 1} de {cards.length}
+        <p><strong>lastReview (timestamp):</strong> {currentCard.lastReview}</p>
+        <p><strong>lastReview (dd:hh:mm:ss):</strong> {formatTimestampToDHMS(currentCard.lastReview)}</p>
+        <p><strong>nextReview (timestamp):</strong> {currentCard.nextReview}</p>
+        <p><strong>nextReview (dd:hh:mm:ss):</strong> {formatTimestampToDHMS(currentCard.nextReview)}</p>
+        <p>Cartas restantes: {cards.length - 1} de {cards.length}</p>
       </div>
       <button
         onClick={() => navigate('/study')}
