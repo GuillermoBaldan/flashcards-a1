@@ -54,13 +54,15 @@ const Decks: React.FC = () => {
             let minNextReviewTime = Infinity;
 
             cardsInDeck.forEach(card => {
+              // Siempre actualiza minNextReviewTime con el menor nextReview entre todas las cartas
+              if (card.nextReview * 1000 < minNextReviewTime) {
+                minNextReviewTime = card.nextReview * 1000;
+              }
+
               if (card.nextReview * 1000 < currentTime) {
                 cardsForStudy++;
               } else {
                 cardsReviewed++;
-                if (card.nextReview * 1000 < minNextReviewTime) {
-                  minNextReviewTime = card.nextReview * 1000;
-                }
               }
             });
             

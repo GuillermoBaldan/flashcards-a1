@@ -42,8 +42,16 @@ const DeckTile: React.FC<{ deck: Deck }> = memo(({ deck }) => {
     const updateTime = () => {
       if (deck.minNextReviewTime !== undefined && deck.minNextReviewTime !== Infinity) {
         const currentTime = Date.now();
-        const remaining = deck.minNextReviewTime - currentTime;
-        setTimeRemaining(formatTimeRemaining(remaining));
+        let remaining = deck.minNextReviewTime - currentTime;
+
+        if (remaining < 0) {
+          // La carta debía haberse repasado hace tiempo
+          const timeAgo = formatTimeRemaining(Math.abs(remaining));
+          setTimeRemaining(`Tenías que repasar tu carta hace ${timeAgo}`);
+        } else {
+          // La carta aún no necesita ser repasada
+          setTimeRemaining(formatTimeRemaining(remaining));
+        }
       } else {
         setTimeRemaining(undefined);
       }
@@ -85,11 +93,18 @@ const DeckTile: React.FC<{ deck: Deck }> = memo(({ deck }) => {
         </svg>
       </div>
       <p ref={textRef} className="font-bold leading-normal truncate w-full" style={{ fontSize: `${fontSize}px`, color: textColor }}>{deck.name}</p>
-      {deck.cardsForStudy && deck.cardsForStudy > 0 ? (
-        <p className="text-sm" style={{ color: 'red' }}>{deck.cardsForStudy} cards for study</p>
-      ) : (
-        <p className="text-sm" style={{ color: textColor }}>Próximo repaso {timeRemaining || 'No hay cartas para estudiar'}</p>
+
+      {/* Mensaje de cartas para estudiar (solo si aplica) */}
+      {deck.cardsForStudy && deck.cardsForStudy > 0 && (
+        <p className="text-sm font-bold" style={{ color: 'red' }}>{deck.cardsForStudy} cards for study</p>
       )}
+
+      {/* Mensaje de tiempo de repaso (siempre visible, con color dinámico) */}
+      <p className="text-sm font-bold" style={timeRemaining && timeRemaining.startsWith('Tenías que repasar') ? { color: 'red', fontWeight: 'bold', backgroundColor: 'yellow' } : { color: textColor }}>
+        {timeRemaining || 'Próximo repaso: No hay cartas para estudiar'}
+      </p>
+
+      {/* Mensaje de cartas repasadas */}
       <p className="text-sm" style={{ color: textColor }}>{(deck.cardsReviewed ?? 0)} cards reviewed</p>
     </Link>
   );

@@ -1,7 +1,10 @@
 const formatTimeRemaining = (ms: number): string => {
-  if (ms <= 0) return 'Ahora mismo';
+  const isPast = ms < 0;
+  const absoluteMs = Math.abs(ms);
 
-  const totalSeconds = Math.floor(ms / 1000);
+  if (absoluteMs <= 0 && !isPast) return 'Ahora mismo';
+
+  const totalSeconds = Math.floor(absoluteMs / 1000);
   const seconds = totalSeconds % 60;
   const totalMinutes = Math.floor(totalSeconds / 60);
   const minutes = totalMinutes % 60;
@@ -20,6 +23,7 @@ const formatTimeRemaining = (ms: number): string => {
   if (minutes > 0) {
     parts.push(`${minutes} minuto${minutes > 1 ? 's' : ''}`);
   }
+  // Always include seconds if no other parts are present, or if seconds > 0
   if (seconds > 0 || parts.length === 0) {
       parts.push(`${seconds} segundo${seconds > 1 ? 's' : ''}`);
   }
@@ -36,7 +40,7 @@ const formatTimeRemaining = (ms: number): string => {
     result = `${parts.join(', ')} y ${lastPart}`;
   }
 
-  return `en ${result}`;
+  return isPast ? `Tenías que repasar tu carta hace ${result}` : `en ${result}`;
 };
 
 export { formatTimeRemaining }; 
