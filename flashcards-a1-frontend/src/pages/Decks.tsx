@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import useAdjustFontSize from '../utils/dynamicFontSize';
 import { formatTimeRemaining } from '../utils/formatTimeRemaining'; // Asegúrate de que esta utilidad existe o la crearé
+import NavigationBar from '../components/NavigationBar';
 
 interface Card {
   _id: string;
@@ -146,46 +147,7 @@ const Decks: React.FC = () => {
 
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-white justify-between group/design-root overflow-x-hidden" style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}>
-      {/* Barra de navegación superior */}
-      <div className="fixed top-0 left-0 w-full z-10 flex gap-2 border-b border-[#f0f2f4] bg-white px-4 pb-3 pt-2">
-        <Link className="just flex flex-1 flex-col items-center justify-start gap-1 text-[#637488]" to="/">
-          <div className="text-[#637488] flex h-8 items-center justify-center" data-icon="House" data-size="24px" data-weight="fill">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-              <path
-                d="M224,115.55V208a16,16,0,0,1-16,16H168a16,16,0,0,1-16-16V168a8,8,0,0,0-8-8H112a8,8,0,0,0-8,8v40a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V115.55a16,16,0,0,1,5.17-11.78l80-75.48.11-.11a16,16,0,0,1,21.53,0,1.14,1.14,0,0,0,.11.11l80,75.48A16,16,0,0,1,224,115.55Z"
-              ></path>
-            </svg>
-          </div>
-        </Link>
-        <Link className="just flex flex-1 flex-col items-center justify-start gap-1 rounded-full text-[#111418]" to="/decks">
-          <div className="text-[#111418] flex h-8 items-center justify-center" data-icon="Folder" data-size="24px" data-weight="fill">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-              <path
-                d="M216,72H131.31L104,44.69A15.88,15.88,0,0,0,92.69,40H40A16,16,0,0,0,24,56V200.62A15.41,15.41,0,0,0,39.39,216h177.5A15.13,15.13,0,0,0,232,200.89V88A16,16,0,0,0,216,72ZM40,56H92.69l16,16H40Z"
-              ></path>
-            </svg>
-        </div>
-        </Link>
-        <Link className="just flex flex-1 flex-col items-center justify-start gap-1 text-[#637488]" to="/study">
-          <div className="text-[#637488] flex h-8 items-center justify-center" data-icon="Cards" data-size="24px" data-weight="regular">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-              <path
-                d="M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z"
-              ></path>
-            </svg>
-          </div>
-        </Link>
-        <Link className="just flex flex-1 flex-col items-center justify-start gap-1 text-[#637488]" to="/profile">
-          <div className="text-[#637488] flex h-8 items-center justify-center" data-icon="User" data-size="24px" data-weight="regular">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-              <path
-                d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"
-              ></path>
-            </svg>
-        </div>
-          <p className="text-[#637488] text-xs font-medium leading-normal tracking-[0.015em]">Profile</p>
-        </Link>
-      </div>
+      <NavigationBar activePage="decks" />
       {/* Contenido principal */}
       <div className="pt-20"> {/* Ajustar el padding-top para que el contenido no quede debajo de la barra de navegación fija */}
         <div className="flex items-center bg-white p-4 pb-2 justify-between">

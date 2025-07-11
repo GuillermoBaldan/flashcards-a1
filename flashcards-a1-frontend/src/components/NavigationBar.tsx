@@ -11,24 +11,24 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ activePage }) => {
     <div className='fixed top-0 w-full border-b border-gray-200 z-10' style={{ backgroundColor: 'white' }}>
       <div className='flex justify-between items-center p-4'>
         <Link to='/' className={`flex flex-col items-center ${activePage === 'home' ? 'text-blue-500' : 'text-black hover:text-blue-500'}`}>
-          <HomeIcon className='h-6 w-6' />
-          <span className='text-xs'>Home</span>
+          <HomeIcon className='h-6 w-6' style={{ color: 'black' }} />
+          <span className='text-xs' style={{ color: 'black' }}>Home</span>
         </Link>
         <Link to='/decks' className={`flex flex-col items-center ${activePage === 'decks' ? 'text-blue-500' : 'text-black hover:text-blue-500'}`}>
-          <BookOpenIcon className='h-6 w-6' />
-          <span className='text-xs'>Decks</span>
+          <BookOpenIcon className='h-6 w-6' style={{ color: 'black' }} />
+          <span className='text-xs' style={{ color: 'black' }}>Decks</span>
         </Link>
         <Link to='/study' className={`flex flex-col items-center ${activePage === 'study' ? 'text-blue-500' : 'text-black hover:text-blue-500'}`}>
-          <LightBulbIcon className='h-6 w-6' />
-          <span className='text-xs'>Study</span>
+          <LightBulbIcon className='h-6 w-6' style={{ color: 'black' }} />
+          <span className='text-xs' style={{ color: 'black' }}>Study</span>
         </Link>
         <Link to='/profile' className={`flex flex-col items-center ${activePage === 'profile' ? 'text-blue-500' : 'text-black hover:text-blue-500'}`}>
-          <UserIcon className='h-6 w-6' />
-          <span className='text-xs'>Profile</span>
+          <UserIcon className='h-6 w-6' style={{ color: 'black' }} />
+          <span className='text-xs' style={{ color: 'black' }}>Profile</span>
         </Link>
         <Link to='/settings' className={`flex flex-col items-center ${activePage === 'settings' ? 'text-blue-500' : 'text-black hover:text-blue-500'}`}>
-          <CogIcon className='h-6 w-6' />
-          <span className='text-xs'>Settings</span>
+          <CogIcon className='h-6 w-6' style={{ color: 'black' }} />
+          <span className='text-xs' style={{ color: 'black' }}>Settings</span>
         </Link>
       </div>
     </div>
