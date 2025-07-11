@@ -132,7 +132,7 @@ const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted }) => {
           className="absolute top-10 bg-white border border-gray-200 rounded-md shadow-lg z-30"
           style={{ right: '3rem', width: 'auto', margin: '0' }}
         >
-          <ul className="py-1" style={{ margin: '0', padding: '0'}}>
+          <ul className="py-1" style={{ margin: '0', padding: '0', listStyle: 'none'}}>
             <li>
               <button
                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
