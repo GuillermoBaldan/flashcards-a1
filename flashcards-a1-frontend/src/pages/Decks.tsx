@@ -29,7 +29,7 @@ const Decks: React.FC = () => {
   }, []);
 
   const DeckItem: React.FC<{ deck: Deck }> = ({ deck }) => (
-    <Link to={`/decks/${deck._id}/cards`}>
+    <Link to={`/decks/${deck._id}/mosaic`}>
       <div className="flex items-center gap-4 bg-white px-4 min-h-14 justify-between">
         <div className="flex items-center gap-4">
           <div className="text-[#111418] flex items-center justify-center rounded-lg bg-[#f0f2f4] shrink-0 size-10" data-icon="Folder" data-size="24px" data-weight="regular">
