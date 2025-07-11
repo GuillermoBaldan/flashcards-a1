@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown'; // Importa ReactMarkdown
 import remarkGfm from 'remark-gfm'; // Importa remarkGfm para soporte de tablas, etc.
 import { htmlToMarkdown } from '../utils/htmlToMarkdown'; // Importa la función de conversión
+import { formatDateToLocaleString } from '../utils/formatDateToLocaleString'; // Importa la nueva función
 
 // Función para formatear un timestamp a dd:hh:mm:ss
 const formatTimestampToDHMS = (ms: number): string => {
@@ -66,8 +67,8 @@ const QuestionAnswer: React.FC = () => {
         const cardsResponse = await axios.get<Card[]>(`http://localhost:5000/cards/deck/${deckId}`);
         const allCards = cardsResponse.data.map((card: Card) => ({
           ...card,
-          lastReview: card.lastReview * 1000,
-          nextReview: card.nextReview * 1000,
+          lastReview: card.lastReview * 1000, // Multiplicar por 1000 para convertir a milisegundos
+          nextReview: card.nextReview * 1000, // Multiplicar por 1000 para convertir a milisegundos
         }));
         const currentTime = Date.now();
 
@@ -198,10 +199,8 @@ const QuestionAnswer: React.FC = () => {
         )}
       </div>
       <div className="mt-4 text-gray-600">
-        <p><strong>lastReview (timestamp):</strong> {currentCard.lastReview}</p>
-        <p><strong>lastReview (dd:hh:mm:ss):</strong> {formatTimestampToDHMS(currentCard.lastReview)}</p>
-        <p><strong>nextReview (timestamp):</strong> {currentCard.nextReview}</p>
-        <p><strong>nextReview (dd:hh:mm:ss):</strong> {formatTimestampToDHMS(currentCard.nextReview)}</p>
+        <p><strong>Última revisión:</strong> {formatDateToLocaleString(currentCard.lastReview)}</p>
+        <p><strong>Próxima revisión:</strong> {formatDateToLocaleString(currentCard.nextReview)}</p>
         <p>Cartas restantes: {cards.length - 1} de {cards.length}</p>
       </div>
       <button

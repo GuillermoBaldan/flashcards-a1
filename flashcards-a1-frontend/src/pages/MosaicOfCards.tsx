@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { htmlToMarkdown } from '../utils/htmlToMarkdown';
@@ -84,20 +84,22 @@ const MosaicOfCards: React.FC = () => {
       </button>
       <div className="w-full max-w-screen-xl gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
         {cards.map(card => (
-          <div key={card._id} className="bg-white rounded-lg shadow-lg p-6 text-center border-solid border-3 border-black rounded-xl" style={{ height: 'auto', borderRadius: '0.5rem' }}>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {htmlToMarkdown(card.front)}
-            </ReactMarkdown>
-            <p className="text-sm text-gray-600 mt-2">
-              <strong>lastReview:</strong> {formatTimestampToDateTime(card.lastReview)}
-            </p>
-            <p className="text-sm text-gray-600">
-              <strong>nextReview:</strong> {formatTimestampToDateTime(card.nextReview)}
-            </p>
-            <p className="text-sm text-gray-600">
-              <strong>ID:</strong> {card._id}
-            </p>
-          </div>
+          <Link to={`/edit-card/${card._id}`} key={card._id}>
+            <div className="bg-white rounded-lg shadow-lg p-6 text-center border-solid border-3 border-black rounded-xl" style={{ height: 'auto', borderRadius: '0.5rem', cursor: 'pointer' }}>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {htmlToMarkdown(card.front)}
+              </ReactMarkdown>
+              <p className="text-sm text-gray-600 mt-2">
+                <strong>lastReview:</strong> {formatTimestampToDateTime(card.lastReview)}
+              </p>
+              <p className="text-sm text-gray-600">
+                <strong>nextReview:</strong> {formatTimestampToDateTime(card.nextReview)}
+              </p>
+              <p className="text-sm text-gray-600">
+                <strong>ID:</strong> {card._id}
+              </p>
+            </div>
+          </Link>
         ))}
       </div>
     </div>
