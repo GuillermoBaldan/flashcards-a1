@@ -64,7 +64,11 @@ const QuestionAnswer: React.FC = () => {
         setDeckName(deckResponse.data.name);
 
         const cardsResponse = await axios.get<Card[]>(`http://localhost:5000/cards/deck/${deckId}`);
-        const allCards = cardsResponse.data;
+        const allCards = cardsResponse.data.map((card: Card) => ({
+          ...card,
+          lastReview: card.lastReview * 1000,
+          nextReview: card.nextReview * 1000,
+        }));
         const currentTime = Date.now();
 
         const cardsForStudy = allCards.filter(card => card.nextReview < currentTime);
@@ -112,8 +116,8 @@ const QuestionAnswer: React.FC = () => {
 
     axios.post(`http://localhost:5000/cards/update/${currentCard._id}`, {
       ...currentCard,
-      lastReview: currentTime, // Asegurar que lastReview se actualice a la hora actual
-      nextReview: newNextReview,
+      lastReview: Math.floor(currentTime / 1000), // Convertir a segundos para guardar en la base de datos
+      nextReview: Math.floor(newNextReview / 1000), // Convertir a segundos para guardar en la base de datos
     })
     .then(() => {
       console.log('Card updated successfully!');
