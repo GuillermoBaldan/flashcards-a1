@@ -76,6 +76,12 @@ const MosaicOfCards: React.FC = () => {
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-4">
       <h1 className="text-3xl font-bold mb-8">Cartas de: {deckName}</h1>
+      <button
+        onClick={() => navigate('/decks')}
+        className="fixed top-4 z-10 px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 focus:outline-none" style={{ right: '2rem', margin: '1rem' }}
+      >
+        Volver a la vista de Mazos
+      </button>
       <div className="w-full max-w-screen-xl gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
         {cards.map(card => (
           <div key={card._id} className="bg-white rounded-lg shadow-lg p-6 text-center border-solid border-3 border-black rounded-xl" style={{ height: 'auto', borderRadius: '0.5rem' }}>
@@ -88,15 +94,12 @@ const MosaicOfCards: React.FC = () => {
             <p className="text-sm text-gray-600">
               <strong>nextReview:</strong> {formatTimestampToDateTime(card.nextReview)}
             </p>
+            <p className="text-sm text-gray-600">
+              <strong>ID:</strong> {card._id}
+            </p>
           </div>
         ))}
       </div>
-      <button
-        onClick={() => navigate('/decks')}
-        className="mt-8 px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 focus:outline-none"
-      >
-        Volver a la vista de Mazos
-      </button>
     </div>
   );
 };
