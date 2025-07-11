@@ -148,7 +148,17 @@ const QuestionAnswer: React.FC = () => {
   }
 
   if (cards.length === 0) {
-    return <div className="text-center mt-8">No hay cartas para estudiar en este mazo.</div>;
+    return (
+      <div className="text-center mt-8">
+        <p className="mb-4">No hay cartas para estudiar en este mazo.</p>
+        <button
+          onClick={() => navigate(`/decks/${deckId}/add-card`)}
+          className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
+        >
+          Añadir Carta
+        </button>
+      </div>
+    );
   }
 
   const currentCard = cards[currentCardIndex];
