@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import useAdjustFontSize from '../utils/dynamicFontSize';
+
 import NavigationBar from '../components/NavigationBar';
 
 interface Card {
@@ -137,23 +137,14 @@ const Study: React.FC = () => {
   }, []);
 
   const DeckTile: React.FC<{ deck: Deck }> = ({ deck }) => {
-    const deckTileRef = useRef<HTMLAnchorElement>(null);
-    const [containerWidth, setContainerWidth] = useState(0);
-
-    useEffect(() => {
-      if (deckTileRef.current) {
-        setContainerWidth(deckTileRef.current.offsetWidth);
-      }
-    }, []);
-
-    const { fontSize, textRef } = useAdjustFontSize(deck.name, containerWidth, 32);
+    const textRef = useRef<HTMLParagraphElement>(null);
 
     return (
     <Link
       to={`/decks/${deck._id}/cards`}
       className="flex flex-col items-start gap-2 rounded-2xl p-4 shadow-sm border h-36 "
       style={{ borderColor: 'black', backgroundColor: deck.color || '#ffffff', borderWidth: '3px', margin: "1rem", borderRadius: '1rem' }}
-      ref={deckTileRef}
+
     >
       <div className="flex items-center justify-center rounded-lg bg-[#f0f2f4] shrink-0 size-10">
         <svg
@@ -175,7 +166,7 @@ const Study: React.FC = () => {
           </g>
         </svg>
       </div>
-      <p ref={textRef} className="text-white font-bold leading-normal truncate w-full" style={{ fontSize: `${fontSize}px` }}>{deck.name}</p>
+      <p ref={textRef} className="text-white font-bold leading-normal truncate w-full text-xl">{deck.name}</p>
       {deck.cardsForStudy && deck.cardsForStudy > 0 ? (
         <p className="text-white text-sm" style={{ color: 'red' }}>{deck.cardsForStudy} cards for study</p>
       ) : (
@@ -204,4 +195,4 @@ const Study: React.FC = () => {
   );
 };
 
-export default Study; 
+export default Study;
