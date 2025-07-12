@@ -28,8 +28,8 @@ interface Card {
   deckId: string;
   front: string;
   back: string;
-  lastReview: number;
-  nextReview: number;
+  lastReview: number | null;
+  nextReview: number | null;
 }
 
 interface Deck {
@@ -67,8 +67,8 @@ const QuestionAnswer: React.FC = () => {
         const cardsResponse = await axios.get<Card[]>(`http://localhost:5000/cards/deck/${deckId}`);
         const allCards = cardsResponse.data.map((card: Card) => ({
           ...card,
-          lastReview: card.lastReview * 1000, // Multiplicar por 1000 para convertir a milisegundos
-          nextReview: card.nextReview * 1000, // Multiplicar por 1000 para convertir a milisegundos
+          lastReview: card.lastReview ? card.lastReview * 1000 : null, // Convertir a milisegundos o null
+          nextReview: card.nextReview ? card.nextReview * 1000 : null, // Convertir a milisegundos o null
         }));
         const currentTime = Date.now();
 
@@ -108,7 +108,7 @@ const QuestionAnswer: React.FC = () => {
     console.log("currentTime:", currentTime);
 
     const newNextReview = correct
-      ? (currentCard.nextReview < 10000 // Si nextReview es un valor muy pequeño (prácticamente 0 o no inicializado)
+      ? (currentCard.nextReview === null || currentCard.nextReview < 10000 // Si nextReview es null o un valor muy pequeño (prácticamente 0 o no inicializado)
         ? currentTime + (30 * 1000) // Intervalo de 30 segundos para la primera revisión
         : (currentCard.nextReview > currentTime
           ? currentTime + (2 * (currentCard.nextReview - currentTime)) // nextReview > currentTime (carta programada a futuro)
@@ -199,8 +199,8 @@ const QuestionAnswer: React.FC = () => {
         )}
       </div>
       <div className="mt-4 text-gray-600">
-        <p><strong>Última revisión:</strong> {formatDateToLocaleString(currentCard.lastReview)}</p>
-        <p><strong>Próxima revisión:</strong> {formatDateToLocaleString(currentCard.nextReview)}</p>
+        <p><strong>Última revisión:</strong> {currentCard.lastReview ? formatDateToLocaleString(currentCard.lastReview) : 'N/A'}</p>
+        <p><strong>Próxima revisión:</strong> {currentCard.nextReview ? formatDateToLocaleString(currentCard.nextReview) : 'N/A'}</p>
         <p>Cartas restantes: {cards.length - 1} de {cards.length}</p>
       </div>
       <button
@@ -213,4 +213,4 @@ const QuestionAnswer: React.FC = () => {
   );
 };
 
-export default QuestionAnswer; 
+export default QuestionAnswer;
