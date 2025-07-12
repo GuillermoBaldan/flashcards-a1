@@ -115,7 +115,7 @@ const QuestionAnswer: React.FC = () => {
           : currentTime + (2 * (currentTime - currentCard.nextReview)))) // nextReview <= currentTime (carta vencida)
       : currentTime + (5 * 60 * 1000); // Fórmula existente para fallos
 
-    axios.post(`http://localhost:5000/cards/update/${currentCard._id}`, {
+    axios.put(`http://localhost:5000/cards/${currentCard._id}`, {
       ...currentCard,
       lastReview: Math.floor(currentTime / 1000), // Convertir a segundos para guardar en la base de datos
       nextReview: Math.floor(newNextReview / 1000), // Convertir a segundos para guardar en la base de datos
