@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { htmlToMarkdown } from '../utils/htmlToMarkdown';
 import axios from 'axios';
+import { resetTimes } from '../utils/resetTime';
 
 interface Card {
   _id: string;
@@ -82,11 +83,21 @@ const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted }) => {
     setShowMenu(false);
   };
 
-  const handleResetTimes = (e: React.MouseEvent) => {
+  const handleResetTimes = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    // Lógica para resetear tiempos
-    alert('Funcionalidad "Resetear tiempos" aún no implementada.');
+    if (window.confirm('¿Estás seguro de que quieres resetear los tiempos de esta tarjeta?')) {
+      try {
+        const updatedCard = { ...card };
+        resetTimes(updatedCard);
+        await axios.put(`http://localhost:5000/cards/${card._id}`, updatedCard);
+        console.log('Tiempos de tarjeta reseteados:', card._id);
+        onCardDeleted(); // Llama al callback para que MosaicOfCards actualice la lista
+      } catch (error) {
+        console.error('Error al resetear los tiempos de la tarjeta:', error);
+        alert('Error al resetear los tiempos de la tarjeta.');
+      }
+    }
     setShowMenu(false);
   };
 
@@ -129,7 +140,7 @@ const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted }) => {
       {showMenu && (
         <div
           ref={menuRef}
-          className="absolute top-10 bg-white border border-gray-200 rounded-md shadow-lg z-30"
+          className="absolute top-10 bg-white rounded-md shadow-lg z-30"
           style={{ right: '3rem', width: 'auto', margin: '0' }}
         >
           <ul className="py-1" style={{ margin: '0', padding: '0', listStyle: 'none'}}>
@@ -189,4 +200,4 @@ const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted }) => {
   );
 };
 
-export default CardItem; 
+export default CardItem;

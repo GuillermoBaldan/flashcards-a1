@@ -77,16 +77,16 @@ router.route('/:id').delete(async (req, res) => {
 });
 
 // Update a card
-router.route('/update/:id').post(async (req, res) => {
+router.route('/:id').put(async (req, res) => {
   try {
     const card = await Card.findById(req.params.id);
     if (card) {
       card.front = req.body.front;
       card.back = req.body.back;
-      card.cardType = req.body.cardType || card.cardType;
-      card.lastReview = req.body.lastReview || card.lastReview;
-      card.nextReview = req.body.nextReview || card.nextReview;
-      card.gameOptions = req.body.gameOptions || card.gameOptions;
+      card.cardType = req.body.cardType !== undefined ? req.body.cardType : card.cardType;
+      card.lastReview = req.body.lastReview !== undefined ? req.body.lastReview : card.lastReview;
+      card.nextReview = req.body.nextReview !== undefined ? req.body.nextReview : card.nextReview;
+      card.gameOptions = req.body.gameOptions !== undefined ? req.body.gameOptions : card.gameOptions;
       await card.save();
       res.json('Card updated!');
     } else {
@@ -97,4 +97,4 @@ router.route('/update/:id').post(async (req, res) => {
   }
 });
 
-export default router; 
+export default router;

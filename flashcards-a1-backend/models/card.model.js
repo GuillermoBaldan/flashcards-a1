@@ -40,13 +40,13 @@ const cardSchema = new Schema({
   },
   lastReview: {
     type: Number,
-    required: true,
-    default: Date.now
+    required: false,
+    default: null
   },
   nextReview: {
     type: Number,
-    required: true,
-    default: Date.now
+    required: false,
+    default: null
   },
   gameOptions: gameOptionsSchema
 }, {
@@ -55,4 +55,4 @@ const cardSchema = new Schema({
 
 const Card = mongoose.model('Card', cardSchema);
 
-export default Card; 
+export default Card;
