@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
+import AddCardButton from '../components/addCardButton';
 import ReactMarkdown from 'react-markdown';
 import RemarkGfm from 'remark-gfm';
 import { htmlToMarkdown } from '../utils/htmlToMarkdown';
@@ -60,13 +61,7 @@ const CardsInDeck: React.FC = () => {
         <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">{deckName}</h2>
         <div className="flex w-12 items-center justify-end">
           {/* Add card button */}
-          <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 bg-transparent text-[#111418] gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
-            <div className="text-[#111418]" data-icon="Plus" data-size="24px" data-weight="regular">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-                <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path>
-              </svg>
-            </div>
-          </button>
+          <AddCardButton deckId={deckId} />
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
@@ -143,4 +138,4 @@ const CardsInDeck: React.FC = () => {
   );
 };
 
-export default CardsInDeck; 
+export default CardsInDeck;

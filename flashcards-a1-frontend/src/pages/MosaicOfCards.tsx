@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import AddCardButton from '../components/addCardButton';
+import ReturnDecksViewButton from '../components/returnDecksViewButton';
 import CardItem from '../components/CardItem'; // Importar el nuevo componente
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -89,12 +91,10 @@ const MosaicOfCards: React.FC = () => {
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-4">
       <h1 className="text-3xl font-bold mb-8">Cartas de: {deckName}</h1>
-      <button
-        onClick={() => navigate('/decks')}
-        className="fixed top-4 z-10 px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 focus:outline-none" style={{ right: '2rem', margin: '1rem' }}
-      >
-        Volver a la vista de Mazos
-      </button>
+      <div className="fixed top-4 right-8 z-10 flex space-x-4">
+        <AddCardButton deckId={deckId} />
+        <ReturnDecksViewButton />
+      </div>
       <div className="w-full max-w-screen-xl gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
         {cards.map(card => (
           <CardItem key={card._id} card={card} onCardDeleted={fetchCards} />
@@ -104,4 +104,4 @@ const MosaicOfCards: React.FC = () => {
   );
 };
 
-export default MosaicOfCards; 
+export default MosaicOfCards;
