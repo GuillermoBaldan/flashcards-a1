@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import { htmlToMarkdown } from '../utils/htmlToMarkdown';
 import axios from 'axios';
 import { resetTimes } from '../utils/resetTime';
@@ -182,9 +183,10 @@ const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted }) => {
 
       <Link to={`/edit-card/${card._id}`} style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
         <div> {/* Contenedor para el contenido principal de la tarjeta */} 
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {htmlToMarkdown(card.front)}
+          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+            {card.front}
           </ReactMarkdown>
+
           <p className="text-sm text-gray-600 mt-2">
             <strong>lastReview:</strong> {formatTimestampToDateTime(card.lastReview)}
           </p>
