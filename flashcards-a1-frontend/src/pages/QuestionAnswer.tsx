@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown'; // Importa ReactMarkdown
 import remarkGfm from 'remark-gfm'; // Importa remarkGfm para soporte de tablas, etc.
 import { htmlToMarkdown } from '../utils/htmlToMarkdown'; // Importa la función de conversión
 import { formatDateToLocaleString } from '../utils/formatDateToLocaleString'; // Importa la nueva función
+import ReturnStudyViewButton from '../components/returnStudyViewButton';
 
 // Función para formatear un timestamp a dd:hh:mm:ss
 const formatTimestampToDHMS = (ms: number): string => {
@@ -158,6 +159,7 @@ const QuestionAnswer: React.FC = () => {
         >
           Añadir Carta
         </button>
+        <ReturnStudyViewButton />
       </div>
     );
   }
@@ -203,12 +205,7 @@ const QuestionAnswer: React.FC = () => {
         <p><strong>Próxima revisión:</strong> {currentCard.nextReview ? formatDateToLocaleString(currentCard.nextReview) : 'N/A'}</p>
         <p>Cartas restantes: {cards.length - 1} de {cards.length}</p>
       </div>
-      <button
-        onClick={() => navigate('/study')}
-        className="mt-8 px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 focus:outline-none"
-      >
-        Volver a la vista de Mazos
-      </button>
+      
     </div>
   );
 };

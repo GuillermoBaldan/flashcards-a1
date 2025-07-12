@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import AddCardButton from '../components/addCardButton';
 import ReturnDecksViewButton from '../components/returnDecksViewButton';
+import ReturnStudyViewButton from '../components/returnStudyViewButton';
 import CardItem from '../components/CardItem'; // Importar el nuevo componente
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -94,6 +95,7 @@ const MosaicOfCards: React.FC = () => {
       <div className="fixed top-4 right-8 z-10 flex space-x-4">
         <AddCardButton deckId={deckId} />
         <ReturnDecksViewButton />
+        <ReturnStudyViewButton />
       </div>
       <div className="w-full max-w-screen-xl gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
         {cards.map(card => (
