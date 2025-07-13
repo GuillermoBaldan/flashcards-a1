@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { calculateStudyMetrics } from '../utils/cardsForStudy';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
@@ -91,20 +92,8 @@ const Study: React.FC = () => {
           const currentTime = Date.now();
           return currentDecks.map(deck => {
             const cardsInDeck = currentCards.filter(card => card.deckId === deck._id);
-            let cardsForStudy = 0;
-            let cardsReviewed = 0;
-            let minNextReviewTime = Infinity;
-
-            cardsInDeck.forEach(card => {
-              if (card.nextReview < currentTime) {
-                cardsForStudy++;
-              } else {
-                cardsReviewed++;
-                if (card.nextReview < minNextReviewTime) {
-                  minNextReviewTime = card.nextReview;
-                }
-              }
-            });
+            const { cardsForStudy, cardsReviewed, minNextReviewTime } = calculateStudyMetrics(cardsInDeck, currentTime);
+            //console.log(`Deck: ${deck.name}, cards For Study: ${cardsForStudy}`);
 
             const nextReviewTimeRemaining =
               minNextReviewTime !== Infinity
@@ -123,7 +112,7 @@ const Study: React.FC = () => {
         setDecks(enrichedDecks);
 
         const intervalId = setInterval(() => {
-          setDecks(prevDecks => processDecks(allCards, prevDecks));
+          setDecks(prevDecks => processDecks(allCards, prevDecks.map(deck => ({ ...deck, cards_id: allCards.filter(card => card.deckId === deck._id).map(card => card._id) }))));
         }, 1000);
 
         return () => clearInterval(intervalId);

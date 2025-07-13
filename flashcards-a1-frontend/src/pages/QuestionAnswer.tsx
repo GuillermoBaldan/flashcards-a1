@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { calculateReviewTimes } from '../utils/manageTimes';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown'; // Importa ReactMarkdown
@@ -103,22 +104,15 @@ const QuestionAnswer: React.FC = () => {
     const currentCard = cards[currentCardIndex];
     if (!currentCard) return;
 
-    const currentTime = Date.now(); // Obtener la hora actual una vez para consistencia
-
-    console.log("currentCard.lastReview:", currentCard.lastReview);
-    console.log("currentTime:", currentTime);
-
-    const newNextReview = correct
-      ? (currentCard.nextReview === null || currentCard.nextReview < 10000 // Si nextReview es null o un valor muy pequeño (prácticamente 0 o no inicializado)
-        ? currentTime + (30 * 1000) // Intervalo de 30 segundos para la primera revisión
-        : (currentCard.nextReview > currentTime
-          ? currentTime + (2 * (currentCard.nextReview - currentTime)) // nextReview > currentTime (carta programada a futuro)
-          : currentTime + (2 * (currentTime - currentCard.nextReview)))) // nextReview <= currentTime (carta vencida)
-      : currentTime + (5 * 60 * 1000); // Fórmula existente para fallos
+    const { newNextReview, newLastReview } = calculateReviewTimes(
+      currentCard.lastReview || Date.now(), // Use current time if lastReview is null
+      currentCard.nextReview || Date.now(), // Use current time if nextReview is null
+      correct
+    );
 
     axios.put(`http://localhost:5000/cards/${currentCard._id}`, {
       ...currentCard,
-      lastReview: Math.floor(currentTime / 1000), // Convertir a segundos para guardar en la base de datos
+      lastReview: Math.floor(newLastReview / 1000), // Convertir a segundos para guardar en la base de datos
       nextReview: Math.floor(newNextReview / 1000), // Convertir a segundos para guardar en la base de datos
     })
     .then(() => {
