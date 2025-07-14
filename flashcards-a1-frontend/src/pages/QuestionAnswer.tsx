@@ -74,11 +74,11 @@ const QuestionAnswer: React.FC = () => {
         }));
         const currentTime = Date.now();
 
-        const cardsForStudy = allCards.filter(card => card.nextReview < currentTime);
+        const cardsForStudy = allCards.filter(card => card.nextReview !== null && card.nextReview < currentTime);
 
         cardsForStudy.sort((a, b) => {
-          const diffA = currentTime - a.nextReview;
-          const diffB = currentTime - b.nextReview;
+          const diffA = currentTime - (a.nextReview !== null ? a.nextReview : currentTime);
+          const diffB = currentTime - (b.nextReview !== null ? b.nextReview : currentTime);
           return diffB - diffA;
         });
 

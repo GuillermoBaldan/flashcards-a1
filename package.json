@@ -5,8 +5,9 @@
     "tailwindcss": "^4.1.11"
   },
   "dependencies": {
-    "@heroicons/react": "^2.2.0",
+    "@heroicons/react": "^2.1.1",
     "@types/marked": "^5.0.2",
+    "@types/react": "^18.2.15",
     "@types/turndown": "^5.0.5",
     "axios": "^1.10.0",
     "marked": "^16.0.0",

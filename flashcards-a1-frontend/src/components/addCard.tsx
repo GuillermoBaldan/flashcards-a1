@@ -5,7 +5,7 @@ import { htmlToMarkdown } from '../utils/htmlToMarkdown';
 import { markdownToHtml } from '../utils/markdownTohtml';
 
 const AddCard: React.FC = () => {
-  const { deckId } = useParams<{ deckId: string }>();
+  const { deckId } = useParams<{ deckId: string | undefined }>();
   const navigate = useNavigate();
   const [front, setFront] = useState<string>('');
   const [back, setBack] = useState<string>('');

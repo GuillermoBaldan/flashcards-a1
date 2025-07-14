@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import NavigationBar from '../components/navigationBar';
+import NavigationBar from '../components/NavigationBar';
 import DeckTile from '../components/deck-component';
-import { formatTimeRemaining } from '../utils/formatTimeRemaining';
+
 
 interface Card {
   _id: string;

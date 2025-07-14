@@ -61,7 +61,7 @@ const CardsInDeck: React.FC = () => {
         <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">{deckName}</h2>
         <div className="flex w-12 items-center justify-end">
           {/* Add card button */}
-          <AddCardButton deckId={deckId} />
+          {deckId && <AddCardButton deckId={deckId} />} 
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
