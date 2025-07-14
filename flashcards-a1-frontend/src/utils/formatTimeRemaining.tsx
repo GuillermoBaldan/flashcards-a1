@@ -1,10 +1,6 @@
 const formatTimeRemaining = (ms: number): string => {
-  const isPast = ms < 0;
-  const absoluteMs = Math.abs(ms);
-
-  if (absoluteMs <= 0 && !isPast) return 'Ahora mismo';
-
-  const totalSeconds = Math.floor(absoluteMs / 1000);
+ 
+  const totalSeconds = Math.floor(ms / 1000);
   const seconds = totalSeconds % 60;
   const totalMinutes = Math.floor(totalSeconds / 60);
   const minutes = totalMinutes % 60;
@@ -40,7 +36,7 @@ const formatTimeRemaining = (ms: number): string => {
     result = `${parts.join(', ')} y ${lastPart}`;
   }
 
-  return isPast ? `Tenías que repasar tu carta hace ${result}` : `en ${result}`;
+  return result;
 };
 
 export { formatTimeRemaining }; 

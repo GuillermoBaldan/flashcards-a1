@@ -10,7 +10,6 @@ interface Deck {
   name: string;
   cardsForStudy: number;
   cardsReviewed: number;
-  minNextReviewTime: number | null;
   color?: string;
 }
 
@@ -21,13 +20,10 @@ interface DeckForStudyProps {
 const DeckForStudy: React.FC<DeckForStudyProps> = ({ deck }) => {
   const textRef = useRef<HTMLParagraphElement>(null);
   useAdjustFontSize(textRef, deck.name);
-
+ 
   const timeRemaining = useMemo(() => {
-    if (deck.minNextReviewTime === null) {
-      return null;
-    }
     const now = Date.now();
-    const diff = deck.minNextReviewTime - now;
+    const diff = deck.nextReview - now;
     return formatTimeRemaining(diff);
   }, [deck.minNextReviewTime]);
 

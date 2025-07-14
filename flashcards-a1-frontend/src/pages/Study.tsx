@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { calculateStudyMetrics } from '../utils/cardsForStudy';
+import { timeToNextReview } from '../utils/timeToNextReview';
+import { formatTimeRemaining } from '../utils/formatTimeRemaining';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
@@ -34,47 +36,7 @@ interface Deck {
   nextReviewTimeRemaining?: string; // Nueva propiedad
 }
 
-// Función para formatear el tiempo restante
-const formatTimeRemaining = (ms: number): string => {
-  if (ms <= 0) return 'Ahora mismo';
 
-  const totalSeconds = Math.floor(ms / 1000);
-  const seconds = totalSeconds % 60;
-  const totalMinutes = Math.floor(totalSeconds / 60);
-  const minutes = totalMinutes % 60;
-  const totalHours = Math.floor(totalMinutes / 60);
-  const hours = totalHours % 24;
-  const days = Math.floor(totalHours / 24);
-
-  let parts: string[] = [];
-
-  if (days > 0) {
-    parts.push(`${days} día${days > 1 ? 's' : ''}`);
-  }
-  if (hours > 0) {
-    parts.push(`${hours} hora${hours > 1 ? 's' : ''}`);
-  }
-  if (minutes > 0) {
-    parts.push(`${minutes} minuto${minutes > 1 ? 's' : ''}`);
-  }
-  if (seconds > 0 || parts.length === 0) {
-      parts.push(`${seconds} segundo${seconds > 1 ? 's' : ''}`);
-  }
-
-  if (parts.length === 0) return 'Ahora mismo';
-
-  let result = '';
-  if (parts.length === 1) {
-    result = parts[0];
-  } else if (parts.length === 2) {
-    result = `${parts[0]} y ${parts[1]}`;
-  } else {
-    const lastPart = parts.pop();
-    result = `${parts.join(', ')} y ${lastPart}`;
-  }
-
-  return `en ${result}`;
-};
 
 const Study: React.FC = () => {
   const [decks, setDecks] = useState<Deck[]>([]);
@@ -92,13 +54,12 @@ const Study: React.FC = () => {
           const currentTime = Date.now();
           return currentDecks.map(deck => {
             const cardsInDeck = currentCards.filter(card => card.deckId === deck._id);
-            const { cardsForStudy, cardsReviewed, minNextReviewTime } = calculateStudyMetrics(cardsInDeck, currentTime);
+            const { cardsForStudy, cardsReviewed } = calculateStudyMetrics(cardsInDeck, currentTime);
+            const minNextReviewTime = timeToNextReview(cardsInDeck, currentTime);
             //console.log(`Deck: ${deck.name}, cards For Study: ${cardsForStudy}`);
 
-            const nextReviewTimeRemaining =
-              minNextReviewTime !== Infinity
-                ? formatTimeRemaining(minNextReviewTime - currentTime)
-                : undefined;
+          const nextReviewTimeRemaining = formatTimeRemaining(minNextReviewTime)
+            
             
             return { ...deck, cardsForStudy, cardsReviewed, nextReviewTimeRemaining };
           });

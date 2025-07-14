@@ -30,7 +30,6 @@ interface Deck {
 export const calculateStudyMetrics = (cardsInDeck: Card[], currentTime: number) => {
   let cardsForStudy = 0;
   let cardsReviewed = 0;
-  let minNextReviewTime = Infinity;
 
   cardsInDeck.forEach(card => {
     if (card.nextReview * 1000 < currentTime) {
@@ -40,11 +39,8 @@ export const calculateStudyMetrics = (cardsInDeck: Card[], currentTime: number) 
       cardsForStudy++;
     } else {
       cardsReviewed++;
-      if (card.nextReview < minNextReviewTime) {
-        minNextReviewTime = card.nextReview;
-      }
-    }
+     }
   });
 
-  return { cardsForStudy, cardsReviewed, minNextReviewTime };
+  return { cardsForStudy, cardsReviewed };
 };
