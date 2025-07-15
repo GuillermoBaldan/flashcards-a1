@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import useAdjustFontSize from '../utils/dynamicFontSize';
 import { formatTimeRemaining } from '../utils/formatTimeRemaining';
 import getContrastColor from '../utils/dynamicContrastColor';
-import React, { useRef, useMemo } from 'react';
 
 interface Deck {
   _id: string;
@@ -11,6 +10,7 @@ interface Deck {
   cardsForStudy: number;
   cardsReviewed: number;
   color?: string;
+  firstCardNextReview?: number | null;
 }
 
 interface DeckForStudyProps {
@@ -18,19 +18,28 @@ interface DeckForStudyProps {
 }
 
 const DeckForStudy: React.FC<DeckForStudyProps> = ({ deck }) => {
-  const textRef = useRef<HTMLParagraphElement>(null);
-  useAdjustFontSize(textRef, deck.name);
+    const linkRef = useRef<HTMLAnchorElement>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  useEffect(() => {
+    if (linkRef.current) {
+      setContainerWidth(linkRef.current.offsetWidth);
+    }
+  }, [linkRef.current]);
+
+  const { fontSize, textRef } = useAdjustFontSize(deck.name, containerWidth);
  
   const timeRemaining = useMemo(() => {
     const now = Date.now();
-    const diff = deck.nextReview - now;
+    const diff = deck.firstCardNextReview != null ? deck.firstCardNextReview - now : 0;
     return formatTimeRemaining(diff);
-  }, [deck.minNextReviewTime]);
+  }, [deck.firstCardNextReview]);
 
   const textColor = getContrastColor(deck.color || '#ffffff');
 
   return (
     <Link
+      ref={linkRef}
       to={`/decks/${deck._id}/cards`}
       className="flex flex-col items-start gap-2 rounded-2xl p-4 shadow-sm border h-36 "
       style={{
@@ -58,7 +67,7 @@ const DeckForStudy: React.FC<DeckForStudyProps> = ({ deck }) => {
           </g>
         </svg>
       </div>
-      <p ref={textRef} className="font-bold leading-normal truncate w-full text-xl" style={{ color: textColor }}>
+      <p ref={textRef} className="font-bold leading-normal truncate w-full text-xl" style={{ color: textColor, fontSize: `${fontSize}px` }}>
         {deck.name}
       </p>
       {deck.cardsForStudy && deck.cardsForStudy > 0 ? (
