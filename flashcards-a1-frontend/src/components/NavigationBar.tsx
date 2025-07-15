@@ -8,7 +8,7 @@ interface NavigationBarProps {
 
 const NavigationBar: React.FC<NavigationBarProps> = ({ activePage }) => {
   return (
-    <div className='fixed top-0 w-full border-b border-gray-200 z-10' style={{ backgroundColor: 'white' }}>
+    <div className='fixed top-0 w-full border-b border-gray-200 z-10' style={{ backgroundColor: 'white', position: 'sticky', top: 0 }}>
       <div className='flex justify-between items-center p-4'>
         <Link to='/' className={`flex flex-col items-center ${activePage === 'home' ? 'text-blue-500' : 'text-black hover:text-blue-500'}`}>
           <HomeIcon className='h-6 w-6' style={{ color: 'black' }} />
