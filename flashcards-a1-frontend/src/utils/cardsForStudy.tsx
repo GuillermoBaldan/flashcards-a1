@@ -30,21 +30,24 @@ interface Deck {
 export const calculateStudyMetrics = (cardsInDeck: Card[], currentTime: number) => {
   let cardsForStudy = 0;
   let cardsReviewed = 0;
-  let minNextReviewTime = Infinity;
+  let minNextReviewTime = cardsInDeck[0].nextReview; //Le damos un valor inicial, por ejemplo la primera carta del mazo
+  let maxPassReviewTime = cardsInDeck[0].nextReview; //Le damos un valor inicial, por ejemplo la primera carta del mazo
 
   cardsInDeck.forEach(card => {
     if (card.nextReview !== null && card.nextReview < currentTime) {
-      if(card._id === '68566b5505e2caf6a91fc909'){
-      console.log(`nextReview: ${card.nextReview}, currentTime: ${currentTime}`)
+       cardsForStudy++;
+       //Calculamos aqui el tiempo de la proxima revisión
+       if (card.nextReview !== null && card.nextReview < minNextReviewTime) {
+        minNextReviewTime = card.nextReview;
       }
-      cardsForStudy++;
     } else {
       cardsReviewed++;
-      if (card.nextReview !== null && card.nextReview < minNextReviewTime) {
-        minNextReviewTime = card.nextReview;
+      //Aqui calculamos tiempo desde que se tenía que haber revisado la carta hasta ahora
+        if (card.nextReview!== null && card.nextReview > maxPassReviewTime) {
+        maxPassReviewTime = card.nextReview;
       }
     }
   });
 
-  return { cardsForStudy, cardsReviewed, minNextReviewTime };
+  return { cardsForStudy, cardsReviewed, minNextReviewTime, maxPassReviewTime };
 };
