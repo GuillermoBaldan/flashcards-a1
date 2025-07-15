@@ -177,11 +177,11 @@ const Study: React.FC = () => {
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-white justify-between group/design-root overflow-x-hidden" style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}>
       <NavigationBar activePage="study" />
-      <div className='pt-20'> {/* Add padding to account for the fixed header */}
+      <div className='pt-20' style={{ marginTop: '6rem' }}> {/* Add padding to account for the fixed header */}
         {renderContent()}
       </div>
     </div>
-  );
+  )
 };
 
 export default Study;
