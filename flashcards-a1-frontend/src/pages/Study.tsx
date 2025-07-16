@@ -140,11 +140,10 @@ const Study: React.FC = () => {
 
         <div className="flex flex-col items-start p-4 w-full">
           {/* Renderizado condicional: si hay cartas para estudiar, muestra el número en rojo; de lo contrario, muestra el tiempo para el próximo repaso. */}
-          {deck.cardsForStudy && deck.cardsForStudy > 0 ? (
+          {deck.cardsForStudy && deck.cardsForStudy > 0 && (
             <p className="text-white text-sm" style={{ color: 'red' }}>{deck.cardsForStudy} cards for study</p>
-          ) : (
-            <p className="text-white text-sm">{deck.nextReviewTimeRemaining}</p>
           )}
+          <p className="text-white text-sm">{deck.nextReviewTimeRemaining}</p>
           {/* Muestra el número de cartas ya revisadas en el mazo. */}
           <p className="text-white text-sm">{deck.cardsReviewed || 0} cards reviewed</p>
         </div>
