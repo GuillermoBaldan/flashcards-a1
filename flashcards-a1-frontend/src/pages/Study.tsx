@@ -44,7 +44,11 @@ const Study: React.FC = () => {
         const cardsResponse = await axios.get('http://localhost:5000/cards/');
 
         const allDecks: Deck[] = decksResponse.data;
-        const allCards: Card[] = cardsResponse.data;
+        const allCards: Card[] = cardsResponse.data.map(card => ({
+          ...card,
+          lastReview: card.lastReview ? card.lastReview * 1000 : null,
+          nextReview: card.nextReview ? card.nextReview * 1000 : null,
+        }));
 
         const processDecks = (currentCards: Card[], currentDecks: Deck[]) => {
           const currentTime = Date.now();
@@ -139,7 +143,7 @@ const Study: React.FC = () => {
           {deck.cardsForStudy && deck.cardsForStudy > 0 ? (
             <p className="text-white text-sm" style={{ color: 'red' }}>{deck.cardsForStudy} cards for study</p>
           ) : (
-            <p className="text-white text-sm">{deck.reviewTime}</p>
+            <p className="text-white text-sm">{deck.nextReviewTimeRemaining}</p>
           )}
           {/* Muestra el número de cartas ya revisadas en el mazo. */}
           <p className="text-white text-sm">{deck.cardsReviewed || 0} cards reviewed</p>
