@@ -102,7 +102,7 @@ const Study: React.FC = () => {
 
     return (
       <Link
-        to={`/decks/${deck._id}/cards`}
+        to={`/decks/${deck._id}/cards`} // Aqui vamos a la página para estudiar el mazo
         className="flex flex-col items-start gap-2 rounded-2xl p-4 shadow-sm border h-36"
         style={{
           borderColor: 'black',

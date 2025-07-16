@@ -83,6 +83,9 @@ const QuestionAnswer: React.FC = () => {
         });
 
         setCards(cardsForStudy);
+        //Tenemos que añadir las cartas vírgenes, es decir las que tienen lastReview y nextReview a null
+        const cardsWithNullReview = allCards.filter(card => card.lastReview === null && card.nextReview === null);
+        setCards(prevCards => [...prevCards, ...cardsWithNullReview]);
       } catch (err) {
         console.error('Error fetching data:', err);
         setError('Error al cargar los datos.');
