@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import NavigationBar from '../components/NavigationBar';
 import { formatTimeRemaining } from '../utils/formatTimeRemaining';
+import getContrastColor from '../utils/dynamicContrastColor';
 
 interface Card {
   _id: string;
@@ -103,6 +104,7 @@ const Study: React.FC = () => {
 
   const DeckTile: React.FC<{ deck: Deck }> = ({ deck }) => {
     const textRef = useRef<HTMLParagraphElement>(null);
+    const textColor = getContrastColor(deck.color || '#ffffff');
 
     return (
       <Link
@@ -133,7 +135,8 @@ const Study: React.FC = () => {
         </div>
         <p
           ref={textRef}
-          className="text-white font-bold leading-normal truncate w-full text-xl"
+          className="font-bold leading-normal truncate w-full text-xl"
+          style={{ color: textColor }}
         >
           {deck.name}
         </p>
@@ -141,11 +144,11 @@ const Study: React.FC = () => {
         <div className="flex flex-col items-start p-4 w-full">
           {/* Renderizado condicional: si hay cartas para estudiar, muestra el número en rojo; de lo contrario, muestra el tiempo para el próximo repaso. */}
           {deck.cardsForStudy && deck.cardsForStudy > 0 && (
-            <p className="text-white text-sm" style={{ color: 'red' }}>{deck.cardsForStudy} cards for study</p>
+            <p className="text-sm" style={{ color: 'red' }}>{deck.cardsForStudy} cards for study</p>
           )}
-          <p className="text-white text-sm" style={{ color: deck.cardsForStudy > 0 ? 'red' : 'white' }}>{deck.nextReviewTimeRemaining}</p>
+          <p className="text-sm" style={{ color: deck.cardsForStudy > 0 ? 'red' : textColor }}>{deck.nextReviewTimeRemaining}</p>
           {/* Muestra el número de cartas ya revisadas en el mazo. */}
-          <p className="text-white text-sm">{deck.cardsReviewed || 0} cards reviewed</p>
+          <p className="text-sm" style={{ color: textColor }}>{deck.cardsReviewed || 0} cards reviewed</p>
         </div>
       </Link>
     );
