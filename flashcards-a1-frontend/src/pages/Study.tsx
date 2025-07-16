@@ -61,7 +61,7 @@ const Study: React.FC = () => {
               reviewTime
             } = calculateStudyMetrics(cardsInDeck, currentTime);
 
-            const nextReviewTimeRemaining = formatTimeRemaining(reviewTime)
+            const nextReviewTimeRemaining = formatTimeRemaining(reviewTime - currentTime)
              
              
 

@@ -31,10 +31,14 @@ export const calculateStudyMetrics = (cardsInDeck: Card[], currentTime: number) 
   let cardsForStudy = 0;
   let cardsReviewed = 0;
   let minNextReview = Infinity;
+  let minOverdue = Infinity;
 
   cardsInDeck.forEach(card => {
     if (card.nextReview === null || card.nextReview < currentTime) {
       cardsForStudy++;
+      if (card.nextReview !== null && card.nextReview < minOverdue) {
+        minOverdue = card.nextReview;
+      }
     } else {
       cardsReviewed++;
       if (card.nextReview < minNextReview) {
@@ -43,7 +47,12 @@ export const calculateStudyMetrics = (cardsInDeck: Card[], currentTime: number) 
     }
   });
 
-  const reviewTime = (minNextReview === Infinity) ? currentTime : minNextReview;
+  let reviewTime;
+  if (cardsForStudy > 0) {
+    reviewTime = (minOverdue === Infinity) ? currentTime : minOverdue;
+  } else {
+    reviewTime = (minNextReview === Infinity) ? currentTime : minNextReview;
+  }
 
   return { cardsForStudy, cardsReviewed, reviewTime };
 };
