@@ -1,6 +1,9 @@
-const formatTimeRemaining = (ms: number): string => {
+const   formatTimeRemaining = (ms: number): string => {
  
-  const totalSeconds = Math.floor(ms / 1000);
+  const isNegative = ms < 0;
+  const absMs = Math.abs(ms);
+
+  const totalSeconds = Math.floor(absMs / 1000);
   const seconds = totalSeconds % 60;
   const totalMinutes = Math.floor(totalSeconds / 60);
   const minutes = totalMinutes % 60;
@@ -19,12 +22,14 @@ const formatTimeRemaining = (ms: number): string => {
   if (minutes > 0) {
     parts.push(`${minutes} minuto${minutes > 1 ? 's' : ''}`);
   }
-  // Always include seconds if no other parts are present, or if seconds > 0
+  // Only include seconds if there are no other parts, or if seconds > 0
   if (seconds > 0 || parts.length === 0) {
       parts.push(`${seconds} segundo${seconds > 1 ? 's' : ''}`);
   }
 
-  if (parts.length === 0) return 'Ahora mismo';
+  if (parts.length === 0 || (parts.length === 1 && parts[0].includes('0 segundo'))) {
+    return 'Ahora mismo';
+  }
 
   let result = '';
   if (parts.length === 1) {
@@ -36,7 +41,7 @@ const formatTimeRemaining = (ms: number): string => {
     result = `${parts.join(', ')} y ${lastPart}`;
   }
 
-  return result;
+  return isNegative ? `Hace ${result}` : `Próximo repaso ${result}`;
 };
 
-export { formatTimeRemaining }; 
+export { formatTimeRemaining };
