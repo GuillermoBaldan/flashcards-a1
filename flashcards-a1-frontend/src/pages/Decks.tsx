@@ -105,7 +105,7 @@ const Decks: React.FC = () => {
       {/* Contenido principal */}
       <div className="pt-20"> {/* Ajustar el padding-top para que el contenido no quede debajo de la barra de navegación fija */}
         <div className="flex items-center bg-white p-4 pb-2 justify-between">
-          <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Decks</h2>
+          <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Decks: {decks.length}</h2>
           <div className="flex w-12 items-center justify-end">
             {/* Botón de añadir mazo (se puede reubicar si es necesario) */}
             <button
@@ -130,4 +130,4 @@ const Decks: React.FC = () => {
   );
 };
 
-export default Decks; 
+export default Decks;
