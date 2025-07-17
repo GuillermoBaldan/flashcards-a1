@@ -79,7 +79,7 @@ const TestTop5: React.FC = () => {
       <NavigationBar activePage="study" />
       <TestBox
         cards={cards}
-        deckName="Top 5% de Preguntas Más Fáciles"
+
         onCardsDepleted={handleCardsDepleted}
       />
     </>

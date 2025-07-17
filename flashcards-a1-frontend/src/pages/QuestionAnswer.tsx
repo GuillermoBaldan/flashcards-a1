@@ -108,7 +108,7 @@ const QuestionAnswer: React.FC = () => {
       <NavigationBar activePage="study" />
       <TestBox
         cards={cards}
-        deckName={deckName}
+
         onCardsDepleted={handleCardsDepleted}
       />
     </>
