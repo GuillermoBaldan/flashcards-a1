@@ -37,6 +37,8 @@ interface Deck {
 
 const Study: React.FC = () => {
   const [decks, setDecks] = useState<Deck[]>([]);
+  const [totalCardsForStudy, setTotalCardsForStudy] = useState<number>(0);
+  const [totalCardsReviewed, setTotalCardsReviewed] = useState<number>(0);
 
   useEffect(() => {
     const fetchDecksAndCards = async () => {
@@ -54,13 +56,19 @@ const Study: React.FC = () => {
         const processDecks = (currentCards: Card[], currentDecks: Deck[]) => {
           const currentTime = Date.now();
 
-          return currentDecks.map(deck => {
+          let currentTotalCardsForStudy = 0;
+          let currentTotalCardsReviewed = 0;
+
+          const processed = currentDecks.map(deck => {
             const cardsInDeck = currentCards.filter(card => card.deckId === deck._id);
             const {
               cardsForStudy,
               cardsReviewed,
               reviewTime
             } = calculateStudyMetrics(cardsInDeck, currentTime);
+
+            currentTotalCardsForStudy += cardsForStudy;
+            currentTotalCardsReviewed += cardsReviewed;
 
             const nextReviewTimeRemaining = formatTimeRemaining(reviewTime - currentTime)
              
@@ -73,6 +81,9 @@ const Study: React.FC = () => {
               nextReviewTimeRemaining
             };
           });
+          setTotalCardsForStudy(currentTotalCardsForStudy);
+          setTotalCardsReviewed(currentTotalCardsReviewed);
+          return processed;
         };
 
         const enrichedDecks = processDecks(allCards, allDecks);
@@ -80,8 +91,8 @@ const Study: React.FC = () => {
         setDecks(enrichedDecks);
 
         const intervalId = setInterval(() => {
-          setDecks(prevDecks =>
-            processDecks(
+          setDecks(prevDecks => {
+            const updatedDecks = processDecks(
               allCards,
               prevDecks.map(deck => ({
                 ...deck,
@@ -89,8 +100,9 @@ const Study: React.FC = () => {
                   .filter(card => card.deckId === deck._id)
                   .map(card => card._id)
               }))
-            )
-          );
+            );
+            return updatedDecks;
+          });
         }, 1000);
 
         return () => clearInterval(intervalId);
@@ -168,7 +180,11 @@ const Study: React.FC = () => {
       style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}
     >
       <NavigationBar activePage="study" />
-      <div className="pt-20" style={{ marginTop: '6rem' }}>
+      <div className="pt-20" style={{ marginTop: '1rem' }}>
+        <div className="flex flex-row items-center justify-around p-4">
+          <h2 className="text-red-500 text-lg font-bold leading-tight tracking-[-0.015em]">📚 Cards for Study: <strong style={{ color: 'red' }}>{totalCardsForStudy}</strong></h2>
+          <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em]">✅ Cards Reviewed: <strong style={{ color: 'green' }}>{totalCardsReviewed}</strong></h2>
+        </div>
         {renderContent()}
       </div>
     </div>
