@@ -8,6 +8,7 @@ import SelectionTest from './pages/selectionTest';
 import TestCards from './pages/TestTypes';
 import CardsOfDeck from './pages/CardsOfDeck';
 import AddCard from './components/addCard'; // Importa el nuevo componente AddCard
+import TestTop1 from './pages/TestTop1'; // Importa el nuevo componente TestTop1
 import './App.css';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/decks/:deckId/add-card" element={<AddCard />} /> {/* Nueva ruta para añadir cartas */}
         <Route path="/edit-card/:cardId" element={<EditCard />} />
         <Route path="/study" element={<Study />} /> {/* La ruta para mostrar los mazos */}
+        <Route path="/test-top1-percent" element={<TestTop1 />} /> {/* Nueva ruta para el test del top 1% */}
         <Route path="/" element={<Decks />} />
       </Routes>
     </Router>
