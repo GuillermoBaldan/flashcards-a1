@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getStackOfCardsByDifficulty } from '../utils/stackOfCardsByDifficulty';
 import TestBox from '../components/testBox';
 import { useNavigate } from 'react-router-dom';
+import NavigationBar from '../components/NavigationBar';
 
 interface Card {
   _id: string;
@@ -74,11 +75,14 @@ const TestTop1: React.FC = () => {
   }
 
   return (
-    <TestBox
-      cards={cards}
-      deckName="Top 1% de Preguntas Más Fáciles"
-      onCardsDepleted={handleCardsDepleted}
-    />
+    <>
+      <NavigationBar activePage="study" />
+      <TestBox
+        cards={cards}
+        deckName="Top 1% de Preguntas Más Fáciles"
+        onCardsDepleted={handleCardsDepleted}
+      />
+    </>
   );
 };
 
