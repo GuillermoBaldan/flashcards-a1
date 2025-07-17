@@ -81,12 +81,13 @@ router.route('/:id').put(async (req, res) => {
   try {
     const card = await Card.findById(req.params.id);
     if (card) {
-      card.front = req.body.front;
-      card.back = req.body.back;
-      card.cardType = req.body.cardType !== undefined ? req.body.cardType : card.cardType;
-      card.lastReview = req.body.lastReview !== undefined ? req.body.lastReview : card.lastReview;
-      card.nextReview = req.body.nextReview !== undefined ? req.body.nextReview : card.nextReview;
-      card.gameOptions = req.body.gameOptions !== undefined ? req.body.gameOptions : card.gameOptions;
+      if (req.body.deckId !== undefined) card.deckId = req.body.deckId;
+      if (req.body.front !== undefined) card.front = req.body.front;
+      if (req.body.back !== undefined) card.back = req.body.back;
+      if (req.body.cardType !== undefined) card.cardType = req.body.cardType;
+      if (req.body.lastReview !== undefined) card.lastReview = req.body.lastReview;
+      if (req.body.nextReview !== undefined) card.nextReview = req.body.nextReview;
+      if (req.body.gameOptions !== undefined) card.gameOptions = req.body.gameOptions;
       await card.save();
       res.json('Card updated!');
     } else {

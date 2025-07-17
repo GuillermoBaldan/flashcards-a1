@@ -7,6 +7,7 @@ import remarkGfm from 'remark-gfm'; // Importa remarkGfm para soporte de tablas,
 import { htmlToMarkdown } from '../utils/htmlToMarkdown'; // Importa la función de conversión
 import { formatDateToLocaleString } from '../utils/formatDateToLocaleString'; // Importa la nueva función
 import ReturnStudyViewButton from '../components/returnStudyViewButton';
+import MoveCardModal from '../components/MoveCardModal.tsx'; // Import the new component
 import '../App.css'; // Asegúrate de que App.css esté importado para las animaciones
 
 // Función para formatear un timestamp a dd:hh:mm:ss
@@ -59,6 +60,7 @@ const QuestionAnswer: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [deckName, setDeckName] = useState<string>('');
   const [showCompletionMessage, setShowCompletionMessage] = useState(false);
+  const [showMoveCardModal, setShowMoveCardModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -182,6 +184,27 @@ const QuestionAnswer: React.FC = () => {
             Voltear carta
           </button>
         )}
+
+      {showMoveCardModal && (
+        <MoveCardModal
+          currentCard={currentCard}
+          onClose={() => setShowMoveCardModal(false)}
+          onCardMoved={() => {
+            setShowMoveCardModal(false);
+            // Optionally, remove the card from the current study session or navigate away
+            if (cards.length > 1) {
+              const remainingCards = cards.filter((_, index) => index !== currentCardIndex);
+              setCards(remainingCards);
+              setCurrentCardIndex(0);
+            } else {
+              setShowCompletionMessage(true);
+              setTimeout(() => {
+                navigate('/study');
+              }, 2000);
+            }
+          }}
+        />
+      )}
         {isFlipped && (
           <div className="flex justify-around mt-6">
             <button
@@ -195,8 +218,14 @@ const QuestionAnswer: React.FC = () => {
               className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none"
             >
               Fallo
-          </button>
-        </div>
+            </button>
+            <button
+              onClick={() => setShowMoveCardModal(true)}
+              className="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 focus:outline-none"
+            >
+              Mover carta
+            </button>
+          </div>
         )}
       </div>
       <div className="mt-4 text-gray-600">
