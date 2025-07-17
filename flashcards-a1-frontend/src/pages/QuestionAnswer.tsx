@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReturnStudyViewButton from '../components/returnStudyViewButton';
 import TestBox from '../components/testBox';
+import NavigationBar from '../components/NavigationBar';
 
 interface Card {
   _id: string;
@@ -103,11 +104,14 @@ const QuestionAnswer: React.FC = () => {
   }
 
   return (
-    <TestBox
-      cards={cards}
-      deckName={deckName}
-      onCardsDepleted={handleCardsDepleted}
-    />
+    <>
+      <NavigationBar activePage="study" />
+      <TestBox
+        cards={cards}
+        deckName={deckName}
+        onCardsDepleted={handleCardsDepleted}
+      />
+    </>
   );
 };
 
