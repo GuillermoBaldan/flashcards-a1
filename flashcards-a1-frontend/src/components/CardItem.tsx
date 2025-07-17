@@ -12,13 +12,13 @@ interface Card {
   deckId: string;
   front: string;
   back: string;
-  lastReview: number;
-  nextReview: number;
+  lastReview: number | null;
+  nextReview: number | null;
 }
 
 // Función para formatear un timestamp a "dd de Mes del YYYY HH:MM"
-const formatTimestampToDateTime = (ms: number): string => {
-  if (ms <= 0) return 'N/A';
+const formatTimestampToDateTime = (ms: number | null): string => {
+  if (ms === null || ms <= 0) return 'N/A';
 
   const date = new Date(ms * 1000); // Multiplicar por 1000 para convertir segundos a milisegundos
   const options: Intl.DateTimeFormatOptions = {

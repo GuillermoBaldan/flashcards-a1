@@ -116,7 +116,7 @@ const MosaicOfCards: React.FC = () => {
         onCardSearchFieldChange={setCardSearchField}
       />
       <div className="fixed top-4 right-8 z-10 flex space-x-4">
-        <AddCardButton deckId={deckId} />
+        {deckId && <AddCardButton deckId={deckId} />} 
         <ReturnDecksViewButton />
         <ReturnStudyViewButton />
       </div>
