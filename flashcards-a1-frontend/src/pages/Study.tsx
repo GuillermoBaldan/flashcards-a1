@@ -146,7 +146,7 @@ const Study: React.FC = () => {
 
     return (
       <Link
-        to="/selectionTest" // Navegar a la página de selección de test
+        to={`/decks/${deck._id}/cards`} // Navegar a la página de estudio de cartas del mazo
         className="flex flex-col items-start gap-2 rounded-2xl p-4 shadow-sm border h-36"
         style={{
           borderColor: 'black',
