@@ -35,7 +35,7 @@ interface Card {
   nextReview: number | null;
 }
 
-const MosaicOfCards: React.FC = () => {
+const CardsOfDeck: React.FC = () => {
   const { deckId } = useParams<{ deckId: string }>();
   const navigate = useNavigate();
   const [cards, setCards] = useState<Card[]>([]);
@@ -133,4 +133,4 @@ const MosaicOfCards: React.FC = () => {
   );
 };
 
-export default MosaicOfCards;
+export default CardsOfDeck;

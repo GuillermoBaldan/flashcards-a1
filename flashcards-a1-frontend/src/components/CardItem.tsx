@@ -68,7 +68,7 @@ const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted }) => {
       try {
         await axios.delete(`http://localhost:5000/cards/${card._id}`);
         console.log('Tarjeta eliminada:', card._id);
-        onCardDeleted(); // Llama al callback para que MosaicOfCards actualice la lista
+        onCardDeleted(); // Llama al callback para que CardsOfDeck actualice la lista
       } catch (error) {
         console.error('Error al borrar la tarjeta:', error);
         alert('Error al borrar la tarjeta.');
