@@ -7,6 +7,7 @@ import remarkGfm from 'remark-gfm'; // Importa remarkGfm para soporte de tablas,
 import { htmlToMarkdown } from '../utils/htmlToMarkdown'; // Importa la función de conversión
 import { formatDateToLocaleString } from '../utils/formatDateToLocaleString'; // Importa la nueva función
 import ReturnStudyViewButton from '../components/returnStudyViewButton';
+import '../App.css'; // Asegúrate de que App.css esté importado para las animaciones
 
 // Función para formatear un timestamp a dd:hh:mm:ss
 const formatTimestampToDHMS = (ms: number): string => {
@@ -57,6 +58,7 @@ const QuestionAnswer: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deckName, setDeckName] = useState<string>('');
+  const [showCompletionMessage, setShowCompletionMessage] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -120,17 +122,17 @@ const QuestionAnswer: React.FC = () => {
     })
     .then(() => {
       console.log('Card updated successfully!');
-      const remainingCards = cards.filter((_, index) => index !== currentCardIndex);
-      setCards(remainingCards);
-      setIsFlipped(false);
-      setCurrentCardIndex(0);
-
-      if (remainingCards.length === 0) {
-        alert("¡Has terminado todas las cartas para estudiar en este mazo!");
-        navigate('/study');
-      } else {
-        setCurrentCardIndex(prevIndex => (prevIndex + 1) % remainingCards.length);
-      }
+  setIsFlipped(false);
+  if (cards.length > 1) {
+    const remainingCards = cards.filter((_, index) => index !== currentCardIndex);
+    setCards(remainingCards);
+    setCurrentCardIndex(0);
+  } else {
+    setShowCompletionMessage(true);
+    setTimeout(() => {
+      navigate('/study');
+    }, 2000); // Muestra el mensaje por 2 segundos antes de navegar
+  }
     })
     .catch(err => {
       console.error('Error updating card:', err);
@@ -202,7 +204,14 @@ const QuestionAnswer: React.FC = () => {
         <p><strong>Próxima revisión:</strong> {currentCard.nextReview ? formatDateToLocaleString(currentCard.nextReview) : 'N/A'}</p>
         <p>Cartas restantes: {cards.length - 1} de {cards.length}</p>
       </div>
-      
+
+      {showCompletionMessage && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg text-center text-2xl font-bold animate-fade-in-out">
+            ¡Has terminado todas las cartas para estudiar en este mazo!
+          </div>
+        </div>
+      )}
     </div>
   );
 };
