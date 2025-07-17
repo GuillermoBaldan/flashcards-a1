@@ -39,6 +39,8 @@ interface Deck {
 
 const Study: React.FC = () => {
   const [decks, setDecks] = useState<Deck[]>([]);
+  const [allDecks, setAllDecks] = useState<Deck[]>([]);
+  const [allCards, setAllCards] = useState<Card[]>([]);
   const [totalCardsForStudy, setTotalCardsForStudy] = useState<number>(0);
   const [totalCardsReviewed, setTotalCardsReviewed] = useState<number>(0);
   const [searchText, setSearchText] = useState<string>('');
@@ -58,89 +60,85 @@ const Study: React.FC = () => {
           nextReview: card.nextReview ? card.nextReview * 1000 : null,
         }));
 
-        const processDecks = (currentCards: Card[], currentDecks: Deck[]) => {
-          const currentTime = Date.now();
-
-          let currentTotalCardsForStudy = 0;
-          let currentTotalCardsReviewed = 0;
-
-          const filteredDecks = currentDecks.filter(deck => {
-            if (searchType === 'decks' && searchText) {
-              return deck.name.toLowerCase().includes(searchText.toLowerCase());
-            }
-            return true;
-          });
-
-          const processed = filteredDecks.map(deck => {
-            let cardsInDeck = currentCards.filter(card => card.deckId === deck._id);
-
-            if (searchType === 'cards' && searchText) {
-              cardsInDeck = cardsInDeck.filter(card => {
-                const frontMatches = card.front.toLowerCase().includes(searchText.toLowerCase());
-                const backMatches = card.back.toLowerCase().includes(searchText.toLowerCase());
-
-                if (cardSearchField === 'front') {
-                  return frontMatches;
-                } else if (cardSearchField === 'back') {
-                  return backMatches;
-                } else { // 'all'
-                  return frontMatches || backMatches;
-                }
-              });
-            }
-
-            const {
-              cardsForStudy,
-              cardsReviewed,
-              reviewTime
-            } = calculateStudyMetrics(cardsInDeck, currentTime);
-
-            currentTotalCardsForStudy += cardsForStudy;
-            currentTotalCardsReviewed += cardsReviewed;
-
-            const nextReviewTimeRemaining = formatTimeRemaining(reviewTime - currentTime)
-             
-             
-
-            return {
-              ...deck,
-              cardsForStudy,
-              cardsReviewed,
-              nextReviewTimeRemaining
-            };
-          });
-          setTotalCardsForStudy(currentTotalCardsForStudy);
-          setTotalCardsReviewed(currentTotalCardsReviewed);
-          return processed;
-        };
-
-        const enrichedDecks = processDecks(allCards, allDecks);
-        enrichedDecks.sort((a, b) => (a.cardsForStudy || 0) - (b.cardsForStudy || 0));
-        setDecks(enrichedDecks);
-
-        const intervalId = setInterval(() => {
-          setDecks(prevDecks => {
-            const updatedDecks = processDecks(
-              allCards,
-              prevDecks.map(deck => ({
-                ...deck,
-                cards_id: allCards
-                  .filter(card => card.deckId === deck._id)
-                  .map(card => card._id)
-              }))
-            );
-            return updatedDecks;
-          });
-        }, 1000);
-
-        return () => clearInterval(intervalId);
+        setAllDecks(allDecks);
+        setAllCards(allCards);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
     fetchDecksAndCards();
-  }, [searchText, searchType, cardSearchField]);
+  }, []);
+
+  useEffect(() => {
+    if (allDecks.length === 0 || allCards.length === 0) return;
+
+    const processDecks = (currentCards: Card[], currentDecks: Deck[]) => {
+      const currentTime = Date.now();
+
+      let currentTotalCardsForStudy = 0;
+      let currentTotalCardsReviewed = 0;
+
+      const filteredDecks = currentDecks.filter(deck => {
+        if (searchType === 'decks' && searchText) {
+          return deck.name.toLowerCase().includes(searchText.toLowerCase());
+        }
+        return true;
+      });
+
+      const processed = filteredDecks.map(deck => {
+        let cardsInDeck = currentCards.filter(card => card.deckId === deck._id);
+
+        if (searchType === 'cards' && searchText) {
+          cardsInDeck = cardsInDeck.filter(card => {
+            const frontMatches = card.front.toLowerCase().includes(searchText.toLowerCase());
+            const backMatches = card.back.toLowerCase().includes(searchText.toLowerCase());
+
+            if (cardSearchField === 'front') {
+              return frontMatches;
+            } else if (cardSearchField === 'back') {
+              return backMatches;
+            } else { // 'all'
+              return frontMatches || backMatches;
+            }
+          });
+        }
+
+        const {
+          cardsForStudy,
+          cardsReviewed,
+          reviewTime
+        } = calculateStudyMetrics(cardsInDeck, currentTime);
+
+        currentTotalCardsForStudy += cardsForStudy;
+        currentTotalCardsReviewed += cardsReviewed;
+
+        const nextReviewTimeRemaining = formatTimeRemaining(reviewTime - currentTime);
+
+        return {
+          ...deck,
+          cardsForStudy,
+          cardsReviewed,
+          nextReviewTimeRemaining
+        };
+      });
+      setTotalCardsForStudy(currentTotalCardsForStudy);
+      setTotalCardsReviewed(currentTotalCardsReviewed);
+      return processed;
+    };
+
+    const processAndSetDecks = () => {
+      const processedDecks = processDecks(allCards, allDecks);
+      processedDecks.sort((a, b) => (a.cardsForStudy || 0) - (b.cardsForStudy || 0));
+      setDecks(processedDecks);
+    };
+
+    processAndSetDecks();
+
+    const intervalId = setInterval(processAndSetDecks, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [allDecks, allCards, searchText, searchType, cardSearchField]);
 
   const DeckTile: React.FC<{ deck: Deck }> = ({ deck }) => {
     const textRef = useRef<HTMLParagraphElement>(null);
