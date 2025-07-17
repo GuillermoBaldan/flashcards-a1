@@ -113,7 +113,8 @@ const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, onCardsDepleted 
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <h1 className="text-3xl font-bold mb-8">Estudiando: {currentDeckName}</h1>
+      <h2 className="text-3xl font-bold mb-8" style={{fontSize: '2.5rem'}}>Estudiando: {currentDeckName}</h2>
+      <p>Cartas restantes: {cards.length - 1} de {cards.length}</p>
       <div className="w-full max-w-md mb-4">
         <TestProgressBar currentCardIndex={totalCardsInSession - cards.length} totalCards={totalCardsInSession} />
       </div>
@@ -177,7 +178,7 @@ const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, onCardsDepleted 
       <div className="mt-4 text-gray-600">
         <p><strong>Última revisión:</strong> {currentCard.lastReview ? formatDateToLocaleString(currentCard.lastReview) : 'N/A'}</p>
         <p><strong>Próxima revisión:</strong> {currentCard.nextReview ? formatDateToLocaleString(currentCard.nextReview) : 'N/A'}</p>
-        <p>Cartas restantes: {cards.length - 1} de {cards.length}</p>
+        
       </div>
 
       {showCompletionMessage && (
