@@ -29,7 +29,7 @@ const SelectionTest: React.FC = () => {
           Tests de Mazos
         </Link>
         <Link
-          to="/test-cards"
+          to="/test-types-cards"
           className="font-bold py-4 px-8 rounded-lg text-xl flex items-center justify-center"
           style={{
             width: '25vw',
