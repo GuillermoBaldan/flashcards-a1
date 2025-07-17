@@ -146,7 +146,7 @@ const Study: React.FC = () => {
 
     return (
       <Link
-        to={`/decks/${deck._id}/cards`} // Aqui vamos a la página para estudiar el mazo
+        to="/selectionTest" // Navegar a la página de selección de test
         className="flex flex-col items-start gap-2 rounded-2xl p-4 shadow-sm border h-36"
         style={{
           borderColor: 'black',
@@ -215,6 +215,11 @@ const Study: React.FC = () => {
           cardSearchField={cardSearchField}
           onCardSearchFieldChange={setCardSearchField}
         />
+        <div className="flex justify-center mt-4">
+          <Link to="/selectionTest" style={{ backgroundColor: '#3b82f6', color: 'white', fontWeight: 'bold', padding: '1rem 2rem', borderRadius: '0.5rem', fontSize: '1.25rem', marginTop: '2rem', width: '13rem'  }}>
+            Test Selection
+          </Link>
+        </div>
         <div className="flex flex-row items-center justify-around p-4">
           <h2 className="text-red-500 text-lg font-bold leading-tight tracking-[-0.015em">📚 Cards for Study: <strong style={{ color: 'red' }}>{totalCardsForStudy}</strong></h2>
           <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em">✅ Cards Reviewed: <strong style={{ color: 'green' }}>{totalCardsReviewed}</strong></h2>

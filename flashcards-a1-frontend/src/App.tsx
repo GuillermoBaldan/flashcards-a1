@@ -4,6 +4,8 @@ import CardsInDeck from './pages/CardsInDeck';
 import EditCard from './pages/EditCard';
 import Study from './pages/Study'; // Importa el componente Study
 import QuestionAnswer from './pages/QuestionAnswer'; // Importa el nuevo componente QuestionAnswer
+import SelectionTest from './pages/selectionTest';
+import TestCards from './pages/Test-Cards';
 import MosaicOfCards from './pages/MosaicOfCards';
 import AddCard from './components/addCard'; // Importa el nuevo componente AddCard
 import './App.css';
@@ -14,6 +16,9 @@ function App() {
       <Routes>
         <Route path="/decks" element={<Decks />} />
         <Route path="/decks/:deckId/cards" element={<QuestionAnswer />} /> {/* La nueva ruta para el estudio de cartas del mazo */}
+        <Route path="/selectionTest" element={<SelectionTest />} />
+        <Route path="/test-decks" element={<QuestionAnswer />} />
+        <Route path="/test-cards" element={<TestCards />} />
         <Route path="/decks/:deckId/mosaic" element={<MosaicOfCards />} />
         <Route path="/decks/:deckId/add-card" element={<AddCard />} /> {/* Nueva ruta para añadir cartas */}
         <Route path="/edit-card/:cardId" element={<EditCard />} />
