@@ -49,7 +49,11 @@ const MoveCardModal: React.FC<MoveCardModalProps> = ({ currentCard, onClose, onC
     }
 
     try {
-      await axios.put(`http://localhost:5000/cards/${currentCard._id}`, { deckId: selectedDeck });
+      await axios.put(`http://localhost:5000/cards/${currentCard._id}`, {
+        deckId: selectedDeck,
+        front: currentCard.front,
+        back: currentCard.back,
+      });
       onCardMoved();
     } catch (err) {
       console.error('Error moving card:', err);

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import NavigationBar from '../components/NavigationBar';
 import DeckTile from '../components/deck-component';
+import SearchBar from '../components/searchBar.tsx';
 
 
 interface Card {
@@ -35,6 +36,9 @@ interface Deck {
 
 const Decks: React.FC = () => {
   const [decks, setDecks] = useState<Deck[]>([]);
+  const [searchText, setSearchText] = useState<string>('');
+  const [searchType, setSearchType] = useState<'cards' | 'decks'>('decks');
+  const [cardSearchField, setCardSearchField] = useState<'front' | 'back' | 'all'>('all');
 
   useEffect(() => {
     const fetchDecksAndCards = async () => {
@@ -47,8 +51,32 @@ const Decks: React.FC = () => {
 
         const processDecks = (currentCards: Card[], prevDecks: Deck[]) => {
           const currentTime = Date.now();
-          return prevDecks.map(prevDeck => {
-            const cardsInDeck = currentCards.filter(card => card.deckId === prevDeck._id);
+
+          const filteredDecks = prevDecks.filter(deck => {
+            if (searchType === 'decks' && searchText) {
+              return deck.name.toLowerCase().includes(searchText.toLowerCase());
+            }
+            return true;
+          });
+
+          return filteredDecks.map(prevDeck => {
+            let cardsInDeck = currentCards.filter(card => card.deckId === prevDeck._id);
+
+            if (searchType === 'cards' && searchText) {
+              cardsInDeck = cardsInDeck.filter(card => {
+                const frontMatches = card.front.toLowerCase().includes(searchText.toLowerCase());
+                const backMatches = card.back.toLowerCase().includes(searchText.toLowerCase());
+
+                if (cardSearchField === 'front') {
+                  return frontMatches;
+                } else if (cardSearchField === 'back') {
+                  return backMatches;
+                } else { // 'all'
+                  return frontMatches || backMatches;
+                }
+              });
+            }
+
             let cardsForStudy = 0;
             let cardsReviewed = 0;
             let minNextReviewTime = Infinity;
@@ -97,13 +125,21 @@ const Decks: React.FC = () => {
     };
 
     fetchDecksAndCards();
-  }, []);
+  }, [searchText, searchType, cardSearchField]);
 
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-white justify-between group/design-root overflow-x-hidden" style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}>
       <NavigationBar activePage="decks" />
       {/* Contenido principal */}
       <div className="pt-20"> {/* Ajustar el padding-top para que el contenido no quede debajo de la barra de navegación fija */}
+        <SearchBar
+          searchText={searchText}
+          onSearchTextChange={setSearchText}
+          searchType={searchType}
+          onSearchTypeChange={setSearchType}
+          cardSearchField={cardSearchField}
+          onCardSearchFieldChange={setCardSearchField}
+        />
         <div className="flex items-center bg-white p-4 pb-2 justify-between">
           <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Decks: {decks.length}</h2>
           <div className="flex w-12 items-center justify-end">

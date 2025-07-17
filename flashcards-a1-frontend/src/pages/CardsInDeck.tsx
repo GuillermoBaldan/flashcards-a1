@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import AddCardButton from '../components/addCardButton';
+import SearchBar from '../components/searchBar.tsx';
 import ReactMarkdown from 'react-markdown';
 import RemarkGfm from 'remark-gfm';
 import { htmlToMarkdown } from '../utils/htmlToMarkdown';
@@ -21,6 +22,9 @@ const CardsInDeck: React.FC = () => {
   const { deckId } = useParams<{ deckId: string }>();
   const [cards, setCards] = useState<Card[]>([]);
   const [deckName, setDeckName] = useState<string>('');
+  const [searchText, setSearchText] = useState<string>('');
+  const [searchType, setSearchType] = useState<'cards' | 'decks'>('cards'); // Default to cards search
+  const [cardSearchField, setCardSearchField] = useState<'front' | 'back' | 'all'>('all');
 
   useEffect(() => {
     if (deckId) {
@@ -48,6 +52,21 @@ const CardsInDeck: React.FC = () => {
     }
   }, [deckId]);
 
+  const filteredCards = cards.filter(card => {
+    if (!searchText) return true;
+
+    const frontMatches = card.front.toLowerCase().includes(searchText.toLowerCase());
+    const backMatches = card.back.toLowerCase().includes(searchText.toLowerCase());
+
+    if (cardSearchField === 'front') {
+      return frontMatches;
+    } else if (cardSearchField === 'back') {
+      return backMatches;
+    } else { // 'all'
+      return frontMatches || backMatches;
+    }
+  });
+
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-white justify-between group/design-root overflow-x-hidden" style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}>
       <div className="flex items-center bg-white p-4 pb-2 justify-between">
@@ -64,9 +83,17 @@ const CardsInDeck: React.FC = () => {
           {deckId && <AddCardButton deckId={deckId} />} 
         </div>
       </div>
+      <SearchBar
+        searchText={searchText}
+        onSearchTextChange={setSearchText}
+        searchType={searchType}
+        onSearchTypeChange={setSearchType}
+        cardSearchField={cardSearchField}
+        onCardSearchFieldChange={setCardSearchField}
+      />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-        {cards.length > 0 ? (
-          cards.map(card => (
+        {filteredCards.length > 0 ? (
+          filteredCards.map(card => (
             <div key={card._id} className="bg-[#f0f2f4] rounded-lg p-4 shadow-md flex flex-col justify-between min-h-[120px]">
               <h3 className="text-lg font-semibold mb-2 text-[#111418]">
                 <ReactMarkdown remarkPlugins={[RemarkGfm]}>

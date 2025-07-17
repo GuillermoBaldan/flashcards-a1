@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import NavigationBar from '../components/NavigationBar';
 import { formatTimeRemaining } from '../utils/formatTimeRemaining';
 import getContrastColor from '../utils/dynamicContrastColor';
+import SearchBar from '../components/searchBar.tsx';
 
 interface Card {
   _id: string;
@@ -40,6 +41,9 @@ const Study: React.FC = () => {
   const [decks, setDecks] = useState<Deck[]>([]);
   const [totalCardsForStudy, setTotalCardsForStudy] = useState<number>(0);
   const [totalCardsReviewed, setTotalCardsReviewed] = useState<number>(0);
+  const [searchText, setSearchText] = useState<string>('');
+  const [searchType, setSearchType] = useState<'cards' | 'decks'>('decks');
+  const [cardSearchField, setCardSearchField] = useState<'front' | 'back' | 'all'>('all');
 
   useEffect(() => {
     const fetchDecksAndCards = async () => {
@@ -60,8 +64,31 @@ const Study: React.FC = () => {
           let currentTotalCardsForStudy = 0;
           let currentTotalCardsReviewed = 0;
 
-          const processed = currentDecks.map(deck => {
-            const cardsInDeck = currentCards.filter(card => card.deckId === deck._id);
+          const filteredDecks = currentDecks.filter(deck => {
+            if (searchType === 'decks' && searchText) {
+              return deck.name.toLowerCase().includes(searchText.toLowerCase());
+            }
+            return true;
+          });
+
+          const processed = filteredDecks.map(deck => {
+            let cardsInDeck = currentCards.filter(card => card.deckId === deck._id);
+
+            if (searchType === 'cards' && searchText) {
+              cardsInDeck = cardsInDeck.filter(card => {
+                const frontMatches = card.front.toLowerCase().includes(searchText.toLowerCase());
+                const backMatches = card.back.toLowerCase().includes(searchText.toLowerCase());
+
+                if (cardSearchField === 'front') {
+                  return frontMatches;
+                } else if (cardSearchField === 'back') {
+                  return backMatches;
+                } else { // 'all'
+                  return frontMatches || backMatches;
+                }
+              });
+            }
+
             const {
               cardsForStudy,
               cardsReviewed,
@@ -113,7 +140,7 @@ const Study: React.FC = () => {
     };
 
     fetchDecksAndCards();
-  }, []);
+  }, [searchText, searchType, cardSearchField]);
 
   const DeckTile: React.FC<{ deck: Deck }> = ({ deck }) => {
     const textRef = useRef<HTMLParagraphElement>(null);
@@ -182,9 +209,17 @@ const Study: React.FC = () => {
     >
       <NavigationBar activePage="study" />
       <div className="pt-20" style={{ marginTop: '1rem' }}>
+        <SearchBar
+          searchText={searchText}
+          onSearchTextChange={setSearchText}
+          searchType={searchType}
+          onSearchTypeChange={setSearchType}
+          cardSearchField={cardSearchField}
+          onCardSearchFieldChange={setCardSearchField}
+        />
         <div className="flex flex-row items-center justify-around p-4">
-          <h2 className="text-red-500 text-lg font-bold leading-tight tracking-[-0.015em]">📚 Cards for Study: <strong style={{ color: 'red' }}>{totalCardsForStudy}</strong></h2>
-          <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em]">✅ Cards Reviewed: <strong style={{ color: 'green' }}>{totalCardsReviewed}</strong></h2>
+          <h2 className="text-red-500 text-lg font-bold leading-tight tracking-[-0.015em">📚 Cards for Study: <strong style={{ color: 'red' }}>{totalCardsForStudy}</strong></h2>
+          <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em">✅ Cards Reviewed: <strong style={{ color: 'green' }}>{totalCardsReviewed}</strong></h2>
         </div>
         {renderContent()}
       </div>
