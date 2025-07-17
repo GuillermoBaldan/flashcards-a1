@@ -33,6 +33,7 @@ interface Deck {
   cardsForStudy?: number;
   cardsReviewed?: number;
   reviewTime?: string;
+  nextReviewTimeRemaining?: string;
 }
 
 const Study: React.FC = () => {
@@ -47,7 +48,7 @@ const Study: React.FC = () => {
         const cardsResponse = await axios.get('http://localhost:5000/cards/');
 
         const allDecks: Deck[] = decksResponse.data;
-        const allCards: Card[] = cardsResponse.data.map(card => ({
+        const allCards: Card[] = cardsResponse.data.map((card: Card) => ({
           ...card,
           lastReview: card.lastReview ? card.lastReview * 1000 : null,
           nextReview: card.nextReview ? card.nextReview * 1000 : null,
@@ -156,9 +157,9 @@ const Study: React.FC = () => {
         <div className="flex flex-col items-start p-4 w-full">
           {/* Renderizado condicional: si hay cartas para estudiar, muestra el número en rojo; de lo contrario, muestra el tiempo para el próximo repaso. */}
           {deck.cardsForStudy && deck.cardsForStudy > 0 && (
-            <p className="text-sm" style={{ color: 'red' }}>{deck.cardsForStudy} cards for study</p>
+            <p className="text-sm" style={{ color: 'red' }}>{deck.cardsForStudy || 0} cards for study</p>
           )}
-          <p className="text-sm" style={{ color: deck.cardsForStudy > 0 ? 'red' : textColor }}>{deck.nextReviewTimeRemaining}</p>
+          <p className="text-sm" style={{ color: (deck.cardsForStudy || 0) > 0 ? 'red' : textColor }}>{deck.nextReviewTimeRemaining || ''}</p>
           {/* Muestra el número de cartas ya revisadas en el mazo. */}
           <p className="text-sm" style={{ color: textColor }}>{deck.cardsReviewed || 0} cards reviewed</p>
         </div>
