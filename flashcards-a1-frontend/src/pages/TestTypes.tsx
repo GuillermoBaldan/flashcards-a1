@@ -11,7 +11,7 @@ const TestCards: React.FC = () => {
       <div className="grid grid-cols-2 gap-4">
         <TestButton text="El test del top 1% de preguntas más fáciles" onClick={() => navigate('/test-top1-percent')} />
         <TestButton text="El test del top 5% de preguntas más fáciles" onClick={() => navigate('/test-top5-percent')} />
-        <TestButton text="El test top 10% de preguntas más fáciles" onClick={() => console.log('10% test clicked')} />
+        <TestButton text="El test top 10% de preguntas más fáciles" onClick={() => navigate('/test-top10-percent')} />
         <TestButton text="El test top 25% de preguntas más fáciles" onClick={() => console.log('25% test clicked')} />
         <TestButton text="El test top 50% de preguntas más fáciles" onClick={() => console.log('50% test clicked')} />
         <TestButton text="Test 100%" onClick={() => console.log('100% test clicked')} />
