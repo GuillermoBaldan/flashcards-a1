@@ -7,6 +7,7 @@ import remarkGfm from 'remark-gfm';
 import { htmlToMarkdown } from '../utils/htmlToMarkdown';
 import { formatDateToLocaleString } from '../utils/formatDateToLocaleString';
 import MoveCardModal from './MoveCardModal';
+import TestProgressBar from './testProgressBar';
 import '../App.css';
 
 interface Card {
@@ -87,10 +88,14 @@ const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, deckName, onCard
   }
 
   const currentCard = cards[currentCardIndex];
+  const totalCardsInSession = initialCards.length; // Use initialCards to get the total count for the session
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <h1 className="text-3xl font-bold mb-8">Estudiando: {deckName}</h1>
+      <div className="w-full max-w-md mb-4">
+        <TestProgressBar currentCardIndex={totalCardsInSession - cards.length} totalCards={totalCardsInSession} />
+      </div>
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md text-center" style={{ minHeight: '200px' }}>
         <div className="text-xl font-semibold mb-4">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
