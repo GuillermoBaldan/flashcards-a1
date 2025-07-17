@@ -19,7 +19,7 @@ interface Deck {
   minNextReviewTime?: number; // Cambiado de nextReviewTimeRemaining a minNextReviewTime
 }
 
-const DeckTile: React.FC<{ deck: Deck }> = memo(({ deck }) => {
+const DeckTile: React.FC<{ deck: Deck; linkSuffix?: string }> = memo(({ deck, linkSuffix = 'cards' }) => {
   const deckTileRef = useRef<HTMLAnchorElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState<string | undefined>(undefined);
@@ -67,7 +67,7 @@ const DeckTile: React.FC<{ deck: Deck }> = memo(({ deck }) => {
 
   return (
     <Link
-      to={`/decks/${deck._id}/mosaic`}
+      to={`/decks/${deck._id}/${linkSuffix}`}
       className="flex flex-col items-start gap-2 rounded-2xl p-4 shadow-sm border h-36 "
       style={{ borderColor: 'black', backgroundColor: deck.color || '#ffffff', borderWidth: '3px', margin: "1rem", borderRadius: '1rem' }}
       ref={deckTileRef}

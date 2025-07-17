@@ -15,7 +15,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/decks" element={<Decks />} />
-        <Route path="/decks/:deckId/cards" element={<QuestionAnswer />} /> {/* La nueva ruta para el estudio de cartas del mazo */}
+        <Route path="/decks/:deckId/study" element={<QuestionAnswer />} /> {/* La nueva ruta para el estudio de cartas del mazo */}
         <Route path="/selectionTest" element={<SelectionTest />} />
         <Route path="/test-decks" element={<QuestionAnswer />} />
         <Route path="/test-types-cards" element={<TestCards />} />
