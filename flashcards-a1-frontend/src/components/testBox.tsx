@@ -21,17 +21,22 @@ interface Card {
 
 interface TestBoxProps {
   cards: Card[];
-  deckName: string;
   onCardsDepleted: () => void; // Callback when all cards are studied
 }
 
-const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, deckName, onCardsDepleted }) => {
+interface Deck {
+  _id: string;
+  name: string;
+}
+
+const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, onCardsDepleted }) => {
   const navigate = useNavigate();
   const [cards, setCards] = useState<Card[]>(initialCards);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [showCompletionMessage, setShowCompletionMessage] = useState(false);
   const [showMoveCardModal, setShowMoveCardModal] = useState(false);
+  const [currentDeckName, setCurrentDeckName] = useState<string>('');
 
   useEffect(() => {
     setCards(initialCards);
@@ -39,6 +44,22 @@ const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, deckName, onCard
     setIsFlipped(false);
     setShowCompletionMessage(false);
   }, [initialCards]);
+
+  useEffect(() => {
+    const fetchDeckName = async () => {
+      if (cards.length > 0) {
+        try {
+          const response = await axios.get<Deck>(`http://localhost:5000/decks/${cards[currentCardIndex].deckId}`);
+          setCurrentDeckName(response.data.name);
+        } catch (error) {
+          console.error('Error fetching deck name:', error);
+          setCurrentDeckName('Mazo Desconocido');
+        }
+      }
+    };
+
+    fetchDeckName();
+  }, [cards, currentCardIndex]);
 
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
@@ -92,7 +113,7 @@ const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, deckName, onCard
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <h1 className="text-3xl font-bold mb-8">Estudiando: {deckName}</h1>
+      <h1 className="text-3xl font-bold mb-8">Estudiando: {currentDeckName}</h1>
       <div className="w-full max-w-md mb-4">
         <TestProgressBar currentCardIndex={totalCardsInSession - cards.length} totalCards={totalCardsInSession} />
       </div>

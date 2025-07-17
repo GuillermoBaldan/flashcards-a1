@@ -67,7 +67,7 @@ const TestTop5: React.FC = () => {
 
   if (cards.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4" style={{ top: 'rem'}}>
         <h1 className="text-3xl font-bold mb-8">Test del Top 10% de Preguntas Más Fáciles</h1>
         <p>No hay tarjetas disponibles para este test.</p>
       </div>
@@ -77,9 +77,10 @@ const TestTop5: React.FC = () => {
   return (
     <>
       <NavigationBar activePage="study" />
+      <h1 className="text-3xl font-bold mb-8">Test del Top 10% de Preguntas Más Fáciles</h1>
       <TestBox
         cards={cards}
-        deckName="Top 10% de Preguntas Más Fáciles"
+
         onCardsDepleted={handleCardsDepleted}
       />
     </>
