@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavigationBar from '../components/NavigationBar';
 import DeckTile from '../components/deck-component';
@@ -39,6 +40,7 @@ const Decks: React.FC = () => {
   const [searchText, setSearchText] = useState<string>('');
   const [searchType, setSearchType] = useState<'cards' | 'decks'>('decks');
   const [cardSearchField, setCardSearchField] = useState<'front' | 'back' | 'all'>('all');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDecksAndCards = async () => {
@@ -146,7 +148,7 @@ const Decks: React.FC = () => {
             {/* Botón de añadir mazo (se puede reubicar si es necesario) */}
             <button
               className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 bg-transparent text-[#111418] gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0"
-              onClick={() => { /* Lógica para añadir nuevo mazo */ alert('Lógica para añadir nuevo mazo aquí'); }}
+              onClick={() => { navigate('/add-deck'); }}
             >
               <div className="text-[#111418]" data-icon="Plus" data-size="24px" data-weight="regular">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">

@@ -11,6 +11,7 @@ import AddCard from './components/addCard'; // Importa el nuevo componente AddCa
 import TestTop1 from './pages/TestTop1'; // Importa el nuevo componente TestTop1
 import TestTop5 from './pages/TestTop5'; // Importa el nuevo componente TestTop5
 import TestTop10 from './pages/TestTop10'; // Importa el nuevo componente TestTop10
+import AddDeck from './pages/AddDeck';
 import './App.css';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/test-types-cards" element={<TestCards />} />
         <Route path="/decks/:deckId/cards" element={<CardsOfDeck />} />
         <Route path="/decks/:deckId/add-card" element={<AddCard />} /> {/* Nueva ruta para añadir cartas */}
+        <Route path="/add-deck" element={<AddDeck />} />
         <Route path="/edit-card/:cardId" element={<EditCard />} />
         <Route path="/study" element={<Study />} /> {/* La ruta para mostrar los mazos */}
         <Route path="/test-top10-percent" element={<TestTop10 />} />
