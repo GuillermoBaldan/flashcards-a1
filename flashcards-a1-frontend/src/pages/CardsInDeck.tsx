@@ -6,6 +6,7 @@ import SearchBar from '../components/searchBar.tsx';
 import ReactMarkdown from 'react-markdown';
 import RemarkGfm from 'remark-gfm';
 import { htmlToMarkdown } from '../utils/htmlToMarkdown';
+import NavigationBar from '../components/NavigationBar';
 
 interface Card {
   _id: string;
@@ -117,49 +118,8 @@ const CardsInDeck: React.FC = () => {
         )}
       </div>
       <div>
-        <div className="flex flex-row gap-2 border-t border-[#f0f2f4] bg-white px-4 pb-3 pt-2">
-          <Link className="flex items-center justify-end gap-1 text-[#637488]" to="/">
-            <div className="text-[#637488] flex h-8 items-center justify-center" data-icon="House" data-size="24px" data-weight="regular">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-                <path
-                  d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"
-                ></path>
-              </svg>
-            </div>
-            <p className="text-[#637488] text-xs font-medium leading-normal tracking-[0.015em]">Home</p>
-          </Link>
-          <Link className="flex items-center justify-end gap-1 text-[#637488]" to="/decks">
-            <div className="text-[#637488] flex h-8 items-center justify-center" data-icon="Folder" data-size="24px" data-weight="regular">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-                <path
-                  d="M216,72H131.31L104,44.69A15.88,15.88,0,0,0,92.69,40H40A16,16,0,0,0,24,56V200.62A15.41,15.41,0,0,0,39.39,216h177.5A15.13,15.13,0,0,0,232,200.89V88A16,16,0,0,0,216,72ZM40,56H92.69l16,16H40Z"
-                ></path>
-              </svg>
-            </div>
-            <p className="text-[#637488] text-xs font-medium leading-normal tracking-[0.015em]">Decks</p>
-          </Link>
-          <Link className="flex items-center justify-end gap-1 text-[#637488]" to="/study">
-            <div className="text-[#637488] flex h-8 items-center justify-center" data-icon="Cards" data-size="24px" data-weight="regular">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-                <path
-                  d="M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z"
-                ></path>
-              </svg>
-            </div>
-            <p className="text-[#637488] text-xs font-medium leading-normal tracking-[0.015em]">Study</p>
-          </Link>
-          <Link className="flex items-center justify-end gap-1 text-[#637488]" to="/profile">
-            <div className="text-[#637488] flex h-8 items-center justify-center" data-icon="User" data-size="24px" data-weight="regular">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-                <path
-                  d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"
-                ></path>
-              </svg>
-            </div>
-            <p className="text-[#637488] text-xs font-medium leading-normal tracking-[0.015em]">Profile</p>
-          </Link>
-        </div>
-        <div className="h-5 bg-white"></div>
+  
+        <NavigationBar activePage="decks" />
       </div>
     </div>
   );

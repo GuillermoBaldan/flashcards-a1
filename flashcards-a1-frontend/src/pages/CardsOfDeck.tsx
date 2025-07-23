@@ -9,6 +9,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { htmlToMarkdown } from '../utils/htmlToMarkdown';
 import SearchBar from '../components/searchBar.tsx';
+import NavigationBar from '../components/NavigationBar';
 
 // Función para formatear un timestamp a "dd de Mes del YYYY HH:MM"
 const formatTimestampToDateTime = (ms: number | null): string => {
@@ -100,12 +101,9 @@ const CardsOfDeck: React.FC = () => {
     return <div className="text-center mt-8 text-red-500">{error}</div>;
   }
 
-  if (cards.length === 0) {
-    return <div className="text-center mt-8">No hay cartas en este mazo.</div>;
-  }
-
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-4">
+      <NavigationBar activePage="decks" />
       <h1 className="text-3xl font-bold mb-8">Cartas de: {deckName}</h1>
       <SearchBar
         searchText={searchText}
@@ -117,18 +115,17 @@ const CardsOfDeck: React.FC = () => {
       />
       <div className="fixed top-4 right-8 z-10 flex space-x-4">
         {deckId && <AddCardButton deckId={deckId} />} 
-        <ReturnDecksViewButton />
-        <ReturnStudyViewButton />
       </div>
       <div className="w-full max-w-screen-xl gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
         {filteredCards.length > 0 ? (
           filteredCards.map(card => (
-          <CardItem key={card._id} card={card} onCardDeleted={fetchCards} />
-        ))
+            <CardItem key={card._id} card={card} onCardDeleted={fetchCards} />
+          ))
         ) : (
-          <div className="text-center mt-8">No se encontraron tarjetas que coincidan con la búsqueda.</div>
+          <div className="text-center mt-8">{cards.length === 0 ? 'No hay cartas en este mazo.' : 'No se encontraron tarjetas que coincidan con la búsqueda.'}</div>
         )}
       </div>
+      
     </div>
   );
 };

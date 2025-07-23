@@ -90,6 +90,8 @@ const QuestionAnswer: React.FC = () => {
 
   if (cards.length === 0) {
     return (
+    <>
+      <NavigationBar activePage="study" />
       <div className="text-center mt-8">
         <p className="mb-4">No hay cartas para estudiar en este mazo.</p>
         <button
@@ -100,7 +102,8 @@ const QuestionAnswer: React.FC = () => {
         </button>
         <ReturnStudyViewButton />
       </div>
-    );
+    </>
+  );
   }
 
   return (

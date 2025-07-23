@@ -16,7 +16,7 @@ const AddCardButton: React.FC<AddCardButtonProps> = ({ deckId }) => {
     <button
       onClick={handleClick}
       className="fixed top-4 z-10 px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 focus:outline-none"
-      style={{ top: '3.5rem', right: '0.5rem', margin: '1rem' }}
+      style={{ top: '6em', right: '0.5rem', margin: '1rem' }}
     >
       Añadir Tarjeta
     </button>

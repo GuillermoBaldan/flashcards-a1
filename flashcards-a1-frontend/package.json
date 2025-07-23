@@ -11,16 +11,17 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.1",
+    "axios": "^1.6.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.6.3",
     "rehype-raw": "^7.0.0",
-    "remark-gfm": "^4.0.1",
-    "axios": "^1.6.7"
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.11",
+    "@types/jest": "^30.0.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.3",

@@ -23,7 +23,7 @@ const AddCard: React.FC = () => {
     axios.post(`http://localhost:5000/cards/add`, cardData)
       .then(res => {
         console.log(res.data);
-        navigate(`/decks/${deckId}/mosaic`); // Redirige a la vista de mosaico del mazo
+        navigate(`/decks/${deckId}/study`); // Redirige a la vista de mosaico del mazo
       })
       .catch(error => {
         console.error("Error creating card:", error);
