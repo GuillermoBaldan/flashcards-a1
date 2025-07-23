@@ -1,22 +1,23 @@
-import { cardsForStudy } from '../utils/cardsForStudy';
-import { dynamicContrastColor } from '../utils/dynamicContrastColor';
-import { dynamicFontSize } from '../utils/dynamicFontSize';
+import { vi } from 'vitest';
+import getContrastColor from '../utils/dynamicContrastColor';
+import useAdjustFontSize from '../utils/dynamicFontSize';
 import { formatDateToLocaleString } from '../utils/formatDateToLocaleString';
 import { formatTimeRemaining } from '../utils/formatTimeRemaining';
 import { htmlToMarkdown } from '../utils/htmlToMarkdown';
-import { manageTimes } from '../utils/manageTimes';
-import { markdownTohtml } from '../utils/markdownTohtml';
-import { resetTime } from '../utils/resetTime';
-import { stackOfCardsByDifficulty } from '../utils/stackOfCardsByDifficulty';
+import { calculateReviewTimes } from '../utils/manageTimes';
+import { markdownToHtml } from '../utils/markdownTohtml';
+import { resetTimes } from '../utils/resetTime';
+import { calculateStudyMetrics } from '../utils/cardsForStudy';
+import { getStackOfCardsByDifficulty } from '../utils/stackOfCardsByDifficulty';
 import { timeToNextReview } from '../utils/timeToNextReview';
 
-import { calculateStudyMetrics } from '../utils/cardsForStudy';
+
 import axios from 'axios';
 
-jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
+vi.mock('axios');
+const mockedAxios = vi.mocked(axios, true);
 
-describe('cardsForStudy', () => {
+describe('calculateStudyMetrics', () => {
   const currentTime = Date.now();
 
   it('should return 0 for all metrics when no cards are in the deck', () => {
@@ -101,39 +102,41 @@ describe('cardsForStudy', () => {
 
 describe('dynamicContrastColor', () => {
   it('should return black for a light background color', () => {
-    expect(dynamicContrastColor('#FFFFFF')).toBe('black');
-    expect(dynamicContrastColor('#F0F0F0')).toBe('black');
-    expect(dynamicContrastColor('#ABCDEF')).toBe('black');
+    expect(getContrastColor('#FFFFFF')).toBe('black');
+    expect(getContrastColor('#F0F0F0')).toBe('black');
+    expect(getContrastColor('#ABCDEF')).toBe('black');
   });
 
   it('should return white for a dark background color', () => {
-    expect(dynamicContrastColor('#000000')).toBe('white');
-    expect(dynamicContrastColor('#123456')).toBe('white');
-    expect(dynamicContrastColor('#333333')).toBe('white');
+    expect(getContrastColor('#000000')).toBe('white');
+    expect(getContrastColor('#123456')).toBe('white');
+    expect(getContrastColor('#333333')).toBe('white');
   });
 
   it('should handle 3-digit hex codes', () => {
-    expect(dynamicContrastColor('#FFF')).toBe('black');
-    expect(dynamicContrastColor('#000')).toBe('white');
-    expect(dynamicContrastColor('#123')).toBe('white');
+    expect(getContrastColor('#FFF')).toBe('black');
+    expect(getContrastColor('#000')).toBe('white');
+    expect(getContrastColor('#123')).toBe('white');
   });
 
   it('should return black for very bright colors even if white has slightly better contrast', () => {
     // This tests the failsafe condition where backgroundLuminance > 0.8
-    expect(dynamicContrastColor('#FFFF00')).toBe('black'); // Yellow
+    expect(getContrastColor('#FFFF00')).toBe('black'); // Yellow
   });
 
   it('should return black for invalid hex codes (treated as white)', () => {
-    expect(dynamicContrastColor('')).toBe('black');
-    expect(dynamicContrastColor('invalid')).toBe('black');
-    expect(dynamicContrastColor(undefined as any)).toBe('black');
-    expect(dynamicContrastColor(null as any)).toBe('black');
+    expect(getContrastColor('')).toBe('black');
+    expect(getContrastColor('invalid')).toBe('black');
+    expect(getContrastColor(undefined as any)).toBe('black');
+    expect(getContrastColor(null as any)).toBe('black');
   });
 });
 
-describe('dynamicFontSize', () => {
-  it('should return a dynamic font size', () => {
-    // Add your test cases here
+describe('useAdjustFontSize', () => {
+  it('should adjust font size based on container width', () => {
+    // Ejemplo de prueba: puedes agregar casos reales aquí
+    // Por ahora, un placeholder para evitar la advertencia de no uso
+    expect(useAdjustFontSize).toBeDefined();
   });
 });
 
@@ -242,7 +245,7 @@ describe('htmlToMarkdown', () => {
   });
 });
 
-describe('manageTimes', () => {
+describe('calculateReviewTimes', () => {
   const currentTime = Date.now();
 
   it('should calculate newNextReview and newLastReview correctly for a correct answer', () => {
@@ -250,7 +253,7 @@ describe('manageTimes', () => {
     const nextReview = currentTime + 5000; // 5 seconds from now
     const isCorrect = true;
 
-    const result = manageTimes(lastReview, nextReview, isCorrect);
+    const result = calculateReviewTimes(lastReview, nextReview, isCorrect);
 
     expect(result.newLastReview).toBe(currentTime);
     expect(result.newNextReview).toBe(currentTime + 2 * (currentTime - lastReview));
@@ -261,7 +264,7 @@ describe('manageTimes', () => {
     const nextReview = currentTime + 5000; // 5 seconds from now
     const isCorrect = false;
 
-    const result = manageTimes(lastReview, nextReview, isCorrect);
+    const result = calculateReviewTimes(lastReview, nextReview, isCorrect);
 
     expect(result.newLastReview).toBe(currentTime);
     expect(result.newNextReview).toBe(currentTime + 30 * 1000); // 30 seconds from now
@@ -272,14 +275,14 @@ describe('manageTimes', () => {
     const nextReview = 0;
     const isCorrect = true;
 
-    const result = manageTimes(lastReview, nextReview, isCorrect);
+    const result = calculateReviewTimes(lastReview, nextReview, isCorrect);
 
     expect(result.newLastReview).toBe(currentTime);
     expect(result.newNextReview).toBe(currentTime + 2 * currentTime);
   });
 });
 
-describe('markdownTohtml', () => {
+describe('markdownToHtml', () => {
   it('should convert basic Markdown to HTML', () => {
     const markdown = 'Hello, **world**!';
     const html = markdownToHtml(markdown);
@@ -317,13 +320,13 @@ describe('markdownTohtml', () => {
   });
 });
 
-describe('resetTime', () => {
+describe('resetTimes', () => {
   it('should set lastReview and nextReview to null', () => {
     const card = {
       lastReview: 123456789,
       nextReview: 987654321,
     };
-    resetTime(card as any);
+    resetTimes(card as any);
     expect(card.lastReview).toBeNull();
     expect(card.nextReview).toBeNull();
   });
@@ -333,19 +336,13 @@ describe('resetTime', () => {
       lastReview: null,
       nextReview: null,
     };
-    resetTime(card as any);
+    resetTimes(card as any);
     expect(card.lastReview).toBeNull();
     expect(card.nextReview).toBeNull();
   });
 });
 
-import { getStackOfCardsByDifficulty } from '../utils/stackOfCardsByDifficulty';
-import axios from 'axios';
-
-jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
-
-describe('stackOfCardsByDifficulty', () => {
+describe('getStackOfCardsByDifficulty', () => {
   beforeEach(() => {
     mockedAxios.get.mockClear();
   });
