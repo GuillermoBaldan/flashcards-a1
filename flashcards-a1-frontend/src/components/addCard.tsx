@@ -22,8 +22,9 @@ const AddCard: React.FC = () => {
 
     axios.post(`http://localhost:5000/cards/add`, cardData)
       .then(res => {
-        console.log(res.data);
-        navigate(`/decks/${deckId}/study`); // Redirige a la vista de mosaico del mazo
+        setFront('');
+        setBack('');
+        navigate(`/decks/${deckId}/add-card`); // Redirige a la vista de añadir tarjeta
       })
       .catch(error => {
         console.error("Error creating card:", error);
@@ -31,7 +32,7 @@ const AddCard: React.FC = () => {
   };
 
   const handleCancel = () => {
-    navigate(`/decks/${deckId}/mosaic`); // Redirige a la vista de mosaico del mazo
+    navigate(`/decks/${deckId}/cards`); // Redirige a la vista de tarjetas del mazo
   };
 
   return (
