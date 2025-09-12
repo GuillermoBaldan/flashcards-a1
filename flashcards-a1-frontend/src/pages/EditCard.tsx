@@ -48,10 +48,10 @@ const EditCard: React.FC = () => {
     };
 
     if (cardId) {
-      axios.put(`http://localhost:5000/cards/update/${cardId}`, cardData)
+      axios.put(`http://localhost:5000/cards/${cardId}`, cardData)
         .then(res => {
           console.log(res.data);
-          navigate(`/decks/${deckId}`);
+          navigate(`/decks/${deckId}/cards`);
         })
         .catch(error => {
           console.error("Error updating card:", error);
@@ -83,7 +83,7 @@ const EditCard: React.FC = () => {
 
         {/* Cabecera */}
         <div className="flex items-center bg-white pb-2 justify-between w-full">
-          <div className="text-[#111418] flex size-12 shrink-0 items-center cursor-pointer" data-icon="X" data-size="24px" data-weight="regular" onClick={() => navigate(`/decks/${deckId}/mosaic`)}>
+          <div className="text-[#111418] flex size-12 shrink-0 items-center cursor-pointer" data-icon="X" data-size="24px" data-weight="regular" onClick={() => navigate(`/decks/${deckId}/cards`)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
               <path
                 d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"
