@@ -43,6 +43,7 @@ const CardsOfDeck: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deckName, setDeckName] = useState<string>('');
+  const [deckColor, setDeckColor] = useState<string>('');
   const [searchText, setSearchText] = useState<string>('');
   const [searchType, setSearchType] = useState<'cards' | 'decks'>('cards');
   const [cardSearchField, setCardSearchField] = useState<'front' | 'back' | 'all'>('all');
@@ -67,6 +68,7 @@ const CardsOfDeck: React.FC = () => {
 
         const deckResponse = await axios.get(`http://localhost:5000/decks/${deckId}`);
         setDeckName(deckResponse.data.name);
+        setDeckColor(deckResponse.data.color || '#FFFFFF'); // Set deck color, default to white if not found
 
         fetchCards(); // Usar la nueva función para obtener las tarjetas
       } catch (err) {
@@ -119,7 +121,7 @@ const CardsOfDeck: React.FC = () => {
       <div className="w-full max-w-screen-xl gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
         {filteredCards.length > 0 ? (
           filteredCards.map(card => (
-            <CardItem key={card._id} card={card} onCardDeleted={fetchCards} />
+            <CardItem key={card._id} card={card} onCardDeleted={fetchCards} deckColor={deckColor} />
           ))
         ) : (
           <div className="text-center mt-8">{cards.length === 0 ? 'No hay cartas en este mazo.' : 'No se encontraron tarjetas que coincidan con la búsqueda.'}</div>

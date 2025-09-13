@@ -35,9 +35,10 @@ const formatTimestampToDateTime = (ms: number | null): string => {
 interface CardItemProps {
   card: Card;
   onCardDeleted: () => void; // Callback para cuando una tarjeta es eliminada
+  deckColor: string; // Add deckColor prop
 }
 
-const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted }) => {
+const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted, deckColor }) => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -111,7 +112,7 @@ const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted }) => {
   };
 
   return (
-    <div className="relative rounded-lg shadow-lg p-6 text-center border-solid border-3 border-black rounded-xl" style={{ height: 'auto', borderRadius: '0.5rem' }}>
+    <div className="relative rounded-lg shadow-lg p-6 text-center border-solid border-3 border-black rounded-xl" style={{ height: 'auto', borderRadius: '0.5rem', backgroundColor: deckColor }}>
       {/* Botón de tres puntitos */}
       <button
         className="absolute top-2 p-2  focus:outline-none z-20"
