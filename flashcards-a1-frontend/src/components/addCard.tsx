@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { htmlToMarkdown } from '../utils/htmlToMarkdown';
@@ -9,6 +9,19 @@ const AddCard: React.FC = () => {
   const navigate = useNavigate();
   const [front, setFront] = useState<string>('');
   const [back, setBack] = useState<string>('');
+  const [deckTitle, setDeckTitle] = useState<string>('');
+
+  useEffect(() => {
+    if (deckId) {
+      axios.get(`http://localhost:5000/decks/${deckId}`)
+        .then(res => {
+          setDeckTitle(res.data.name);
+        })
+        .catch(error => {
+          console.error("Error fetching deck title:", error);
+        });
+    }
+  }, [deckId]);
 
   const handleSave = () => {
     const htmlFront = markdownToHtml(front);
@@ -46,7 +59,7 @@ const AddCard: React.FC = () => {
               ></path>
             </svg>
           </div>
-          <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Add New Card</h2>
+          <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">{deckTitle || 'Add New Card'}</h2>
         </div>
 
         <div className="flex flex-row gap-4 justify-center items-start w-full mt-4">
