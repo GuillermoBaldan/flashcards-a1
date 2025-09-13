@@ -1,5 +1,5 @@
 const formatDateToLocaleString = (timestamp: number): string => {
-  const date = new Date(timestamp);
+  const date = new Date(timestamp * 1000);
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
@@ -11,4 +11,4 @@ const formatDateToLocaleString = (timestamp: number): string => {
   return date.toLocaleString('es-ES', options);
 };
 
-export { formatDateToLocaleString }; 
+export { formatDateToLocaleString };

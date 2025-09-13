@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReturnStudyViewButton from '../components/returnStudyViewButton';
@@ -41,45 +41,45 @@ const QuestionAnswer: React.FC = () => {
   const [currentCardInView, setCurrentCardInView] = useState<Card | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+
+      const deckResponse = await axios.get<Deck>(`http://localhost:5000/decks/${deckId}`);
+      setDeckName(deckResponse.data.name);
+
+      const cardsResponse = await axios.get<Card[]>(`http://localhost:5000/cards/deck/${deckId}`);
+      const allCards = cardsResponse.data.map((card: Card) => ({
+        ...card,
+        lastReview: card.lastReview,
+        nextReview: card.nextReview,
+      }));
+      const currentTime = Math.floor(Date.now() / 1000);
+
+      const cardsForStudy = allCards.filter(card => card.nextReview !== null && card.nextReview < currentTime);
+
+      cardsForStudy.sort((a, b) => {
+        const diffA = currentTime - (a.nextReview ?? currentTime);
+        const diffB = currentTime - (b.nextReview ?? currentTime);
+        return diffB - diffA;
+      });
+
+      setCards(cardsForStudy);
+      const cardsWithNullReview = allCards.filter(card => card.lastReview === null && card.nextReview === null);
+      setCards(prevCards => [...prevCards, ...cardsWithNullReview]);
+    } catch (err) {
+      console.error('Error fetching data:', err);
+      setError('Error al cargar los datos.');
+    } finally {
+      setLoading(false);
+    }
+  }, [deckId, setDeckName, setCards, setLoading, setError]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-
-        const deckResponse = await axios.get<Deck>(`http://localhost:5000/decks/${deckId}`);
-        setDeckName(deckResponse.data.name);
-
-        const cardsResponse = await axios.get<Card[]>(`http://localhost:5000/cards/deck/${deckId}`);
-        const allCards = cardsResponse.data.map((card: Card) => ({
-          ...card,
-          lastReview: card.lastReview ? card.lastReview * 1000 : null,
-          nextReview: card.nextReview ? card.nextReview * 1000 : null,
-        }));
-        const currentTime = Date.now();
-
-        const cardsForStudy = allCards.filter(card => card.nextReview !== null && card.nextReview < currentTime);
-
-        cardsForStudy.sort((a, b) => {
-          const diffA = currentTime - (a.nextReview !== null ? a.nextReview : currentTime);
-          const diffB = currentTime - (b.nextReview !== null ? b.nextReview : currentTime);
-          return diffB - diffA;
-        });
-
-        setCards(cardsForStudy);
-        const cardsWithNullReview = allCards.filter(card => card.lastReview === null && card.nextReview === null);
-        setCards(prevCards => [...prevCards, ...cardsWithNullReview]);
-      } catch (err) {
-        console.error('Error fetching data:', err);
-        setError('Error al cargar los datos.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     if (deckId) {
       fetchData();
     }
-  }, [deckId]);
+  }, [deckId, fetchData]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -121,11 +121,10 @@ const QuestionAnswer: React.FC = () => {
     // No need to refresh cards here, as the TestBox will handle the next card
   };
 
-  const handleCardMoved = () => {
-    handleCloseMoveCardModal();
-    // If the card is moved, it should no longer be in the current study session.
-    // We need to trigger a re-fetch or update the cards state in TestBox.
-    // For now, let's just close the modal. The TestBox will naturally move to the next card.
+  const handleCardMoved = (movedCard: Card) => {
+    setCards(prevCards => prevCards.filter(card => card._id !== movedCard._id));
+    const updatedCard = { ...movedCard, nextReview: Math.floor(Date.now() / 1000) };
+    setCards(prevCards => [updatedCard, ...prevCards]);
   };
 
   if (loading) {

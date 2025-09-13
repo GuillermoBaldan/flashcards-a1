@@ -1,16 +1,34 @@
-export const calculateReviewTimes = (lastReview: number, nextReview: number, isCorrect: boolean) => {
-  const currentTime = Date.now();
-  let newNextReview = nextReview;
+export const calculateReviewTimes = (lastReview: number | null, nextReview: number | null, isCorrect: boolean) => {
+  const currentTime = Math.floor(Date.now() / 1000);
   let newLastReview = currentTime;
 
   if (isCorrect) {
-    // If correct, nextReview is current time + 2 * (current time - lastReview)
-    newNextReview = currentTime + 2 * (currentTime - lastReview);
+    let newNextReview;
+    if (lastReview === null && nextReview === null) {
+      newNextReview = currentTime + 30;
+    } else {
+      const interval = currentTime - (lastReview ?? currentTime);
+      newNextReview = currentTime + interval * 2;
+    }
+    return { newNextReview, newLastReview };
   } else {
-    // If incorrect, nextReview is current time + 1 minute (or some small interval)
-    // This is a placeholder, you might want a more sophisticated algorithm here
-    newNextReview = currentTime + 30 * 1000; // 30 seconds from now
-  }
+    // Lógica original para fallos
+    const lastReviewSec = lastReview ?? currentTime;
+    const nextReviewSec = nextReview ?? currentTime;
+    let previousInterval = nextReviewSec - lastReviewSec;
 
-  return { newNextReview, newLastReview };
+    if (lastReview === null || nextReview === null) {
+      previousInterval = 24 * 60 * 60; // 1 day initial in seconds
+    }
+
+    let multiplier = 0.5;
+    let newInterval = previousInterval * multiplier;
+
+    // Minimum interval for failure: 5 minutes in seconds
+    newInterval = Math.max(newInterval, 5 * 60);
+
+    const newNextReview = currentTime + Math.floor(newInterval);
+
+    return { newNextReview, newLastReview };
+  }
 };

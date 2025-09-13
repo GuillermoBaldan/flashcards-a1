@@ -98,4 +98,34 @@ router.route('/:id').put(async (req, res) => {
   }
 });
 
+// Ruta para corregir los timestamps de todas las tarjetas
+router.route('/fix-timestamps').get(async (req, res) => {
+  try {
+    const cards = await Card.find();
+    let updatedCount = 0;
+
+    for (const card of cards) {
+      let needsUpdate = false;
+
+      if (card.lastReview !== null && card.lastReview < 315532800) {
+        card.lastReview = Math.floor(Date.now() / 1000);
+        needsUpdate = true;
+      }
+
+      if (card.nextReview !== null && card.nextReview < 315532800) {
+        card.nextReview = (card.lastReview || Math.floor(Date.now() / 1000)) + (24 * 60 * 60);
+        needsUpdate = true;
+      }
+
+      if (needsUpdate) {
+        await card.save();
+        updatedCount++;
+      }
+    }
+
+    res.json('Timestamps fixed in ' + updatedCount + ' cards.');
+  } catch (err) {
+    res.status(400).json('Error: ' + err);
+  }
+});
 export default router;

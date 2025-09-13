@@ -78,15 +78,14 @@ const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, onCardsDepleted,
     if (!currentCard) return;
 
     const { newNextReview, newLastReview } = calculateReviewTimes(
-      currentCard.lastReview || Date.now(),
-      currentCard.nextReview || Date.now(),
+      currentCard.lastReview ?? Math.floor(Date.now() / 1000),
+      currentCard.nextReview ?? Math.floor(Date.now() / 1000),
       correct
     );
-
     axios.put(`http://localhost:5000/cards/${currentCard._id}`, {
       ...currentCard,
-      lastReview: Math.floor(newLastReview / 1000),
-      nextReview: Math.floor(newNextReview / 1000),
+      lastReview: newLastReview,
+      nextReview: newNextReview,
     })
     .then(() => {
       console.log('Card updated successfully!');
