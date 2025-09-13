@@ -53,6 +53,8 @@ const MoveCardModal: React.FC<MoveCardModalProps> = ({ currentCard, onClose, onC
         deckId: selectedDeck,
         front: currentCard.front,
         back: currentCard.back,
+        lastReview: currentCard.lastReview,
+        nextReview: currentCard.nextReview,
       });
       onCardMoved();
     } catch (err) {

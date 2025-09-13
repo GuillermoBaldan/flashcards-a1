@@ -10,6 +10,7 @@ import remarkGfm from 'remark-gfm';
 import { htmlToMarkdown } from '../utils/htmlToMarkdown';
 import SearchBar from '../components/searchBar.tsx';
 import NavigationBar from '../components/NavigationBar';
+import MoveCardModal from '../components/MoveCardModal'; // Importar MoveCardModal
 
 // Función para formatear un timestamp a "dd de Mes del YYYY HH:MM"
 const formatTimestampToDateTime = (ms: number | null): string => {
@@ -47,6 +48,8 @@ const CardsOfDeck: React.FC = () => {
   const [searchText, setSearchText] = useState<string>('');
   const [searchType, setSearchType] = useState<'cards' | 'decks'>('cards');
   const [cardSearchField, setCardSearchField] = useState<'front' | 'back' | 'all'>('all');
+  const [showMoveCardModal, setShowMoveCardModal] = useState(false); // Estado para controlar el modal
+  const [cardToMove, setCardToMove] = useState<Card | null>(null); // Estado para la carta a mover
 
   const fetchCards = useCallback(async () => {
     try {
@@ -103,6 +106,21 @@ const CardsOfDeck: React.FC = () => {
     return <div className="text-center mt-8 text-red-500">{error}</div>;
   }
 
+  const handleMoveCardClick = (card: Card) => {
+    setCardToMove(card);
+    setShowMoveCardModal(true);
+  };
+
+  const handleCloseMoveCardModal = () => {
+    setShowMoveCardModal(false);
+    setCardToMove(null);
+  };
+
+  const handleCardMoved = () => {
+    handleCloseMoveCardModal();
+    fetchCards(); // Refrescar la lista de tarjetas después de mover una
+  };
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 p-4">
       <NavigationBar activePage="decks" />
@@ -121,13 +139,26 @@ const CardsOfDeck: React.FC = () => {
       <div className="w-full max-w-screen-xl gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
         {filteredCards.length > 0 ? (
           filteredCards.map(card => (
-            <CardItem key={card._id} card={card} onCardDeleted={fetchCards} deckColor={deckColor} />
+            <CardItem 
+              key={card._id} 
+              card={card} 
+              onCardDeleted={fetchCards} 
+              deckColor={deckColor} 
+              onMoveCard={handleMoveCardClick} // Pasar la función para mover la carta
+            />
           ))
         ) : (
           <div className="text-center mt-8">{cards.length === 0 ? 'No hay cartas en este mazo.' : 'No se encontraron tarjetas que coincidan con la búsqueda.'}</div>
         )}
       </div>
       
+      {showMoveCardModal && cardToMove && (
+        <MoveCardModal
+          currentCard={cardToMove}
+          onClose={handleCloseMoveCardModal}
+          onCardMoved={handleCardMoved}
+        />
+      )}
     </div>
   );
 };

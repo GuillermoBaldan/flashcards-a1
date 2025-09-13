@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { htmlToMarkdown } from '../utils/htmlToMarkdown';
 import { formatDateToLocaleString } from '../utils/formatDateToLocaleString';
-import MoveCardModal from './MoveCardModal';
+
 import TestProgressBar from './testProgressBar';
 import '../App.css';
 
@@ -22,6 +22,7 @@ interface Card {
 interface TestBoxProps {
   cards: Card[];
   onCardsDepleted: () => void; // Callback when all cards are studied
+  onCardChange: (card: Card | null) => void; // Callback to inform parent about the current card
 }
 
 interface Deck {
@@ -29,13 +30,12 @@ interface Deck {
   name: string;
 }
 
-const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, onCardsDepleted }) => {
+const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, onCardsDepleted, onCardChange }) => {
   const navigate = useNavigate();
   const [cards, setCards] = useState<Card[]>(initialCards);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [showCompletionMessage, setShowCompletionMessage] = useState(false);
-  const [showMoveCardModal, setShowMoveCardModal] = useState(false);
   const [currentDeckName, setCurrentDeckName] = useState<string>('');
 
   useEffect(() => {
@@ -44,6 +44,14 @@ const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, onCardsDepleted 
     setIsFlipped(false);
     setShowCompletionMessage(false);
   }, [initialCards]);
+
+  useEffect(() => {
+    if (cards.length > 0) {
+      onCardChange(cards[currentCardIndex]);
+    } else {
+      onCardChange(null);
+    }
+  }, [cards, currentCardIndex, onCardChange]);
 
   useEffect(() => {
     const fetchDeckName = async () => {
@@ -133,25 +141,6 @@ const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, onCardsDepleted 
           </button>
         )}
 
-      {showMoveCardModal && (
-        <MoveCardModal
-          currentCard={currentCard}
-          onClose={() => setShowMoveCardModal(false)}
-          onCardMoved={() => {
-            setShowMoveCardModal(false);
-            if (cards.length > 1) {
-              const remainingCards = cards.filter((_, index) => index !== currentCardIndex);
-              setCards(remainingCards);
-              setCurrentCardIndex(0);
-            } else {
-              setShowCompletionMessage(true);
-              setTimeout(() => {
-                onCardsDepleted();
-              }, 2000);
-            }
-          }}
-        />
-      )}
         {isFlipped && (
           <div className="flex justify-around mt-6">
             <button
@@ -165,12 +154,6 @@ const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, onCardsDepleted 
               className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none"
             >
               Fallo
-            </button>
-            <button
-              onClick={() => setShowMoveCardModal(true)}
-              className="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 focus:outline-none"
-            >
-              Mover carta
             </button>
           </div>
         )}

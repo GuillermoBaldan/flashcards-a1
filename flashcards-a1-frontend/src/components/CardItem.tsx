@@ -36,9 +36,10 @@ interface CardItemProps {
   card: Card;
   onCardDeleted: () => void; // Callback para cuando una tarjeta es eliminada
   deckColor: string; // Add deckColor prop
+  onMoveCard: (card: Card) => void; // Callback para mover la tarjeta
 }
 
-const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted, deckColor }) => {
+const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted, deckColor, onMoveCard }) => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -106,8 +107,7 @@ const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted, deckColor }) =
   const handleMoveToAnotherDeck = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    // Lógica para mover a otro mazo
-    alert('Funcionalidad "Mover a otro mazo" aún no implementada.');
+    onMoveCard(card); // Llama a la función onMoveCard pasada por props
     setShowMenu(false);
   };
 
