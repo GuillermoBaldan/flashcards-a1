@@ -7,6 +7,7 @@ import { formatTimeRemaining } from '../utils/formatTimeRemaining';
 import getContrastColor from '../utils/dynamicContrastColor';
 import SearchBar from '../components/searchBar.tsx';
 import DeckTile from '../components/deck-component';
+import RecentDecks from '../components/recentDecks';
 
 interface Card {
   _id: string;
@@ -130,7 +131,19 @@ const Study: React.FC = () => {
 
     const processAndSetDecks = () => {
       const processedDecks = processDecks(allCards, allDecks);
-      processedDecks.sort((a, b) => (a.cardsForStudy || 0) - (b.cardsForStudy || 0));
+      processedDecks.sort((a, b) => {
+        const aHasCardsForStudy = (a.cardsForStudy || 0) > 0;
+        const bHasCardsForStudy = (b.cardsForStudy || 0) > 0;
+
+        if (aHasCardsForStudy && !bHasCardsForStudy) {
+          return -1; // a comes before b
+        } else if (!aHasCardsForStudy && bHasCardsForStudy) {
+          return 1; // b comes before a
+        } else {
+          // Both have cards for study or neither have cards for study, sort by cardsForStudy ascending
+          return (a.cardsForStudy || 0) - (b.cardsForStudy || 0);
+        }
+      });
       setDecks(processedDecks);
     };
 
@@ -166,7 +179,10 @@ const Study: React.FC = () => {
           cardSearchField={cardSearchField}
           onCardSearchFieldChange={setCardSearchField}
         />
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center mt-4 gap-8" style={{ display: 'flex', gap: "1rem"}}>
+          <Link to="/study/recent-decks" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-base" style={{ backgroundColor: '#3b82f6', color: 'white', fontWeight: 'bold', padding: '1rem 2rem', borderRadius: '0.5rem', fontSize: '1.25rem', marginTop: '2rem', width: '13rem' }}>
+            Recent Decks
+          </Link>
           <Link to="/selectionTest" style={{ backgroundColor: '#3b82f6', color: 'white', fontWeight: 'bold', padding: '1rem 2rem', borderRadius: '0.5rem', fontSize: '1.25rem', marginTop: '2rem', width: '13rem'  }}>
             Test Selection
           </Link>

@@ -18,7 +18,7 @@ interface Card {
   __v: number;
 }
 
-const TestTop5: React.FC = () => {
+const TestTop10: React.FC = () => {
   const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,7 +54,7 @@ const TestTop5: React.FC = () => {
   }, []);
 
   const handleCardsDepleted = () => {
-    navigate('/study'); // Navigate back to study page or wherever appropriate
+    navigate('/study/recent-decks'); // Navigate back to study page or wherever appropriate
   };
 
   if (loading) {
@@ -87,4 +87,4 @@ const TestTop5: React.FC = () => {
   );
 };
 
-export default TestTop5;
+export default TestTop10;

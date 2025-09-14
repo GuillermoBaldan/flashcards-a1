@@ -12,6 +12,7 @@ import TestTop1 from './pages/TestTop1'; // Importa el nuevo componente TestTop1
 import TestTop5 from './pages/TestTop5'; // Importa el nuevo componente TestTop5
 import TestTop10 from './pages/TestTop10'; // Importa el nuevo componente TestTop10
 import AddDeck from './pages/AddDeck';
+import RecentDecksPage from './pages/RecentDecksPage';
 import './App.css';
 
 function App() {
@@ -28,9 +29,10 @@ function App() {
         <Route path="/add-deck" element={<AddDeck />} />
         <Route path="/edit-card/:cardId" element={<EditCard />} />
         <Route path="/study" element={<Study />} /> {/* La ruta para mostrar los mazos */}
+        <Route path="/study/recent-decks" element={<RecentDecksPage />} /> {/* Nueva ruta para mostrar los mazos recientes */}
         <Route path="/test-top10-percent" element={<TestTop10 />} />
         <Route path="/test-top1-percent" element={<TestTop1 />} /> {/* Nueva ruta para el test del top 1% */}
-        <Route path="/test-top5-percent" element={<TestTop5 />} /> {/* Nueva ruta para el test del top 1% */}
+        <Route path="/test-top5-percent" element={<TestTop5 />} /> {/* Nueva ruta para el test del top 5% */}
         <Route path="/" element={<Decks />} />
       </Routes>
     </Router>

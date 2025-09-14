@@ -54,7 +54,7 @@ const TestTop1: React.FC = () => {
   }, []);
 
   const handleCardsDepleted = () => {
-    navigate('/study'); // Navigate back to study page or wherever appropriate
+    navigate('/study/recent-decks'); // Navigate back to study page or wherever appropriate
   };
 
   if (loading) {
