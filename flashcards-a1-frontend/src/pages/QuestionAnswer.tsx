@@ -125,7 +125,9 @@ const QuestionAnswer: React.FC = () => {
     setCards(prevCards => prevCards.filter(card => card._id !== movedCard._id));
     const updatedCard = { ...movedCard, nextReview: Math.floor(Date.now() / 1000) };
     setCards(prevCards => [updatedCard, ...prevCards]);
+    navigate('/study');
   };
+
 
   if (loading) {
     return <div className="text-center mt-8">Cargando cartas...</div>;
