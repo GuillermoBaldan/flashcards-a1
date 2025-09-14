@@ -37,6 +37,7 @@ interface Deck {
   cardsReviewed?: number;
   reviewTime?: string;
   nextReviewTimeRemaining?: string;
+  totalCards?: number;
 }
 
 const Study: React.FC = () => {
@@ -112,6 +113,8 @@ const Study: React.FC = () => {
           reviewTime
         } = calculateStudyMetrics(cardsInDeck, currentTime);
 
+        const totalCards = cardsInDeck.length;
+
         currentTotalCardsForStudy += cardsForStudy;
         currentTotalCardsReviewed += cardsReviewed;
 
@@ -121,7 +124,8 @@ const Study: React.FC = () => {
           ...deck,
           cardsForStudy,
           cardsReviewed,
-          nextReviewTimeRemaining
+          nextReviewTimeRemaining,
+          totalCards
         };
       });
       setTotalCardsForStudy(currentTotalCardsForStudy);

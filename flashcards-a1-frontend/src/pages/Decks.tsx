@@ -33,6 +33,7 @@ interface Deck {
   cardsForStudy?: number;
   cardsReviewed?: number;
   minNextReviewTime?: number; // Cambiado de nextReviewTimeRemaining a minNextReviewTime
+  totalCards?: number;
 }
 
 const Decks: React.FC = () => {
@@ -82,6 +83,7 @@ const Decks: React.FC = () => {
             let cardsForStudy = 0;
             let cardsReviewed = 0;
             let minNextReviewTime = Infinity;
+            let totalCards = cardsInDeck.length;
 
             cardsInDeck.forEach(card => {
               // Siempre actualiza minNextReviewTime con el menor nextReview entre todas las cartas
@@ -100,9 +102,10 @@ const Decks: React.FC = () => {
             if (
               prevDeck.cardsForStudy !== cardsForStudy ||
               prevDeck.cardsReviewed !== cardsReviewed ||
-              prevDeck.minNextReviewTime !== minNextReviewTime // Cambiado a minNextReviewTime
+              prevDeck.minNextReviewTime !== minNextReviewTime || // Cambiado a minNextReviewTime
+              prevDeck.totalCards !== totalCards
             ) {
-              return { ...prevDeck, cardsForStudy, cardsReviewed, minNextReviewTime }; // Cambiado a minNextReviewTime
+              return { ...prevDeck, cardsForStudy, cardsReviewed, minNextReviewTime, totalCards }; // Cambiado a minNextReviewTime
             }
             return prevDeck; // Devolver la misma referencia si nada significativo cambió
           });

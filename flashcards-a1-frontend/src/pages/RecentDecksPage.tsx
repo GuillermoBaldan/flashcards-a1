@@ -31,6 +31,7 @@ interface Deck {
   cardsReviewed?: number;
   nextReviewTimeRemaining?: string;
   mostRecentReview?: number;
+  totalCards?: number;
 }
 
 const RecentDecksPage: React.FC = () => {
@@ -57,7 +58,8 @@ const RecentDecksPage: React.FC = () => {
           const mostRecentReview = cardsInDeck.reduce((maxReview, card) => {
             return (card.lastReview && card.lastReview > maxReview) ? card.lastReview : maxReview;
           }, 0);
-          return { ...deck, mostRecentReview };
+          const totalCards = cardsInDeck.length;
+          return { ...deck, mostRecentReview, totalCards };
         }).sort((a, b) => (b.mostRecentReview || 0) - (a.mostRecentReview || 0));
 
         setDecks(sortedDecks);

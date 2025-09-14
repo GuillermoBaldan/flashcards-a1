@@ -17,6 +17,7 @@ interface Deck {
   cardsForStudy?: number;
   cardsReviewed?: number;
   minNextReviewTime?: number; // Cambiado de nextReviewTimeRemaining a minNextReviewTime
+  totalCards?: number;
 }
 
 const DeckTile: React.FC<{ deck: Deck; linkSuffix?: string }> = memo(({ deck, linkSuffix = 'cards' }) => {
@@ -65,6 +66,12 @@ const DeckTile: React.FC<{ deck: Deck; linkSuffix?: string }> = memo(({ deck, li
 
   const { fontSize, textRef } = useAdjustFontSize(deck.name, containerWidth, 32);
 
+  const displayName = (linkSuffix === 'study' || linkSuffix === 'cards') && deck.totalCards !== undefined
+    ? `${deck.name} (${deck.totalCards})`
+    : deck.name;
+
+  const { fontSize: adjustedFontSize, textRef: adjustedTextRef } = useAdjustFontSize(displayName, containerWidth, 32);
+
   return (
     <Link
       to={`/decks/${deck._id}/${linkSuffix}`}
@@ -92,7 +99,7 @@ const DeckTile: React.FC<{ deck: Deck; linkSuffix?: string }> = memo(({ deck, li
           </g>
         </svg>
       </div>
-      <p ref={textRef} className="font-bold leading-normal truncate w-full" style={{ fontSize: `${fontSize}px`, color: textColor }}>{deck.name}</p>
+      <p ref={adjustedTextRef} className="font-bold leading-normal truncate w-full" style={{ fontSize: `${adjustedFontSize}px`, color: textColor }}>{displayName}</p>
 
       {/* Mensaje de cartas para estudiar (solo si aplica) */}
       {deck.cardsForStudy && deck.cardsForStudy > 0 && (
@@ -106,6 +113,9 @@ const DeckTile: React.FC<{ deck: Deck; linkSuffix?: string }> = memo(({ deck, li
 
       {/* Mensaje de cartas repasadas */}
       <p className="text-sm" style={{ color: textColor }}>{(deck.cardsReviewed ?? 0)} cards reviewed</p>
+      {linkSuffix !== 'study' && linkSuffix !== 'cards' && deck.totalCards !== undefined && (
+        <p className="text-sm" style={{ color: textColor }}>({deck.totalCards} tarjetas hechas)</p>
+      )}
     </Link>
   );
 });
