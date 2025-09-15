@@ -1,0 +1,11 @@
+.no-underline-p {
+  text-decoration: none;
+}
+
+p a {
+  text-decoration: none !important;
+}
+
+.card-back a {
+  text-decoration: none !important;
+}

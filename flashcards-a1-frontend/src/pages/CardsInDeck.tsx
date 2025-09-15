@@ -7,6 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import RemarkGfm from 'remark-gfm';
 import { htmlToMarkdown } from '../utils/htmlToMarkdown';
 import NavigationBar from '../components/NavigationBar';
+import '../styles/components/CardsInDeck.css';
 
 interface Card {
   _id: string;
@@ -101,7 +102,7 @@ const CardsInDeck: React.FC = () => {
                   {htmlToMarkdown(card.front)}
                 </ReactMarkdown>
               </h3>
-              <p className="text-[#637488]">
+              <p className="text-[#637488] card-back">
                 <ReactMarkdown remarkPlugins={[RemarkGfm]}>
                   {htmlToMarkdown(card.back)}
                 </ReactMarkdown>
@@ -114,7 +115,7 @@ const CardsInDeck: React.FC = () => {
             </div>
           ))
         ) : (
-          <p className="text-[#637488] text-center col-span-full">No se encontraron tarjetas para este mazo.</p>
+          <p className="text-[#637488] text-center col-span-full no-underline-p">No se encontraron tarjetas para este mazo.</p>
         )}
       </div>
       <div>

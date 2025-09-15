@@ -4,3 +4,5 @@
 
 @import './global.css';
 @import './components/NavigationBar.css';
+@import './components/CardsInDeck.css';
+@import './components/DeckTile.css';
