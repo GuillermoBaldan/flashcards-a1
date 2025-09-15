@@ -8,6 +8,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import DynamicFontSize from '../components/DynamicFontSize';
 import TestProgressBar from '../components/testProgressBar';
+import '../styles/pages/ContinuousTest.css'; // Importar el nuevo archivo CSS
 
 interface Card {
   _id: string;
@@ -226,25 +227,25 @@ const ContinuousTest: React.FC = () => {
                     </div>
                   </div>
                 </div>
+                <div className="mt-4 text-center">
+                  <p>Última revisión: {currentCard.lastReview ? new Date(currentCard.lastReview * 1000).toLocaleString() : 'Nunca'}</p>
+                  <p>Próxima revisión: {formatTimeRemaining(currentCard.nextReview)}</p>
+                </div>
                 <div className="flex justify-center mt-4 space-x-4 z-10 relative">
                   {!isFlipped ? (
-                    <button onClick={handleFlip} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <button onClick={handleFlip} className="custom-button flip-button">
                       Voltear carta
                     </button>
                   ) : (
                     <>
-                      <button onClick={() => handleAnswer(true)} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                      <button onClick={() => handleAnswer(true)} className="custom-button success-button">
                         Acierto
                       </button>
-                      <button onClick={() => handleAnswer(false)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                      <button onClick={() => handleAnswer(false)} className="custom-button failure-button">
                         Fallo
                       </button>
                     </>
                   )}
-                </div>
-                <div className="mt-4 text-center">
-                  <p>Última revisión: {currentCard.lastReview ? new Date(currentCard.lastReview * 1000).toLocaleString() : 'Nunca'}</p>
-                  <p>Próxima revisión: {formatTimeRemaining(currentCard.nextReview)}</p>
                 </div>
               </>
             )}
