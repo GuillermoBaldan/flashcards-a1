@@ -113,6 +113,7 @@ const Decks: React.FC = () => {
 
         const enrichedDecks = processDecks(allCards, allDecksData);
 
+
         // Ordenar los mazos por cardsForStudy de mayor a menor (más urgentes primero)
         enrichedDecks.sort((a, b) => (b.cardsForStudy || 0) - (a.cardsForStudy || 0));
 
