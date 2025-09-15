@@ -40,6 +40,7 @@ const ContinuousTest: React.FC = () => {
   const [cardsForStudy, setCardsForStudy] = useState<number>(0);
   const [barProgress, setBarProgress] = useState<number>(0);
   const [queue, setQueue] = useState<Card[]>([]);
+  const [currentCard, setCurrentCard] = useState<Card | null>(null);
 
   const updateDueCardsAndProgress = () => {
     if (allCards.length === 0) return;
@@ -114,6 +115,12 @@ const ContinuousTest: React.FC = () => {
   }, [deckId]);
 
   useEffect(() => {
+    if (!currentCard || !queue.some(c => c._id === currentCard._id)) {
+      setCurrentCard(queue[0] || null);
+    }
+  }, [queue]);
+
+  useEffect(() => {
     if (cards.length === 0 && reviewedCards.size > 0) {
       setShowCompletionMessage(true);
     } else {
@@ -126,42 +133,52 @@ const ContinuousTest: React.FC = () => {
   }, [cards, reviewedCards, currentCardIndex]);
 
   const handleAnswer = async (isCorrect: boolean) => {
-    if (queue.length === 0) return;
+    if (!currentCard) return;
 
-    const currentCard = queue[0]; // Get the first card from the queue
     const { newLastReview, newNextReview } = calculateReviewTimes(currentCard.lastReview, currentCard.nextReview, isCorrect);
 
     try {
+      let updatedNextReview = newNextReview;
       if (!isCorrect) {
         // If incorrect, set nextReview to 30 seconds from now
-        const thirtySecondsFromNow = Math.floor(Date.now() / 1000) + 30;
-        await axios.put(`http://localhost:5000/cards/${currentCard._id}`, {
-          lastReview: newLastReview,
-          nextReview: thirtySecondsFromNow,
-        });
-
-        // Update local allCards with the new nextReview time
-        setAllCards(prevCards => prevCards.map(card =>
-          card._id === currentCard._id ? { ...card, lastReview: newLastReview, nextReview: thirtySecondsFromNow } : card
-        ));
-      } else {
-        // If correct, update with calculated review times
-        await axios.put(`http://localhost:5000/cards/${currentCard._id}`, {
-          lastReview: newLastReview,
-          nextReview: newNextReview,
-        });
-
-        // Update local allCards with the new nextReview time
-        setAllCards(prevCards => prevCards.map(card =>
-          card._id === currentCard._id ? { ...card, lastReview: newLastReview, nextReview: newNextReview } : card
-        ));
-
-        setReviewedCards(prev => {
-          const newSet = new Set(prev);
-          newSet.add(currentCard._id);
-          return newSet;
-        });
+        updatedNextReview = Math.floor(Date.now() / 1000) + 30;
       }
+
+      await axios.put(`http://localhost:5000/cards/${currentCard._id}`, {
+        lastReview: newLastReview,
+        nextReview: updatedNextReview,
+      });
+
+      // Update local allCards with the new review times
+      const updatedCard = { ...currentCard, lastReview: newLastReview, nextReview: updatedNextReview };
+      setAllCards(prevCards => prevCards.map(card =>
+        card._id === currentCard._id ? updatedCard : card
+      ));
+
+      let newReviewed = reviewedCards;
+      if (isCorrect) {
+        newReviewed = new Set(reviewedCards);
+        newReviewed.add(currentCard._id);
+        setReviewedCards(newReviewed);
+      }
+
+      // Compute new dueCards
+      const currentTime = Date.now();
+      const newDueCards = allCards
+        .map(card => card._id === currentCard._id ? updatedCard : card) // Use updated card
+        .filter(card => !newReviewed.has(card._id) && card.nextReview * 1000 <= currentTime);
+
+      newDueCards.sort((a, b) => {
+        const diffA = Math.abs(a.nextReview * 1000 - currentTime);
+        const diffB = Math.abs(b.nextReview * 1000 - currentTime);
+        return diffA - diffB;
+      });
+
+      setQueue(newDueCards);
+      setCards(newDueCards);
+
+      // Set currentCard to the next one
+      setCurrentCard(newDueCards[0] || null);
 
       setIsFlipped(false);
     } catch (error) {
@@ -195,17 +212,17 @@ const ContinuousTest: React.FC = () => {
               <TestProgressBar progress={barProgress} />
               <p className="text-center mt-2">{Math.max(0, totalCards - cardsForStudy)} / {totalCards} tarjetas repasadas</p>
             </div>
-            {queue.length === 0 || !queue[0] ? (
+            {!currentCard ? (
               <p>Cargando...</p>
             ) : (
               <>
                 <div className="card-container bg-gray-100 p-6 rounded-lg shadow-lg w-full max-w-md min-h-[200px]">
                   <div className={`card ${isFlipped ? 'flipped' : ''}`}>
                     <div className="card-front">
-                      <DynamicFontSize text={queue[0].front} />
+                      <DynamicFontSize text={currentCard.front} />
                     </div>
                     <div className="card-back">
-                      <DynamicFontSize text={queue[0].back} />
+                      <DynamicFontSize text={currentCard.back} />
                     </div>
                   </div>
                 </div>
@@ -226,8 +243,8 @@ const ContinuousTest: React.FC = () => {
                   )}
                 </div>
                 <div className="mt-4 text-center">
-                  <p>Última revisión: {queue[0].lastReview ? new Date(queue[0].lastReview * 1000).toLocaleString() : 'Nunca'}</p>
-                  <p>Próxima revisión: {formatTimeRemaining(queue[0].nextReview)}</p>
+                  <p>Última revisión: {currentCard.lastReview ? new Date(currentCard.lastReview * 1000).toLocaleString() : 'Nunca'}</p>
+                  <p>Próxima revisión: {formatTimeRemaining(currentCard.nextReview)}</p>
                 </div>
               </>
             )}
