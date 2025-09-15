@@ -5,6 +5,7 @@ import NavigationBar from '../components/NavigationBar';
 import { formatTimeRemaining } from '../utils/formatTimeRemaining';
 import { calculateReviewTimes } from '../utils/manageTimes';
 import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
 
 interface Card {
   _id: string;
@@ -41,7 +42,7 @@ const ContinuousTest: React.FC = () => {
       const currentTime = Date.now();
 
       // Filter cards that have nextReview < currentTime
-      const dueCards = fetchedCards.filter(card => card.nextReview * 1000 < currentTime && !reviewedCards.has(card._id));
+      const dueCards = fetchedCards.filter(card => !reviewedCards.has(card._id));
 
       // Sort cards based on the absolute difference between nextReview and currentTime
       dueCards.sort((a, b) => {
@@ -154,26 +155,32 @@ const ContinuousTest: React.FC = () => {
               <p>Cargando...</p>
             ) : (
               <>
-                <div className="bg-gray-100 p-6 rounded-lg shadow-lg w-full max-w-md">
-                  <div className={`card ${isFlipped ? 'flipped' : ''}`} onClick={handleFlip}>
+                <div className="card-container bg-gray-100 p-6 rounded-lg shadow-lg w-full max-w-md min-h-[200px]">
+                  <div className={`card ${isFlipped ? 'flipped' : ''}`}>
                     <div className="card-front">
-                      <ReactMarkdown className="text-xl font-semibold mb-4">{cards[currentCardIndex].front}</ReactMarkdown>
+                      <ReactMarkdown rehypePlugins={[rehypeRaw]}>{cards[currentCardIndex].front}</ReactMarkdown>
                     </div>
                     <div className="card-back">
-                      <ReactMarkdown className="text-lg text-gray-700 mb-4">{cards[currentCardIndex].back}</ReactMarkdown>
+                      <ReactMarkdown rehypePlugins={[rehypeRaw]}>{cards[currentCardIndex].back}</ReactMarkdown>
                     </div>
                   </div>
                 </div>
-                {isFlipped && (
-                  <div className="flex justify-center mt-4 space-x-4">
-                    <button onClick={() => handleAnswer(true)} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                      Acierto
+                <div className="flex justify-center mt-4 space-x-4">
+                  {!isFlipped ? (
+                    <button onClick={handleFlip} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                      Voltear carta
                     </button>
-                    <button onClick={() => handleAnswer(false)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                      Fallo
-                    </button>
-                  </div>
-                )}
+                  ) : (
+                    <>
+                      <button onClick={() => handleAnswer(true)} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        Acierto
+                      </button>
+                      <button onClick={() => handleAnswer(false)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Fallo
+                      </button>
+                    </>
+                  )}
+                </div>
                 <div className="mt-4 text-center">
                   <p>Última revisión: {cards[currentCardIndex].lastReview ? new Date(cards[currentCardIndex].lastReview * 1000).toLocaleString() : 'Nunca'}</p>
                   <p>Próxima revisión: {formatTimeRemaining(cards[currentCardIndex].nextReview)}</p>
