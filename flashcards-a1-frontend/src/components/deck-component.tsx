@@ -79,7 +79,7 @@ const DeckTile: React.FC<{ deck: Deck; linkSuffix?: string }> = memo(({ deck, li
     return () => clearInterval(intervalId);
   }, [deck.minNextReviewTime]);
 
-  const { fontSize, textRef } = useAdjustFontSize(deck.name, containerWidth, 32);
+  // const { fontSize, textRef } = useAdjustFontSize(deck.name, containerWidth, 32);
 
   const displayName = (linkSuffix === 'study' || linkSuffix === 'cards') && deck.totalCards !== undefined
     ? `${deck.name} (${deck.totalCards})`
@@ -96,17 +96,17 @@ const DeckTile: React.FC<{ deck: Deck; linkSuffix?: string }> = memo(({ deck, li
   return (
     <Link
       to={`/decks/${deck._id}/${linkSuffix}`}
-      className="deck-tile no-underline"
-      style={{ backgroundColor: deck.color || '#ffffff', overflow: 'hidden' }}
+      className="deck-tile no-underline deck-tile-link"
+      style={{ backgroundColor: deck.color || '#ffffff' }}
       ref={deckTileRef}
     >
-      <div style={{ position: 'absolute', top: '0.5rem', right: '0.5rem' }} ref={menuRef}>
+      <div className="deck-menu-container" ref={menuRef}>
         <button 
           onClick={handleMenuToggle} 
           className="menu-button"
           style={{ color: textColor }}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" style={{ width: '1.5rem', height: '1.5rem' }}>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="menu-button-icon">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
           </svg>
         </button>
@@ -126,7 +126,7 @@ const DeckTile: React.FC<{ deck: Deck; linkSuffix?: string }> = memo(({ deck, li
           </div>
         )}
       </div>
-      <p ref={adjustedTextRef} className="deck-name" style={{ fontSize: `${Math.max(adjustedFontSize, 12)}px`, color: textColor }}>{displayName}</p>
+      <p ref={adjustedTextRef} className="deck-name dynamic-text-color" style={{ fontSize: `${Math.max(adjustedFontSize, 12)}px`, color: textColor }}>{displayName}</p>
 
       {/* Mensaje de cartas para estudiar (solo si aplica) */}
       {deck.cardsForStudy && deck.cardsForStudy > 0 && (
@@ -135,15 +135,15 @@ const DeckTile: React.FC<{ deck: Deck; linkSuffix?: string }> = memo(({ deck, li
 
       {/* Mensaje de tiempo de repaso (siempre visible, con color dinámico) */}
       {linkSuffix !== 'study' && (
-        <p className={`review-time ${timeRemaining && timeRemaining.startsWith('Tenías que repasar') ? 'review-time-overdue' : ''}`} style={{ color: textColor }}>
+        <p className={`review-time ${timeRemaining && timeRemaining.startsWith('Tenías que repasar') ? 'review-time-overdue' : ''} dynamic-text-color`} style={{ color: textColor }}>
           {timeRemaining || 'Próximo repaso: No hay cartas para estudiar'}
         </p>
       )}
 
       {/* Mensaje de cartas repasadas */}
-      <p className="cards-reviewed" style={{ color: textColor }}>{(deck.cardsReviewed ?? 0)} cards reviewed</p>
+      <p className="cards-reviewed dynamic-text-color" style={{ color: textColor }}>{(deck.cardsReviewed ?? 0)} cards reviewed</p>
       {linkSuffix !== 'study' && linkSuffix !== 'cards' && deck.totalCards !== undefined && (
-        <p className="total-cards" style={{ color: textColor }}>({deck.totalCards} tarjetas hechas)</p>
+        <p className="total-cards dynamic-text-color" style={{ color: textColor }}>({deck.totalCards} tarjetas hechas)</p>
       )}
     </Link>
   );

@@ -80,3 +80,23 @@
 .menu-item:hover {
   background-color: #f3f4f6;
 }
+
+.deck-tile-link {
+  background-color: var(--deck-color, #ffffff);
+  overflow: hidden;
+}
+
+.deck-menu-container {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.menu-button-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.dynamic-text-color {
+  color: var(--text-color);
+}

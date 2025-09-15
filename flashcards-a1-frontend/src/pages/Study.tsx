@@ -8,6 +8,7 @@ import getContrastColor from '../utils/dynamicContrastColor';
 import SearchBar from '../components/searchBar.tsx';
 import DeckTile from '../components/deck-component';
 import RecentDecks from '../components/recentDecks';
+import RecentDecksButton from '../components/recentDecksButton';
 
 interface Card {
   _id: string;
@@ -174,7 +175,7 @@ const Study: React.FC = () => {
       style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}
     >
       <NavigationBar activePage="study" />
-      <div className="pt-20" style={{ marginTop: '1rem' }}>
+      <div className="search-bar-container" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
         <SearchBar
           searchText={searchText}
           onSearchTextChange={setSearchText}
@@ -183,11 +184,14 @@ const Study: React.FC = () => {
           cardSearchField={cardSearchField}
           onCardSearchFieldChange={setCardSearchField}
         />
-        <div className="flex justify-center mt-4 gap-8" style={{ display: 'flex', gap: "1rem"}}>
-          <Link to="/study/recent-decks" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-base" style={{ backgroundColor: '#3b82f6', color: 'white', fontWeight: 'bold', padding: '1rem 2rem', borderRadius: '0.5rem', fontSize: '1.25rem', marginTop: '2rem', width: '13rem' }}>
-            Recent Decks
-          </Link>
-          <Link to="/selectionTest" style={{ backgroundColor: '#3b82f6', color: 'white', fontWeight: 'bold', padding: '1rem 2rem', borderRadius: '0.5rem', fontSize: '1.25rem', marginTop: '2rem', width: '13rem'  }}>
+      </div>
+      <div className="pt-20">
+        <div className="flex justify-center mt-4">
+          <RecentDecksButton
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-base"
+            style={{ backgroundColor: '#3b82f6', color: 'white', fontWeight: 'bold', padding: '1rem 2rem', borderRadius: '0.5rem', fontSize: '1.25rem', marginTop: '2rem', width: '13rem', marginRight: '4rem' }}
+          />
+          <Link to="/selectionTest" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-base" style={{ backgroundColor: '#3b82f6', color: 'white', fontWeight: 'bold', padding: '1rem 2rem', borderRadius: '0.5rem', fontSize: '1.25rem', marginTop: '2rem', width: '13rem' }}>
             Test Selection
           </Link>
         </div>
