@@ -73,7 +73,10 @@ button:focus-visible {
 
 .card-container {
   perspective: 1000px;
-  position: relative;
+  width: 83%; /* Set width to 83% as per user request */
+  max-width: none; /* Remove any max-width restriction */
+  height: 300px; /* Maintain existing height or adjust if needed */
+  margin: 0 auto; /* Center the card */
 }
 
 .card {
@@ -99,8 +102,27 @@ button:focus-visible {
   display: flex;
   justify-content: center;
   align-items: center;
+  /* Ensure the back of the card is not interactive when not visible */
+  pointer-events: none;
+  box-sizing: border-box; /* Include padding in the element's total width and height */
+  padding: 1.5rem; /* Add padding to prevent text from touching edges */
+}
+
+.card-front {
+  z-index: 2;
+  pointer-events: auto; /* Front is interactive by default */
+}
+
+.card.flipped .card-front {
+  pointer-events: none; /* Front is not interactive when flipped */
 }
 
 .card-back {
   transform: rotateY(180deg);
+  z-index: 1;
+}
+
+.card.flipped .card-back {
+  pointer-events: auto; /* Back is interactive when flipped */
+  z-index: 3;
 }

@@ -216,7 +216,7 @@ const ContinuousTest: React.FC = () => {
               <p>Cargando...</p>
             ) : (
               <>
-                <div className="card-container bg-gray-100 p-6 rounded-lg shadow-lg w-full max-w-md min-h-[200px]">
+                <div className="card-container bg-gray-100 p-6 rounded-lg shadow-lg w-[83%] min-h-[200px]">
                   <div className={`card ${isFlipped ? 'flipped' : ''}`}>
                     <div className="card-front">
                       <DynamicFontSize text={currentCard.front} />
@@ -226,7 +226,7 @@ const ContinuousTest: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex justify-center mt-4 space-x-4">
+                <div className="flex justify-center mt-4 space-x-4 z-10 relative">
                   {!isFlipped ? (
                     <button onClick={handleFlip} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                       Voltear carta
