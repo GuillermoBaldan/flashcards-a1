@@ -6,6 +6,7 @@ import { formatTimeRemaining } from '../utils/formatTimeRemaining';
 import { calculateReviewTimes } from '../utils/manageTimes';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
+import DynamicFontSize from '../components/DynamicFontSize';
 
 interface Card {
   _id: string;
@@ -102,12 +103,12 @@ const ContinuousTest: React.FC = () => {
     if (cards.length === 0 || currentCardIndex >= cards.length) return;
 
     const currentCard = cards[currentCardIndex];
-    const { lastReview, nextReview } = calculateReviewTimes(isCorrect, currentCard.lastReview, currentCard.nextReview);
+    const { newLastReview, newNextReview } = calculateReviewTimes(currentCard.lastReview, currentCard.nextReview, isCorrect);
 
     try {
       await axios.put(`http://localhost:5000/cards/${currentCard._id}`, {
-        lastReview,
-        nextReview,
+        lastReview: newLastReview,
+        nextReview: newNextReview,
       });
 
       setReviewedCards(prev => {
@@ -158,10 +159,10 @@ const ContinuousTest: React.FC = () => {
                 <div className="card-container bg-gray-100 p-6 rounded-lg shadow-lg w-full max-w-md min-h-[200px]">
                   <div className={`card ${isFlipped ? 'flipped' : ''}`}>
                     <div className="card-front">
-                      <ReactMarkdown rehypePlugins={[rehypeRaw]}>{cards[currentCardIndex].front}</ReactMarkdown>
+                      <DynamicFontSize text={cards[currentCardIndex].front} />
                     </div>
                     <div className="card-back">
-                      <ReactMarkdown rehypePlugins={[rehypeRaw]}>{cards[currentCardIndex].back}</ReactMarkdown>
+                      <DynamicFontSize text={cards[currentCardIndex].back} />
                     </div>
                   </div>
                 </div>
