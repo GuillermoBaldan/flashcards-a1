@@ -7,6 +7,7 @@ import { calculateReviewTimes } from '../utils/manageTimes';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import DynamicFontSize from '../components/DynamicFontSize';
+import TestProgressBar from '../components/testProgressBar';
 
 interface Card {
   _id: string;
@@ -134,7 +135,6 @@ const ContinuousTest: React.FC = () => {
   }
 
   const totalDue = cards.length + reviewedCards.size;
-  const progress = totalDue > 0 ? (reviewedCards.size / totalDue) * 100 : 0;
 
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-white justify-between group/design-root overflow-x-hidden">
@@ -147,9 +147,7 @@ const ContinuousTest: React.FC = () => {
             <h1 className="text-3xl font-bold mb-4">{currentDeckName} - Test Continuo</h1>
             <p className="text-lg mb-8">Tarjetas restantes: {cards.length}</p>
             <div className="w-full max-w-md mb-4">
-              <div className="bg-gray-200 rounded-full h-2.5">
-                <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${progress}%` }}></div>
-              </div>
+              <TestProgressBar currentCardIndex={reviewedCards.size} totalCards={totalDue} />
               <p className="text-center mt-2">{reviewedCards.size} / {totalDue} tarjetas repasadas</p>
             </div>
             {currentCardIndex >= cards.length || !cards[currentCardIndex] ? (
