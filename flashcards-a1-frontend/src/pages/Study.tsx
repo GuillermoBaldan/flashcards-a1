@@ -176,26 +176,28 @@ const Study: React.FC = () => {
       style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}
     >
       <NavigationBar activePage="study" />
-      <div className="search-bar-container" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
-        <SearchBar
-          searchText={searchText}
-          onSearchTextChange={setSearchText}
-          searchType={searchType}
-          onSearchTypeChange={setSearchType}
-          cardSearchField={cardSearchField}
-          onCardSearchFieldChange={setCardSearchField}
-        />
-      </div>
-      <div className="pt-20">
-        <div className="flex justify-center mt-4">
-          <RecentDecksButton />
-          <TestSelectionButton />
+      <div className="app-content">
+        <div className="search-bar-container" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+          <SearchBar
+            searchText={searchText}
+            onSearchTextChange={setSearchText}
+            searchType={searchType}
+            onSearchTypeChange={setSearchType}
+            cardSearchField={cardSearchField}
+            onCardSearchFieldChange={setCardSearchField}
+          />
         </div>
-        <div className="flex flex-row items-center justify-around p-4">
-          <h2 className="text-red-500 text-lg font-bold leading-tight tracking-[-0.015em">📚 Cards for Study: <strong style={{ color: 'red' }}>{totalCardsForStudy}</strong></h2>
-          <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em">✅ Cards Reviewed: <strong style={{ color: 'green' }}>{totalCardsReviewed}</strong></h2>
+        <div>
+          <div className="flex justify-center mt-4">
+            <RecentDecksButton />
+            <TestSelectionButton />
+          </div>
+          <div className="flex flex-row items-center justify-around p-4">
+            <h2 className="text-red-500 text-lg font-bold leading-tight tracking-[-0.015em">📚 Cards for Study: <strong style={{ color: 'red' }}>{totalCardsForStudy}</strong></h2>
+            <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em">✅ Cards Reviewed: <strong style={{ color: 'green' }}>{totalCardsReviewed}</strong></h2>
+          </div>
+          {renderContent()}
         </div>
-        {renderContent()}
       </div>
     </div>
   );

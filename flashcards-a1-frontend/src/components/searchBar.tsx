@@ -17,19 +17,44 @@ const SearchBar: React.FC<SearchBarProps> = ({
   cardSearchField,
   onCardSearchFieldChange,
 }) => {
+  const containerStyle: React.CSSProperties = {
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '12px 16px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    boxSizing: 'border-box',
+  };
+
+  const inputStyle: React.CSSProperties = {
+    flex: 1,
+    padding: '8px 12px',
+    border: '1px solid #d1d5db',
+    borderRadius: '6px',
+    fontSize: '14px',
+  };
+
+  const selectStyle: React.CSSProperties = {
+    padding: '8px 12px',
+    border: '1px solid #d1d5db',
+    borderRadius: '6px',
+    fontSize: '14px',
+  };
+
   return (
-    <div className="flex items-center space-x-2 p-4">
+    <div style={containerStyle}>
       <input
         type="text"
         placeholder={`Buscar ${searchType === 'cards' ? 'tarjetas' : 'mazos'}...`}
         value={searchText}
         onChange={(e) => onSearchTextChange(e.target.value)}
-        className="flex-grow p-2 border border-gray-300 rounded-md"
+        style={inputStyle}
       />
       <select
         value={searchType}
         onChange={(e) => onSearchTypeChange(e.target.value as 'cards' | 'decks')}
-        className="p-2 border border-gray-300 rounded-md"
+        style={selectStyle}
       >
         <option value="cards">Tarjetas</option>
         <option value="decks">Mazos</option>
@@ -38,7 +63,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         <select
           value={cardSearchField}
           onChange={(e) => onCardSearchFieldChange(e.target.value as 'front' | 'back' | 'all')}
-          className="p-2 border border-gray-300 rounded-md"
+          style={selectStyle}
         >
           <option value="all">Front y Back</option>
           <option value="front">Front</option>

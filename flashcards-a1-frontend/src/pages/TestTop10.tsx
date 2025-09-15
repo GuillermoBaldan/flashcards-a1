@@ -77,12 +77,13 @@ const TestTop10: React.FC = () => {
   return (
     <>
       <NavigationBar activePage="study" />
-      <h1 className="text-3xl font-bold mb-8">Test del Top 10% de Preguntas Más Fáciles</h1>
-      <TestBox
-        cards={cards}
-
-        onCardsDepleted={handleCardsDepleted}
-      />
+      <div className="app-content">
+        <h1 className="text-3xl font-bold mb-8">Test del Top 10% de Preguntas Más Fáciles</h1>
+        <TestBox
+           cards={cards}
+           onCardsDepleted={handleCardsDepleted}
+         />
+      </div>
     </>
   );
 };

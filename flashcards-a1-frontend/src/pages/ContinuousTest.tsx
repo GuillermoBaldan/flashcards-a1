@@ -202,7 +202,7 @@ const ContinuousTest: React.FC = () => {
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-white justify-between group/design-root overflow-x-hidden">
       <NavigationBar activePage="study" />
-      <div className="flex flex-col items-center justify-center flex-grow p-4">
+      <div className="app-content flex flex-col items-center justify-center flex-grow p-4">
         {queue.length === 0 && !showCompletionMessage ? (
           <p className="text-center mt-8">No hay tarjetas para repasar en este mazo.</p>
         ) : (
@@ -251,23 +251,9 @@ const ContinuousTest: React.FC = () => {
             )}
           </>
         )}
-        {showCompletionMessage && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-8 rounded-lg text-center">
-              <h2 className="text-2xl font-bold mb-4">¡Test completado!</h2>
-              <p className="mb-4">Has repasado todas las tarjetas debidas de este mazo.</p>
-              <button
-                onClick={() => navigate(-1)}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Volver
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
-};
+}
 
 export default ContinuousTest;

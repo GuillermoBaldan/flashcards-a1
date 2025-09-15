@@ -122,43 +122,45 @@ const CardsOfDeck: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100 p-4">
+    <div className="flex flex-col items-center min-h-screen bg-gray-100">
       <NavigationBar activePage="decks" />
-      <h1 className="text-3xl font-bold mb-8">Cartas de: {deckName}</h1>
-      <SearchBar
-        searchText={searchText}
-        onSearchTextChange={setSearchText}
-        searchType={searchType}
-        onSearchTypeChange={setSearchType}
-        cardSearchField={cardSearchField}
-        onCardSearchFieldChange={setCardSearchField}
-      />
-      <div className="fixed top-4 right-8 z-10 flex space-x-4">
-        {deckId && <AddCardButton deckId={deckId} />} 
-      </div>
-      <div className="w-full max-w-screen-xl gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
-        {filteredCards.length > 0 ? (
-          filteredCards.map(card => (
-            <CardItem 
-              key={card._id} 
-              card={card} 
-              onCardDeleted={fetchCards} 
-              deckColor={deckColor} 
-              onMoveCard={handleMoveCardClick} // Pasar la función para mover la carta
-            />
-          ))
-        ) : (
-          <div className="text-center mt-8">{cards.length === 0 ? 'No hay cartas en este mazo.' : 'No se encontraron tarjetas que coincidan con la búsqueda.'}</div>
+      <div className="app-content w-full p-4">
+        <h1 className="text-3xl font-bold mb-8">Cartas de: {deckName}</h1>
+        <SearchBar
+          searchText={searchText}
+          onSearchTextChange={setSearchText}
+          searchType={searchType}
+          onSearchTypeChange={setSearchType}
+          cardSearchField={cardSearchField}
+          onCardSearchFieldChange={setCardSearchField}
+        />
+        <div className="fixed top-4 right-8 z-10 flex space-x-4">
+          {deckId && <AddCardButton deckId={deckId} />} 
+        </div>
+        <div className="w-full max-w-screen-xl gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
+          {filteredCards.length > 0 ? (
+            filteredCards.map(card => (
+              <CardItem 
+                key={card._id} 
+                card={card} 
+                onCardDeleted={fetchCards} 
+                deckColor={deckColor} 
+                onMoveCard={handleMoveCardClick} // Pasar la función para mover la carta
+              />
+            ))
+          ) : (
+            <div className="text-center mt-8">{cards.length === 0 ? 'No hay cartas en este mazo.' : 'No se encontraron tarjetas que coincidan con la búsqueda.'}</div>
+          )}
+        </div>
+        
+        {showMoveCardModal && cardToMove && (
+          <MoveCardModal
+            currentCard={cardToMove}
+            onClose={handleCloseMoveCardModal}
+            onCardMoved={handleCardMoved}
+          />
         )}
       </div>
-      
-      {showMoveCardModal && cardToMove && (
-        <MoveCardModal
-          currentCard={cardToMove}
-          onClose={handleCloseMoveCardModal}
-          onCardMoved={handleCardMoved}
-        />
-      )}
     </div>
   );
 };

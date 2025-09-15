@@ -79,19 +79,22 @@ const RecentDecksPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative flex size-full min-h-screen flex-col bg-white justify-between group/design-root overflow-x-hidden"
-      style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}>
+    <div className="relative min-h-screen bg-white overflow-x-hidden" style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}>
       <NavigationBar activePage="study" />
-      <div style={{ paddingTop: '5rem' }}>
-        <h2 style={{ textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Recent Decks</h2>
-        <div style={{ padding: '1rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem 2rem' }}>
-          {decks.length > 0 ? (
-            decks.map(deck => (
-              <DeckTile key={deck._id} deck={deck} linkSuffix="study" />
-            ))
-          ) : (
-            <p>No hay mazos recientes para mostrar.</p>
-          )}
+      {/* Compensar altura del header fijo */}
+      <div className="app-content">
+        {/* Contenedor de ancho común con el nav */}
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px' }}>
+          <h2 style={{ textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Recent Decks</h2>
+          <div style={{ padding: '1rem 0', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem 2rem' }}>
+            {decks.length > 0 ? (
+              decks.map(deck => (
+                <DeckTile key={deck._id} deck={deck} linkSuffix="study" />
+              ))
+            ) : (
+              <p>No hay mazos recientes para mostrar.</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

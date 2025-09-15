@@ -141,7 +141,7 @@ const QuestionAnswer: React.FC = () => {
     return (
     <>
       <NavigationBar activePage="study" />
-      <div className="text-center mt-8">
+      <div className="app-content text-center mt-8">
         <p className="mb-4">No hay cartas para estudiar en este mazo.</p>
         <button
           onClick={() => navigate(`/decks/${deckId}/add-card`)}
@@ -158,68 +158,70 @@ const QuestionAnswer: React.FC = () => {
   return (
     <>
       <NavigationBar activePage="study" />
-      <div className="relative flex justify-end p-4">
-        <button
-          className="p-2 focus:outline-none z-20"
-          onClick={handleMenuClick}
-          aria-label="Opciones de la tarjeta"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="feather feather-more-vertical"
+      <div className="app-content">
+        <div className="relative flex justify-end p-4">
+          <button
+            className="p-2 focus:outline-none z-20"
+            onClick={handleMenuClick}
+            aria-label="Opciones de la tarjeta"
           >
-            <circle cx="12" cy="12" r="1" />
-            <circle cx="12" cy="5" r="1" />
-            <circle cx="12" cy="19" r="1" />
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-more-vertical"
+            >
+              <circle cx="12" cy="12" r="1" />
+              <circle cx="12" cy="5" r="1" />
+              <circle cx="12" cy="19" r="1" />
+            </svg>
+          </button>
 
-        {showMenu && currentCardInView && (
-          <div
-            ref={menuRef}
-            className="absolute top-10 right-4 bg-white rounded-md shadow-lg z-30"
-          >
-            <ul className="py-1" style={{ margin: '0', padding: '0', listStyle: 'none'}}>
-              <li>
-                <button
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  onClick={handleMoveCard}
-                >
-                  Mover a otro mazo
-                </button>
-              </li>
-              <li>
-                <button
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  onClick={handleEditCard}
-                >
-                  Editar
-                </button>
-              </li>
-            </ul>
-          </div>
+          {showMenu && currentCardInView && (
+            <div
+              ref={menuRef}
+              className="absolute top-10 right-4 bg-white rounded-md shadow-lg z-30"
+            >
+              <ul className="py-1" style={{ margin: '0', padding: '0', listStyle: 'none'}}>
+                <li>
+                  <button
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={handleMoveCard}
+                  >
+                    Mover a otro mazo
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={handleEditCard}
+                  >
+                    Editar
+                  </button>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+        <TestBox
+          cards={cards}
+          onCardsDepleted={handleCardsDepleted}
+          onCardChange={setCurrentCardInView}
+        />
+        {showMoveCardModal && currentCardInView && (
+          <MoveCardModal
+            currentCard={currentCardInView}
+            onClose={handleCloseMoveCardModal}
+            onCardMoved={handleCardMoved}
+          />
         )}
       </div>
-      <TestBox
-        cards={cards}
-        onCardsDepleted={handleCardsDepleted}
-        onCardChange={setCurrentCardInView} // Pass a callback to update the current card in view
-      />
-      {showMoveCardModal && currentCardInView && (
-        <MoveCardModal
-          currentCard={currentCardInView}
-          onClose={handleCloseMoveCardModal}
-          onCardMoved={handleCardMoved}
-        />
-      )}
     </>
   );
 };

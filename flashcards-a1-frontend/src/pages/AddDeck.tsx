@@ -22,9 +22,9 @@ const AddDeck: React.FC = () => {
   };
 
   return (
-    <div className="relative flex size-full min-h-screen flex-col bg-white justify-between group/design-root overflow-x-hidden" style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}>
+    <div className="relative flex size-full min-h-screen flex-col bg-white justify-between group/design-root overflow-x-hidden" style={{ fontFamily: 'Manrope, \"Noto Sans\", sans-serif' }}>
       <NavigationBar activePage="decks" />
-      <div className="pt-20 p-4">
+      <div className="app-content p-4">
         <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em] text-center mb-4">Add New Deck</h2>
         <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
           <div className="mb-4">

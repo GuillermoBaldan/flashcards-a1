@@ -77,11 +77,12 @@ const TestTop1: React.FC = () => {
   return (
     <>
       <NavigationBar activePage="study" />
-      <TestBox
-        cards={cards}
-     
-        onCardsDepleted={handleCardsDepleted}
-      />
+      <div className="app-content">
+        <TestBox
+          cards={cards}
+          onCardsDepleted={handleCardsDepleted}
+        />
+      </div>
     </>
   );
 };
