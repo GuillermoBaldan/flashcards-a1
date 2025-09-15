@@ -107,9 +107,11 @@ const DeckTile: React.FC<{ deck: Deck; linkSuffix?: string }> = memo(({ deck, li
       )}
 
       {/* Mensaje de tiempo de repaso (siempre visible, con color dinámico) */}
-      <p className="text-sm font-bold" style={timeRemaining && timeRemaining.startsWith('Tenías que repasar') ? { color: 'red', fontWeight: 'bold', backgroundColor: 'yellow' } : { color: textColor }}>
-        {timeRemaining || 'Próximo repaso: No hay cartas para estudiar'}
-      </p>
+      {linkSuffix !== 'study' && (
+        <p className="text-sm font-bold" style={timeRemaining && timeRemaining.startsWith('Tenías que repasar') ? { color: 'red', fontWeight: 'bold', backgroundColor: 'yellow' } : { color: textColor }}>
+          {timeRemaining || 'Próximo repaso: No hay cartas para estudiar'}
+        </p>
+      )}
 
       {/* Mensaje de cartas repasadas */}
       <p className="text-sm" style={{ color: textColor }}>{(deck.cardsReviewed ?? 0)} cards reviewed</p>

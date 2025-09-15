@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import DeckTile from '../components/deck-component';
 import NavigationBar from '../components/NavigationBar';
+import { calculateStudyMetrics } from '../utils/cardsForStudy';
+import { formatTimeRemaining } from '../utils/formatTimeRemaining';
 
 interface Card {
   _id: string;
@@ -53,13 +55,17 @@ const RecentDecksPage: React.FC = () => {
 
         setAllCards(allCardsData);
 
+        const currentTime = Date.now();
+
         const sortedDecks = allDecksData.map(deck => {
           const cardsInDeck = allCardsData.filter(card => card.deckId === deck._id);
+          const { cardsForStudy, cardsReviewed, reviewTime } = calculateStudyMetrics(cardsInDeck, currentTime);
+
           const mostRecentReview = cardsInDeck.reduce((maxReview, card) => {
             return (card.lastReview && card.lastReview > maxReview) ? card.lastReview : maxReview;
           }, 0);
           const totalCards = cardsInDeck.length;
-          return { ...deck, mostRecentReview, totalCards };
+          return { ...deck, mostRecentReview, totalCards, cardsForStudy, cardsReviewed, minNextReviewTime: reviewTime };
         }).sort((a, b) => (b.mostRecentReview || 0) - (a.mostRecentReview || 0));
 
         setDecks(sortedDecks);

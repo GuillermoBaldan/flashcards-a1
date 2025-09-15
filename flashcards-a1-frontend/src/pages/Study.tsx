@@ -124,7 +124,7 @@ const Study: React.FC = () => {
           ...deck,
           cardsForStudy,
           cardsReviewed,
-          nextReviewTimeRemaining,
+          minNextReviewTime: reviewTime,
           totalCards
         };
       });

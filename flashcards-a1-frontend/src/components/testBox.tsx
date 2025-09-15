@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import useAdjustFontSize from '../utils/dynamicFontSize';
 import { calculateReviewTimes } from '../utils/manageTimes';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -37,6 +38,10 @@ const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, onCardsDepleted,
   const [isFlipped, setIsFlipped] = useState(false);
   const [showCompletionMessage, setShowCompletionMessage] = useState(false);
   const [currentDeckName, setCurrentDeckName] = useState<string>('');
+  const cardContentRef = useRef<HTMLDivElement>(null);
+
+  const { fontSize: frontFontSize, textRef: frontTextRef } = useAdjustFontSize(cards[currentCardIndex]?.front || '', cardContentRef.current?.offsetWidth || 0, 48);
+  const { fontSize: backFontSize, textRef: backTextRef } = useAdjustFontSize(cards[currentCardIndex]?.back || '', cardContentRef.current?.offsetWidth || 0, 48);
 
   useEffect(() => {
     setCards(initialCards);
@@ -125,11 +130,13 @@ const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, onCardsDepleted,
       <div className="w-full max-w-md mb-4">
         <TestProgressBar currentCardIndex={totalCardsInSession - cards.length} totalCards={totalCardsInSession} />
       </div>
-      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md text-center" style={{ minHeight: '200px' }}>
+      <div ref={cardContentRef} className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md text-center" style={{ minHeight: '200px' }}>
         <div className="text-xl font-semibold mb-4">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {isFlipped ? htmlToMarkdown(currentCard.back) : htmlToMarkdown(currentCard.front)}
-          </ReactMarkdown>
+          <div ref={isFlipped ? backTextRef : frontTextRef} style={{ fontSize: isFlipped ? backFontSize : frontFontSize }}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {isFlipped ? htmlToMarkdown(currentCard.back) : htmlToMarkdown(currentCard.front)}
+            </ReactMarkdown>
+          </div>
         </div>
         {!isFlipped && (
           <button
