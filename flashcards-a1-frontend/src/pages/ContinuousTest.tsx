@@ -34,43 +34,53 @@ const ContinuousTest: React.FC = () => {
   const [reviewedCards, setReviewedCards] = useState<Set<string>>(new Set());
   const [currentDeckName, setCurrentDeckName] = useState<string>('');
   const [showCompletionMessage, setShowCompletionMessage] = useState<boolean>(false);
+  const [allCards, setAllCards] = useState<Card[]>([]);
+  const [progress, setProgress] = useState(0);
+  const [totalCards, setTotalCards] = useState<number>(0);
+  const [cardsForStudy, setCardsForStudy] = useState<number>(0);
+  const [barProgress, setBarProgress] = useState<number>(0);
+  const [queue, setQueue] = useState<Card[]>([]);
 
-  const fetchCardsForContinuousTest = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get<Card[]>(`http://localhost:5000/cards/deck/${deckId}`);
-      const fetchedCards = response.data;
-
-      const currentTime = Date.now();
-
-      // Filter cards that have nextReview < currentTime
-      const dueCards = fetchedCards.filter(card => !reviewedCards.has(card._id));
-
-      // Sort cards based on the absolute difference between nextReview and currentTime
-      dueCards.sort((a, b) => {
-        const diffA = Math.abs(a.nextReview * 1000 - currentTime);
-        const diffB = Math.abs(b.nextReview * 1000 - currentTime);
-        return diffA - diffB;
-      });
-
-      setCards(dueCards);
-      setLoading(false);
-    } catch (err) {
-      setError('Error fetching cards.');
-      setLoading(false);
-      console.error(err);
+  const updateDueCardsAndProgress = () => {
+    if (allCards.length === 0) return;
+  
+    const currentTime = Date.now();
+  
+    // Tarjetas que cumplen nextReview < currentTime y no han sido revisadas correctamente
+    const dueCards = allCards.filter(card => card.nextReview * 1000 <= currentTime && !reviewedCards.has(card._id));
+  
+    // Actualizar cardsForStudy con el número actual de tarjetas vencidas
+    setCardsForStudy(dueCards.length);
+    
+    // Actualizar totalCards si el número actual de tarjetas vencidas es mayor
+    if (dueCards.length > totalCards) {
+      setTotalCards(dueCards.length);
     }
+
+    // Calcular barProgress
+    if (totalCards > 0) {
+      const newBarProgress = ((totalCards - dueCards.length) / totalCards) * 100;
+      setBarProgress(Math.max(0, newBarProgress));
+    } else {
+      setBarProgress(0);
+    }
+
+    // Ordenar tarjetas por proximidad a currentTime
+    dueCards.sort((a, b) => {
+      const diffA = Math.abs(a.nextReview * 1000 - currentTime);
+      const diffB = Math.abs(b.nextReview * 1000 - currentTime);
+      return diffA - diffB;
+    });
+  
+    setQueue(dueCards);
+    setCards(dueCards);
   };
 
   useEffect(() => {
-    fetchCardsForContinuousTest();
-
-    const interval = setInterval(() => {
-      fetchCardsForContinuousTest();
-    }, 60000);
-
+    updateDueCardsAndProgress();
+    const interval = setInterval(updateDueCardsAndProgress, 1000);
     return () => clearInterval(interval);
-  }, [deckId, reviewedCards]);
+  }, [allCards, reviewedCards, totalCards]);
 
   useEffect(() => {
     const fetchDeckName = async () => {
@@ -89,6 +99,21 @@ const ContinuousTest: React.FC = () => {
   }, [deckId]);
 
   useEffect(() => {
+    const fetchAllCards = async () => {
+      try {
+        const response = await axios.get<Card[]>(`http://localhost:5000/cards/deck/${deckId}`);
+        setAllCards(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError('Error fetching cards.');
+        setLoading(false);
+        console.error(err);
+      }
+    };
+    fetchAllCards();
+  }, [deckId]);
+
+  useEffect(() => {
     if (cards.length === 0 && reviewedCards.size > 0) {
       setShowCompletionMessage(true);
     } else {
@@ -101,22 +126,42 @@ const ContinuousTest: React.FC = () => {
   }, [cards, reviewedCards, currentCardIndex]);
 
   const handleAnswer = async (isCorrect: boolean) => {
-    if (cards.length === 0 || currentCardIndex >= cards.length) return;
+    if (queue.length === 0) return;
 
-    const currentCard = cards[currentCardIndex];
+    const currentCard = queue[0]; // Get the first card from the queue
     const { newLastReview, newNextReview } = calculateReviewTimes(currentCard.lastReview, currentCard.nextReview, isCorrect);
 
     try {
-      await axios.put(`http://localhost:5000/cards/${currentCard._id}`, {
-        lastReview: newLastReview,
-        nextReview: newNextReview,
-      });
+      if (!isCorrect) {
+        // If incorrect, set nextReview to 30 seconds from now
+        const thirtySecondsFromNow = Math.floor(Date.now() / 1000) + 30;
+        await axios.put(`http://localhost:5000/cards/${currentCard._id}`, {
+          lastReview: newLastReview,
+          nextReview: thirtySecondsFromNow,
+        });
 
-      setReviewedCards(prev => {
-        const newSet = new Set(prev);
-        newSet.add(currentCard._id);
-        return newSet;
-      });
+        // Update local allCards with the new nextReview time
+        setAllCards(prevCards => prevCards.map(card =>
+          card._id === currentCard._id ? { ...card, lastReview: newLastReview, nextReview: thirtySecondsFromNow } : card
+        ));
+      } else {
+        // If correct, update with calculated review times
+        await axios.put(`http://localhost:5000/cards/${currentCard._id}`, {
+          lastReview: newLastReview,
+          nextReview: newNextReview,
+        });
+
+        // Update local allCards with the new nextReview time
+        setAllCards(prevCards => prevCards.map(card =>
+          card._id === currentCard._id ? { ...card, lastReview: newLastReview, nextReview: newNextReview } : card
+        ));
+
+        setReviewedCards(prev => {
+          const newSet = new Set(prev);
+          newSet.add(currentCard._id);
+          return newSet;
+        });
+      }
 
       setIsFlipped(false);
     } catch (error) {
@@ -134,33 +179,33 @@ const ContinuousTest: React.FC = () => {
     return <div className="text-center mt-8 text-red-500">Error: {error}</div>;
   }
 
-  const totalDue = cards.length + reviewedCards.size;
+  // const totalDue = cards.length + reviewedCards.size;
 
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-white justify-between group/design-root overflow-x-hidden">
       <NavigationBar activePage="study" />
       <div className="flex flex-col items-center justify-center flex-grow p-4">
-        {cards.length === 0 && !showCompletionMessage ? (
+        {queue.length === 0 && !showCompletionMessage ? (
           <p className="text-center mt-8">No hay tarjetas para repasar en este mazo.</p>
         ) : (
           <>
             <h1 className="text-3xl font-bold mb-4">{currentDeckName} - Test Continuo</h1>
-            <p className="text-lg mb-8">Tarjetas restantes: {cards.length}</p>
+            <p className="text-lg mb-8">Tarjetas restantes: {cardsForStudy}</p>
             <div className="w-full max-w-md mb-4">
-              <TestProgressBar currentCardIndex={reviewedCards.size} totalCards={totalDue} />
-              <p className="text-center mt-2">{reviewedCards.size} / {totalDue} tarjetas repasadas</p>
+              <TestProgressBar progress={barProgress} />
+              <p className="text-center mt-2">{Math.max(0, totalCards - cardsForStudy)} / {totalCards} tarjetas repasadas</p>
             </div>
-            {currentCardIndex >= cards.length || !cards[currentCardIndex] ? (
+            {queue.length === 0 || !queue[0] ? (
               <p>Cargando...</p>
             ) : (
               <>
                 <div className="card-container bg-gray-100 p-6 rounded-lg shadow-lg w-full max-w-md min-h-[200px]">
                   <div className={`card ${isFlipped ? 'flipped' : ''}`}>
                     <div className="card-front">
-                      <DynamicFontSize text={cards[currentCardIndex].front} />
+                      <DynamicFontSize text={queue[0].front} />
                     </div>
                     <div className="card-back">
-                      <DynamicFontSize text={cards[currentCardIndex].back} />
+                      <DynamicFontSize text={queue[0].back} />
                     </div>
                   </div>
                 </div>
@@ -181,8 +226,8 @@ const ContinuousTest: React.FC = () => {
                   )}
                 </div>
                 <div className="mt-4 text-center">
-                  <p>Última revisión: {cards[currentCardIndex].lastReview ? new Date(cards[currentCardIndex].lastReview * 1000).toLocaleString() : 'Nunca'}</p>
-                  <p>Próxima revisión: {formatTimeRemaining(cards[currentCardIndex].nextReview)}</p>
+                  <p>Última revisión: {queue[0].lastReview ? new Date(queue[0].lastReview * 1000).toLocaleString() : 'Nunca'}</p>
+                  <p>Próxima revisión: {formatTimeRemaining(queue[0].nextReview)}</p>
                 </div>
               </>
             )}
