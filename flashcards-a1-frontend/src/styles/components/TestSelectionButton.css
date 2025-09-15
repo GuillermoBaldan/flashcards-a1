@@ -1,0 +1,15 @@
+.test-selection-button {
+  background-color: #3b82f6;
+  color: white;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  width: 13rem;
+  text-decoration: none; /* Remove underline */
+}
+
+.test-selection-button:hover {
+  background-color: #2563eb; /* Darker blue on hover */
+}

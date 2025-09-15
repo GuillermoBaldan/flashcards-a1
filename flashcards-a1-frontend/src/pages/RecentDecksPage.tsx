@@ -82,9 +82,9 @@ const RecentDecksPage: React.FC = () => {
     <div className="relative flex size-full min-h-screen flex-col bg-white justify-between group/design-root overflow-x-hidden"
       style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}>
       <NavigationBar activePage="study" />
-      <div className="pt-20" style={{ marginTop: '1rem' }}>
-        <h2 className="text-center text-2xl font-bold mb-4">Recent Decks</h2>
-        <div className="p-4 grid grid-cols-3 gap-x-8 gap-y-4">
+      <div style={{ paddingTop: '5rem' }}>
+        <h2 style={{ textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Recent Decks</h2>
+        <div style={{ padding: '1rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem 2rem' }}>
           {decks.length > 0 ? (
             decks.map(deck => (
               <DeckTile key={deck._id} deck={deck} linkSuffix="study" />

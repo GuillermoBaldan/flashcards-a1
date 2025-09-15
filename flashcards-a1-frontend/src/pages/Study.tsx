@@ -9,6 +9,7 @@ import SearchBar from '../components/searchBar.tsx';
 import DeckTile from '../components/deck-component';
 import RecentDecks from '../components/recentDecks';
 import RecentDecksButton from '../components/recentDecksButton';
+import TestSelectionButton from '../components/testSelectionButton';
 
 interface Card {
   _id: string;
@@ -187,13 +188,8 @@ const Study: React.FC = () => {
       </div>
       <div className="pt-20">
         <div className="flex justify-center mt-4">
-          <RecentDecksButton
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-base"
-            style={{ backgroundColor: '#3b82f6', color: 'white', fontWeight: 'bold', padding: '1rem 2rem', borderRadius: '0.5rem', fontSize: '1.25rem', marginTop: '2rem', width: '13rem', marginRight: '4rem' }}
-          />
-          <Link to="/selectionTest" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-base" style={{ backgroundColor: '#3b82f6', color: 'white', fontWeight: 'bold', padding: '1rem 2rem', borderRadius: '0.5rem', fontSize: '1.25rem', marginTop: '2rem', width: '13rem' }}>
-            Test Selection
-          </Link>
+          <RecentDecksButton />
+          <TestSelectionButton />
         </div>
         <div className="flex flex-row items-center justify-around p-4">
           <h2 className="text-red-500 text-lg font-bold leading-tight tracking-[-0.015em">📚 Cards for Study: <strong style={{ color: 'red' }}>{totalCardsForStudy}</strong></h2>

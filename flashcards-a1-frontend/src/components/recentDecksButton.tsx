@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import '../styles/components/RecentDecksButton.css';
 
 interface RecentDecksButtonProps {
   className?: string;
@@ -8,7 +9,7 @@ interface RecentDecksButtonProps {
 
 const RecentDecksButton: React.FC<RecentDecksButtonProps> = ({ className, style }) => {
   return (
-    <Link to="/study/recent-decks" className={className} style={style}>
+    <Link to="/study/recent-decks" className="recent-decks-button" style={style}>
       Recent Decks
     </Link>
   );
