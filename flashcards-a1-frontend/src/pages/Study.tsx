@@ -201,7 +201,7 @@ const Study: React.FC = () => {
           <RecentDecksButton />
           <TestSelectionButton />
         </div>
-        <div className="search-bar-container">
+        <div className="section-inner search-bar-container">
           <input
             type="text"
             placeholder="Search decks..."

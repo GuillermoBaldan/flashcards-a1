@@ -1,3 +1,8 @@
+/* Altura de la barra de navegación para compensar contenido fijo */
+:root {
+  --nav-height: 64px;
+}
+
 .decks-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -19,6 +24,11 @@
     gap: 2rem;
     padding: 2rem;
   }
+}
+
+/* Asegura que el contenido principal no quede oculto tras la navbar fija */
+.app-content.content-container {
+  padding-top: var(--nav-height);
 }
 
 .decks-header-container {
@@ -56,4 +66,24 @@
 
 .add-deck-button:hover svg {
   fill: white; /* El icono se vuelve blanco al hacer hover */
+}
+
+/* Alinear otros elementos (como la barra de búsqueda) con el padding del grid sin usar display: grid */
+.grid-aligned {
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  /* margin-top eliminado para evitar doble separación; la compensación la hace .content-container */
+}
+
+@media (min-width: 640px) {
+  .grid-aligned {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-aligned {
+    padding: 2rem;
+  }
 }

@@ -139,14 +139,16 @@ const Decks: React.FC = () => {
       <NavigationBar activePage="decks" />
       {/* Contenido principal */}
       <div className="app-content content-container"> {/* Ajuste para que el contenido no quede debajo de la barra de navegación fija */}
-        <SearchBar
-          searchText={searchText}
-          onSearchTextChange={setSearchText}
-          searchType={searchType}
-          onSearchTypeChange={setSearchType}
-          cardSearchField={cardSearchField}
-          onCardSearchFieldChange={setCardSearchField}
-        />
+        <div className="grid-aligned">
+          <SearchBar
+            searchText={searchText}
+            onSearchTextChange={setSearchText}
+            searchType={searchType}
+            onSearchTypeChange={setSearchType}
+            cardSearchField={cardSearchField}
+            onCardSearchFieldChange={setCardSearchField}
+          />
+        </div>
         <div className="section-inner">
           <div className="flex justify-center mt-4">
             {/* <RecentDecksButton />
@@ -170,7 +172,7 @@ const Decks: React.FC = () => {
           </div>
         </div>
         <div className="section-inner decks-grid">
-        {decks.map(deck => (
+          {decks.map(deck => (
             <DeckTile key={deck._id} deck={deck} />
           ))}
         </div>

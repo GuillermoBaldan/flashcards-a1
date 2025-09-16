@@ -18,9 +18,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
   onCardSearchFieldChange,
 }) => {
   const containerStyle: React.CSSProperties = {
-    maxWidth: 'var(--content-max-width)',
-    margin: '0 auto',
-    padding: '12px 16px',
+    width: '100%',
+    padding: '12px 0',
     display: 'flex',
     alignItems: 'center',
     gap: '8px',

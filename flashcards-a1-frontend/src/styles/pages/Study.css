@@ -43,6 +43,23 @@
   margin-top: 20px; /* Add some space between search bar and buttons */
 }
 
+/* Nueva: asegurar que la barra de búsqueda ocupe todo el ancho del mosaico */
+.study-page .search-bar-container {
+  width: 100%;
+  padding-left: 16px; /* igual que .section-inner */
+  padding-right: 16px;
+  box-sizing: border-box;
+}
+
+.study-page .search-bar {
+  width: 100%;
+  display: block;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
 .study-page .count-number {
   display: inline-block;
   font-weight: 900;
