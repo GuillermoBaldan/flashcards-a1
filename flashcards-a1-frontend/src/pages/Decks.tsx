@@ -137,7 +137,7 @@ const Decks: React.FC = () => {
     <div className="relative flex size-full min-h-screen flex-col bg-white justify-between group/design-root overflow-x-hidden" style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}>
       <NavigationBar activePage="decks" />
       {/* Contenido principal */}
-      <div className="app-content"> {/* Ajuste para que el contenido no quede debajo de la barra de navegación fija */}
+      <div className="app-content content-container"> {/* Ajuste para que el contenido no quede debajo de la barra de navegación fija */}
         <SearchBar
           searchText={searchText}
           onSearchTextChange={setSearchText}

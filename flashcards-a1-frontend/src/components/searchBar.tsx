@@ -18,14 +18,14 @@ const SearchBar: React.FC<SearchBarProps> = ({
   onCardSearchFieldChange,
 }) => {
   const containerStyle: React.CSSProperties = {
-    maxWidth: '1200px',
+    maxWidth: 'var(--content-max-width)',
     margin: '0 auto',
     padding: '12px 16px',
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
     boxSizing: 'border-box',
-  };
+  } as React.CSSProperties;
 
   const inputStyle: React.CSSProperties = {
     flex: 1,

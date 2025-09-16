@@ -176,17 +176,15 @@ const Study: React.FC = () => {
       style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}
     >
       <NavigationBar activePage="study" />
-      <div className="app-content">
-        <div className="search-bar-container" style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
-          <SearchBar
-            searchText={searchText}
-            onSearchTextChange={setSearchText}
-            searchType={searchType}
-            onSearchTypeChange={setSearchType}
-            cardSearchField={cardSearchField}
-            onCardSearchFieldChange={setCardSearchField}
-          />
-        </div>
+      <div className="app-content content-container">
+        <SearchBar
+          searchText={searchText}
+          onSearchTextChange={setSearchText}
+          searchType={searchType}
+          onSearchTypeChange={setSearchType}
+          cardSearchField={cardSearchField}
+          onCardSearchFieldChange={setCardSearchField}
+        />
         <div>
           <div className="flex justify-center mt-4">
             <RecentDecksButton />

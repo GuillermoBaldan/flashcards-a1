@@ -3,6 +3,7 @@ html { box-sizing: border-box; }
 *, *::before, *::after { box-sizing: inherit; }
 
 :root {
+  --content-max-width: 1200px;
   font-family: "Comic Neue", cursive; /* Unify font to Comic Neue */
   line-height: 1.5;
   font-weight: 400;
@@ -15,6 +16,13 @@ html { box-sizing: border-box; }
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.content-container {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
 }
 
 a {
