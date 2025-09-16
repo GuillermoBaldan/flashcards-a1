@@ -59,19 +59,19 @@
   border: 1px solid transparent;
   padding: 0.5em 1em;
   font-size: 1em;
-  font-weight: 700;
   font-family: inherit;
   color: white;
   cursor: pointer;
   transition: background-color 0.25s, border-color 0.25s;
+  font-weight: normal !important;
 }
 
 .flip-button {
-  background-color: #3b82f6; /* Blue */
+  background-color: #3b82f6 !important; /* Blue */
 }
 
 .flip-button:hover {
-  background-color: #1d4ed8;
+  background-color: #1d4ed8 !important;
 }
 
 .success-button {
@@ -88,4 +88,31 @@
 
 .failure-button:hover {
   background-color: #b91c1c;
+}
+
+/* Contenedor de botones de respuesta */
+.answer-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0; /* usamos márgenes en los hijos como fallback */
+  margin-top: 1rem;
+  flex-wrap: wrap; /* mejor en pantallas pequeñas */
+  position: relative;
+  z-index: 10;
+}
+
+/* Evitar que los hijos crezcan y controlar el reparto del espacio + separación vía márgenes */
+.answer-buttons > * {
+  flex: 0 0 auto;
+  margin: 0 1rem;
+}
+.answer-buttons > *:first-child { margin-left: 0; }
+.answer-buttons > *:last-child { margin-right: 0; }
+
+/* Mantenerlos en una sola fila en pantallas medianas/grandes */
+@media (min-width: 640px) {
+  .answer-buttons {
+    flex-wrap: nowrap;
+  }
 }

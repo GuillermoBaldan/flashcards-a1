@@ -52,24 +52,25 @@ h1 {
   line-height: 1.1;
 }
 
-button {
+/* Scope global button styles to exclude .custom-button */
+button:not(.custom-button) {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
-  font-weight: 700; /* Make buttons bolder */
+  font-weight: 700; /* Make other buttons bolder */
   font-family: inherit;
   background-color: #646cff; /* A more prominent background color */
   color: white; /* White text for better contrast */
   cursor: pointer;
   transition: border-color 0.25s, background-color 0.25s; /* Add transition for background-color */
 }
-button:hover {
+button:not(.custom-button):hover {
   border-color: #646cff;
   background-color: #535bf2; /* Darker shade on hover */
 }
-button:focus,
-button:focus-visible {
+button:not(.custom-button):focus,
+button:not(.custom-button):focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
@@ -81,7 +82,8 @@ button:focus-visible {
   a:hover {
     color: #747bff;
   }
-  button {
+  /* Keep light mode styling scoped as well */
+  button:not(.custom-button) {
     background-color: #747bff; /* Lighter background for light mode */
     color: #213547; /* Darker text for light mode */
   }

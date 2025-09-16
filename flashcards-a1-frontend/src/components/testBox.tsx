@@ -128,7 +128,13 @@ const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, onCardsDepleted,
       <h2 className="text-3xl font-bold mb-8" style={{fontSize: '2.5rem'}}>Estudiando: {currentDeckName}</h2>
       <p>Cartas restantes: {cards.length - 1} de {cards.length}</p>
       <div className="w-full max-w-md mb-4">
-        <TestProgressBar currentCardIndex={totalCardsInSession - cards.length} totalCards={totalCardsInSession} />
+        <TestProgressBar
+          progress={
+            totalCardsInSession > 0
+              ? Math.round(((totalCardsInSession - cards.length) / totalCardsInSession) * 100)
+              : 0
+          }
+        />
       </div>
       <div ref={cardContentRef} className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md text-center" style={{ minHeight: '200px' }}>
         <div className="text-xl font-semibold mb-4">
@@ -141,27 +147,28 @@ const TestBox: React.FC<TestBoxProps> = ({ cards: initialCards, onCardsDepleted,
         {!isFlipped && (
           <button
             onClick={handleFlip}
-            className="mt-4 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
+            className="custom-button flip-button mt-4"
           >
             Voltear carta
           </button>
         )}
 
         {isFlipped && (
-          <div className="flex justify-around mt-6">
-            <button
-              onClick={() => handleAnswer(true)}
-              className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
-            >
-              Acierto
-            </button>
-            <button
-              onClick={() => handleAnswer(false)}
-              className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none"
-            >
-              Fallo
-            </button>
-          </div>
+          <div className="flex justify-center mt-6 flex-wrap" style={{ gap: '1rem' }}>
+             <button
+               onClick={() => handleAnswer(true)}
+               className="custom-button success-button"
+              style={{ marginRight: '1rem' }}
+             >
+               Acierto
+             </button>
+             <button
+               onClick={() => handleAnswer(false)}
+               className="custom-button failure-button"
+             >
+               Fallo
+             </button>
+           </div>
         )}
       </div>
       <div className="mt-4 text-gray-600">

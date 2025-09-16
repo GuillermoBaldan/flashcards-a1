@@ -1,0 +1,19 @@
+.acierto-button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.5em 1.2em;
+  font-size: 1em;
+  font-family: inherit;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.25s, border-color 0.25s, transform 0.1s;
+  background-color: #22c55e; /* Green */
+}
+
+.acierto-button:hover {
+  background-color: #15803d;
+}
+
+.acierto-button:active {
+  transform: translateY(1px);
+}
