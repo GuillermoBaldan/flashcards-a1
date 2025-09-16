@@ -20,3 +20,40 @@
     padding: 2rem;
   }
 }
+
+.decks-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem; /* Equivalente a py-4 */
+  padding-bottom: 1rem; /* Equivalente a py-4 */
+}
+
+.decks-header-container h2 {
+  margin: 0;
+}
+
+.add-deck-button {
+  background-color: white;
+  border: 1px solid #e0e0e0; /* Un borde sutil para que se vea el botón blanco */
+  border-radius: 0.75rem; /* rounded-xl */
+  height: 3rem; /* h-12 */
+  width: 3rem; /* Para que sea un círculo o cuadrado */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-deck-button svg {
+  fill: #111418; /* Color del icono, similar al texto del h2 */
+}
+
+.add-deck-button:hover {
+  background-color: #2563eb; /* Un azul similar al de la imagen */
+}
+
+.add-deck-button:hover svg {
+  fill: white; /* El icono se vuelve blanco al hacer hover */
+}
