@@ -7,7 +7,7 @@ import QuestionAnswer from './pages/QuestionAnswer'; // Importa el nuevo compone
 import SelectionTest from './pages/selectionTest';
 import TestCards from './pages/TestTypes';
 import CardsOfDeck from './pages/CardsOfDeck';
-import AddCard from './components/addCard'; // Importa el nuevo componente AddCard
+import AddCard from './pages/AddCard'; // Importa la página AddCard (con su CSS)
 import TestTop1 from './pages/TestTop1'; // Importa el nuevo componente TestTop1
 import TestTop5 from './pages/TestTop5'; // Importa el nuevo componente TestTop5
 import TestTop10 from './pages/TestTop10'; // Importa el nuevo componente TestTop10
