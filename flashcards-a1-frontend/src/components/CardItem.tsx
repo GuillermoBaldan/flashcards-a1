@@ -112,14 +112,14 @@ const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted, deckColor, onM
   };
 
   return (
-    <div className="relative rounded-lg shadow-lg p-6 text-center border-solid border-3 border-black rounded-xl" style={{ height: 'auto', borderRadius: '0.5rem', backgroundColor: deckColor }}>
+    <div className="card-item rounded-lg shadow-lg p-6 text-center border-solid border-3 border-black rounded-xl" style={{ position: 'relative', height: 'auto', borderRadius: '0.5rem', backgroundColor: deckColor }}>
       {/* Botón de tres puntitos */}
       <button
-        className="absolute top-2 p-2  focus:outline-none z-20"
-        style={{ right: '0.1rem', width: '3rem', padding: '0', backgroundColor: 'transparent' }}
-        onClick={handleMenuClick}
-        aria-label="Opciones de la tarjeta"
-      >
+        className="menu-button"
+        style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', zIndex: 20, padding: '0.25rem', borderRadius: '0.375rem', color: '#111418' }}
+         onClick={handleMenuClick}
+         aria-label="Opciones de la tarjeta"
+       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -142,8 +142,7 @@ const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted, deckColor, onM
       {showMenu && (
         <div
           ref={menuRef}
-          className="absolute top-10 z-30"
-          style={{ right: '3rem', width: 'auto', margin: '0', backgroundColor: 'white', borderRadius: '0.375rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)' }}
+          style={{ position: 'absolute', top: '2.5rem', right: '0.5rem', zIndex: 30, width: 'auto', margin: '0', backgroundColor: 'white', borderRadius: '0.375rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)' }}
         >
           <ul className="py-1" style={{ margin: '0', padding: '0', listStyle: 'none'}}>
             <li>

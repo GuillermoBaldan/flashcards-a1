@@ -95,6 +95,10 @@
   right: 0.5rem;
 }
 
+/* En los tiles del deck, el botón de menú debe verse con el color del deck (sin fondo blanco) */
+.deck-menu-container .menu-button {
+  background-color: transparent;
+}
 .menu-button-icon {
   width: 1.5rem;
   height: 1.5rem;
