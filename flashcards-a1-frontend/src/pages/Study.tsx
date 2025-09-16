@@ -206,8 +206,8 @@ const Study: React.FC = () => {
         />
         <div>
           <div className="flex justify-center mt-4">
-            {/* <RecentDecksButton />
-            <TestSelectionButton /> */}
+            <RecentDecksButton />
+            <TestSelectionButton />
           </div>
           <div className="section-inner flex flex-row items-center justify-around py-4">
             <h2 className="text-red-500 text-lg font-bold leading-tight tracking-[-0.015em">📚 Cards for Study: <strong style={{ color: 'red' }}>{totalCardsForStudy}</strong></h2>
