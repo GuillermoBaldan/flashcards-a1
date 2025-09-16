@@ -42,6 +42,25 @@ interface Deck {
   totalCards?: number;
 }
 
+const calculateStudyMetrics = (cards: Card[], currentTime: number) => {
+  let cardsForStudy = 0;
+  let cardsReviewed = 0;
+  let minNextReviewTime = Infinity;
+
+  cards.forEach(card => {
+    if (card.nextReview && card.nextReview <= currentTime) {
+      cardsForStudy++;
+      if (card.nextReview < minNextReviewTime) {
+        minNextReviewTime = card.nextReview;
+      }
+    } else if (card.lastReview) {
+      cardsReviewed++;
+    }
+  });
+
+  return { cardsForStudy, cardsReviewed, reviewTime: minNextReviewTime === Infinity ? currentTime : minNextReviewTime };
+};
+
 const Study: React.FC = () => {
   const [decks, setDecks] = useState<Deck[]>([]);
   const [allDecks, setAllDecks] = useState<Deck[]>([]);
