@@ -2,11 +2,16 @@
   --nav-height: 64px;
 }
 
-.app-content {
+/* Study page scoped styles */
+.study-page {
+  /* page-level scope wrapper; no styles needed here by default */
+}
+
+.study-page .app-content {
   padding-top: var(--nav-height);
 }
 
-.study-decks-grid {
+.study-page .study-decks-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid */
   gap: 1rem; /* Espacio entre las tarjetas */
@@ -14,18 +19,18 @@
 }
 
 @media (min-width: 640px) {
-  .study-decks-grid {
+  .study-page .study-decks-grid {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
 }
 
 @media (min-width: 1024px) {
-  .study-decks-grid {
+  .study-page .study-decks-grid {
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   }
 }
 
-.section-inner {
+.study-page .section-inner {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -34,6 +39,29 @@
   padding-bottom: 1rem;
 }
 
-.button-container {
+.study-page .button-container {
   margin-top: 20px; /* Add some space between search bar and buttons */
+}
+
+.study-page .count-number {
+  display: inline-block;
+  font-weight: 900;
+  font-size: 1.15em; /* un poco más grande que el texto circundante */
+  line-height: 1;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px; /* pill */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  font-variant-numeric: tabular-nums; /* alinear dígitos */
+}
+
+.study-page .count-number--red {
+  color: #b91c1c; /* rojo más oscuro para mejor contraste */
+  background: rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.35);
+}
+
+.study-page .count-number--green {
+  color: #166534; /* verde más oscuro para mejor contraste */
+  background: rgba(22, 163, 74, 0.12);
+  border: 1px solid rgba(22, 163, 74, 0.35);
 }

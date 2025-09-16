@@ -189,13 +189,13 @@ const Study: React.FC = () => {
   );
 
   return (
-    <div>
+    <div className="study-page">
       <NavigationBar activePage="study" />
       <div className="app-content">
         {/* <h2 className="text-2xl font-bold text-center my-4">Study Decks</h2> */}
         <div className="section-inner">
-          <h2 className="text-xl font-semibold">🃏 Cards to Review: {totalCardsForStudy}</h2>
-          <h2 className="text-xl font-semibold">✅ Cards Reviewed: {totalCardsReviewed}</h2>
+          <h2 className="text-xl font-semibold">🃏 Cards to Review: <span className="count-number count-number--red">{totalCardsForStudy}</span></h2>
+          <h2 className="text-xl font-semibold">✅ Cards Reviewed: <span className="count-number count-number--green">{totalCardsReviewed}</span></h2>
         </div>
         <div className="flex justify-center button-container">
           <RecentDecksButton />
