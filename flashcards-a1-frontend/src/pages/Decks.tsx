@@ -4,6 +4,9 @@ import axios from 'axios';
 import NavigationBar from '../components/NavigationBar';
 import DeckTile from '../components/deck-component';
 import SearchBar from '../components/searchBar.tsx';
+import RecentDecksButton from '../components/recentDecksButton';
+import TestSelectionButton from '../components/testSelectionButton';
+import '../../src/styles/pages/Decks.css';
 
 
 interface Card {
@@ -146,23 +149,29 @@ const Decks: React.FC = () => {
           cardSearchField={cardSearchField}
           onCardSearchFieldChange={setCardSearchField}
         />
-        <div className="flex items-center bg-white p-4 pb-2 justify-between">
-          <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Decks: {decks.length}</h2>
-          <div className="flex w-12 items-center justify-end">
-            {/* Botón de añadir mazo (se puede reubicar si es necesario) */}
-            <button
-              className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 bg-transparent text-[#111418] gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0"
-              onClick={() => { navigate('/add-deck'); }}
-            >
-              <div className="text-[#111418]" data-icon="Plus" data-size="24px" data-weight="regular">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
-                  <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path>
-                </svg>
-              </div>
-            </button>
+        <div className="section-inner">
+          <div className="flex justify-center mt-4">
+            <RecentDecksButton />
+            <TestSelectionButton />
+          </div>
+          <div className="flex flex-row items-center justify-around py-4">
+            <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Decks: {decks.length}</h2>
+            <div className="flex w-12 items-center justify-end">
+              {/* Botón de añadir mazo (se puede reubicar si es necesario) */}
+              <button
+                className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 bg-transparent text-[#111418] gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0"
+                onClick={() => { navigate('/add-deck'); }}
+              >
+                <div className="text-[#111418]" data-icon="Plus" data-size="24px" data-weight="regular">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path>
+                  </svg>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
-        <div className="p-4 grid grid-cols-3 gap-x-8 gap-y-4">
+        <div className="section-inner decks-grid">
         {decks.map(deck => (
             <DeckTile key={deck._id} deck={deck} />
           ))}

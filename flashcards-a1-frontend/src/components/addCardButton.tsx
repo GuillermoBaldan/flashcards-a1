@@ -15,8 +15,8 @@ const AddCardButton: React.FC<AddCardButtonProps> = ({ deckId }) => {
   return (
     <button
       onClick={handleClick}
-      className="fixed top-4 z-10 px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 focus:outline-none"
-      style={{ top: '6em', right: '0.5rem', margin: '1rem' }}
+      className="menu-button"
+      style={{ position: 'fixed', top: '6em', right: '0.5rem', margin: '1rem', zIndex: 10, padding: '0.5rem 1rem', borderRadius: '0.5rem' }}
     >
       Añadir Tarjeta
     </button>

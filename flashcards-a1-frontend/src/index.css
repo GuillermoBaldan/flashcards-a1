@@ -1,8 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import './styles/global.css';
 
-@import './global.css';
-@import './components/NavigationBar.css';
-@import './components/CardsInDeck.css';
-@import './components/DeckTile.css';
+/* Import only valid global styles; component styles are imported within their components */

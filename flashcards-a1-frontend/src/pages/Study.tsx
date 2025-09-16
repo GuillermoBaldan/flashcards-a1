@@ -10,6 +10,7 @@ import DeckTile from '../components/deck-component';
 import RecentDecks from '../components/recentDecks';
 import RecentDecksButton from '../components/recentDecksButton';
 import TestSelectionButton from '../components/testSelectionButton';
+import '../../src/styles/pages/Study.css';
 
 interface Card {
   _id: string;
@@ -163,7 +164,7 @@ const Study: React.FC = () => {
   
 
   const renderContent = () => (
-    <div className="p-4 grid grid-cols-3 gap-x-8 gap-y-4">
+    <div className="study-decks-grid">
       {decks.map(deck => (
         <DeckTile key={deck._id} deck={deck} linkSuffix="study" />
       ))}
@@ -190,7 +191,7 @@ const Study: React.FC = () => {
             <RecentDecksButton />
             <TestSelectionButton />
           </div>
-          <div className="flex flex-row items-center justify-around p-4">
+          <div className="section-inner flex flex-row items-center justify-around py-4">
             <h2 className="text-red-500 text-lg font-bold leading-tight tracking-[-0.015em">📚 Cards for Study: <strong style={{ color: 'red' }}>{totalCardsForStudy}</strong></h2>
             <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em">✅ Cards Reviewed: <strong style={{ color: 'green' }}>{totalCardsReviewed}</strong></h2>
           </div>

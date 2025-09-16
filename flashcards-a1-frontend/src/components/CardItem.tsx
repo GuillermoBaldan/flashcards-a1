@@ -142,13 +142,13 @@ const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted, deckColor, onM
       {showMenu && (
         <div
           ref={menuRef}
-          className="absolute top-10 bg-white rounded-md shadow-lg z-30"
-          style={{ right: '3rem', width: 'auto', margin: '0' }}
+          className="absolute top-10 z-30"
+          style={{ right: '3rem', width: 'auto', margin: '0', backgroundColor: 'white', borderRadius: '0.375rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)' }}
         >
           <ul className="py-1" style={{ margin: '0', padding: '0', listStyle: 'none'}}>
             <li>
               <button
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                className="block w-full text-left px-4 py-2 text-sm dropdown-item"
                 onClick={handleMoveToAnotherDeck}
               >
                 Mover a otro mazo
@@ -156,7 +156,7 @@ const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted, deckColor, onM
             </li>
             <li>
               <button
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                className="block w-full text-left px-4 py-2 text-sm dropdown-item"
                 onClick={handleDelete}
               >
                 Borrar
@@ -164,7 +164,7 @@ const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted, deckColor, onM
             </li>
             <li>
               <button
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                className="block w-full text-left px-4 py-2 text-sm dropdown-item"
                 onClick={handleEdit}
               >
                 Editar
@@ -172,7 +172,7 @@ const CardItem: React.FC<CardItemProps> = ({ card, onCardDeleted, deckColor, onM
             </li>
             <li>
               <button
-                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                className="block w-full text-left px-4 py-2 text-sm dropdown-item"
                 onClick={handleResetTimes}
               >
                 Resetear tiempos
