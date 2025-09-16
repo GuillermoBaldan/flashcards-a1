@@ -1,0 +1,53 @@
+/* Edit Card page specific styles (mirroring AddCard behavior) */
+
+.edit-card-editors {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem; /* gap-4 */
+  justify-content: center;
+  align-items: stretch; /* ensure both columns have equal height */
+  width: 100%;
+  margin-top: 1rem; /* mt-4 */
+  box-sizing: border-box;
+}
+
+.edit-card-editor {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+  min-width: 300px;
+}
+
+.edit-card-textarea {
+  width: 100%;
+  min-width: 0;
+  height: 33vh; /* same height for both textareas */
+  resize: none; /* prevent manual resize to keep alignment */
+  overflow: auto; /* show scroll if content overflows */
+  border: none;
+  border-radius: 12px; /* rounded-xl */
+  color: #111418;
+  outline: none; /* focus:outline-0 */
+  background: #f0f2f4;
+  padding: 1rem; /* p-4 */
+  font-size: 1rem; /* text-base */
+  font-weight: 400; /* font-normal */
+  line-height: 1.5; /* leading-normal */
+  box-sizing: border-box;
+}
+
+.edit-card-textarea::placeholder {
+  color: #637488; /* placeholder color */
+}
+
+/* Responsive: stack editors on small screens */
+@media (max-width: 900px) {
+  .edit-card-editors {
+    flex-direction: column;
+    align-items: center;
+  }
+  .edit-card-editor {
+    width: 100%;
+    max-width: 800px;
+  }
+}

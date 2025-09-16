@@ -5,6 +5,7 @@ import { htmlToMarkdown } from '../utils/htmlToMarkdown';
 import { markdownToHtml } from '../utils/markdownTohtml';
 import ReactMarkdown from 'react-markdown';
 import RemarkGfm from 'remark-gfm';
+import '../styles/pages/EditCard.css';
 
 interface Card {
   _id: string;
@@ -101,19 +102,19 @@ const EditCard: React.FC = () => {
 
         {/* Sección de contenido: Edición o Previsualización */}
         {isEditing ? (
-          <div className="flex flex-row gap-4 justify-center items-start w-full mt-4">
-            <label className="flex flex-col w-1/3">
+          <div className="flex flex-row gap-4 justify-center items-start w-full mt-4 edit-card-editors">
+            <label className="flex flex-col w-1/3 edit-card-editor">
               <p className="text-[#111418] text-base font-medium leading-normal pb-2">Front</p>
               <textarea
-                className="form-input flex w-full min-w-0 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border-none bg-[#f0f2f4] focus:border-none min-h-[240px] placeholder:text-[#637488] p-4 text-base font-normal leading-normal"
+                className="form-input flex w-full min-w-0 overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border-none bg-[#f0f2f4] focus:border-none placeholder:text-[#637488] p-4 text-base font-normal leading-normal edit-card-textarea"
                 value={front}
                 onChange={(e) => setFront(e.target.value)}
               ></textarea>
             </label>
-            <label className="flex flex-col w-1/3">
+            <label className="flex flex-col w-1/3 edit-card-editor">
               <p className="text-[#111418] text-base font-medium leading-normal pb-2">Back</p>
               <textarea
-                className="form-input flex w-full min-w-0 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border-none bg-[#f0f2f4] focus:border-none min-h-[240px] placeholder:text-[#637488] p-4 text-base font-normal leading-normal"
+                className="form-input flex w-full min-w-0 overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border-none bg-[#f0f2f4] focus:border-none placeholder:text-[#637488] p-4 text-base font-normal leading-normal edit-card-textarea"
                 value={back}
                 onChange={(e) => setBack(e.target.value)}
               ></textarea>
