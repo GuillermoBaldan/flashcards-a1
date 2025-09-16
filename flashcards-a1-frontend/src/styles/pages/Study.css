@@ -1,3 +1,11 @@
+:root {
+  --nav-height: 64px;
+}
+
+.app-content {
+  padding-top: var(--nav-height);
+}
+
 .study-decks-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid */
@@ -15,4 +23,17 @@
   .study-decks-grid {
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   }
+}
+
+.section-inner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.button-container {
+  margin-top: 20px; /* Add some space between search bar and buttons */
 }

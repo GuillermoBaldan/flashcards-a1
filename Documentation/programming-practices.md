@@ -1,0 +1,4 @@
+ - No usar tailwind
+ - 1º Definicir varios opciones para llevar a cabo la tarea encargada por el usuario
+ - 2º Escribir las opciones para que las vea el usuario
+ - 3º (En el caso de trabajar sobre frontend). Elegir la opción de implementación que combine mayor simpleza y robusted, para adimitir cambios en el layout, que sea responsive y mobile first.

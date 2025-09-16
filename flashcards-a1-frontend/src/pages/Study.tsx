@@ -4,7 +4,6 @@ import axios from 'axios';
 import NavigationBar from '../components/NavigationBar';
 import { formatTimeRemaining } from '../utils/formatTimeRemaining';
 import getContrastColor from '../utils/dynamicContrastColor';
-import SearchBar from '../components/searchBar.tsx';
 import DeckTile from '../components/deck-component';
 import RecentDecks from '../components/recentDecks';
 import RecentDecksButton from '../components/recentDecksButton';
@@ -190,30 +189,31 @@ const Study: React.FC = () => {
   );
 
   return (
-    <div
-      className="relative flex size-full min-h-screen flex-col bg-white justify-between group/design-root overflow-x-hidden"
-      style={{ fontFamily: 'Manrope, "Noto Sans", sans-serif' }}
-    >
+    <div>
       <NavigationBar activePage="study" />
-      <div className="app-content content-container">
-        <SearchBar
-          searchText={searchText}
-          onSearchTextChange={setSearchText}
-          searchType={searchType}
-          onSearchTypeChange={setSearchType}
-          cardSearchField={cardSearchField}
-          onCardSearchFieldChange={setCardSearchField}
-        />
-        <div>
-          <div className="flex justify-center mt-4">
-            <RecentDecksButton />
-            <TestSelectionButton />
-          </div>
-          <div className="section-inner flex flex-row items-center justify-around py-4">
-            <h2 className="text-red-500 text-lg font-bold leading-tight tracking-[-0.015em">📚 Cards for Study: <strong style={{ color: 'red' }}>{totalCardsForStudy}</strong></h2>
-            <h2 className="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em">✅ Cards Reviewed: <strong style={{ color: 'green' }}>{totalCardsReviewed}</strong></h2>
-          </div>
-          {renderContent()}
+      <div className="app-content">
+        {/* <h2 className="text-2xl font-bold text-center my-4">Study Decks</h2> */}
+        <div className="section-inner">
+          <h2 className="text-xl font-semibold">🃏 Cards to Review: {totalCardsForStudy}</h2>
+          <h2 className="text-xl font-semibold">✅ Cards Reviewed: {totalCardsReviewed}</h2>
+        </div>
+        <div className="flex justify-center button-container">
+          <RecentDecksButton />
+          <TestSelectionButton />
+        </div>
+        <div className="search-bar-container">
+          <input
+            type="text"
+            placeholder="Search decks..."
+            className="search-bar"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+        </div>
+        <div className="study-decks-grid">
+          {decks.map((deck) => (
+            <DeckTile key={deck._id} deck={deck} linkSuffix="study" />
+          ))}
         </div>
       </div>
     </div>
