@@ -1,57 +1,67 @@
+/* Contenedor de la tarjeta */
 .card-container {
   perspective: 1000px;
   width: 83%; /* Set width to 83% as per user request */
-  max-width: none; /* Remove any max-width restriction */
-  height: 300px; /* Maintain existing height or adjust if needed */
+  max-width: 980px; /* límite máximo desktop */
+  height: auto; /* Allow content to define height */
   margin: 0 auto; /* Center the card */
 }
 
 .card {
   position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.6s;
   width: 100%;
-  min-height: 200px;
+  min-height: clamp(180px, 28vh, 420px);
 }
 
+/* área interna para el texto: limita altura máxima y evita scroll interno */
+.card-content {
+  width: 100%;
+  max-height: min(52vh, 520px); /* no crece más allá de esto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* evitar que el contenido sobresalga hacia la barra */
+}
 .card.flipped {
-  transform: rotateY(180deg);
+  transform: none; /* Disable 3D flip effect since we render a single side */
 }
 
 .card-front,
 .card-back {
-  position: absolute;
+  position: static; /* Use normal flow so content pushes buttons down */
   width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  top: 0;
-  left: 0;
+  height: auto;
+  min-height: 160px; /* altura mínima para permitir ajuste por alto */
   display: flex;
   justify-content: center;
   align-items: center;
   /* Ensure the back of the card is not interactive when not visible */
-  pointer-events: none;
+  pointer-events: auto;
   box-sizing: border-box; /* Include padding in the element's total width and height */
   padding: 1.5rem; /* Add padding to prevent text from touching edges */
+  overflow: hidden; /* impedir solape con elementos superiores */
 }
 
 .card-front {
-  z-index: 2;
-  pointer-events: auto; /* Front is interactive by default */
+  /* normal flow */
 }
 
 .card.flipped .card-front {
-  pointer-events: none; /* Front is not interactive when flipped */
+  /* no special behavior needed */
 }
 
 .card-back {
-  transform: rotateY(180deg);
-  z-index: 1;
+  transform: none;
 }
 
 .card.flipped .card-back {
-  pointer-events: auto; /* Back is interactive when flipped */
-  z-index: 3;
+  /* normal flow */
+}
+
+/* contenedor de la barra de progreso para que quede por encima en el apilado */
+.progress-container {
+  position: relative;
+  z-index: 20;
 }
 
 .custom-button {
@@ -96,7 +106,7 @@
   justify-content: center;
   align-items: center;
   gap: 0; /* usamos márgenes en los hijos como fallback */
-  margin-top: 1rem;
+  margin-top: 20px; /* igual que .study-page .button-container */
   flex-wrap: wrap; /* mejor en pantallas pequeñas */
   position: relative;
   z-index: 10;

@@ -211,7 +211,7 @@ const ContinuousTest: React.FC = () => {
           <>
             <h1 className="text-3xl font-bold mb-4">{currentDeckName} - Test Continuo</h1>
             <p className="text-lg mb-8">Tarjetas restantes: {cardsForStudy}</p>
-            <div className="w-full max-w-md mb-4">
+            <div className="w-full max-w-md mb-4 progress-container">
               <TestProgressBar progress={barProgress} />
               <p className="text-center mt-2">{Math.max(0, totalCards - cardsForStudy)} / {totalCards} tarjetas repasadas</p>
             </div>
@@ -221,12 +221,19 @@ const ContinuousTest: React.FC = () => {
               <>
                 <div className="card-container bg-gray-100 p-6 rounded-lg shadow-lg w-[83%] min-h-[200px]">
                   <div className={`card ${isFlipped ? 'flipped' : ''}`}>
-                    <div className="card-front">
-                      <DynamicFontSize text={currentCard.front} />
-                    </div>
-                    <div className="card-back">
-                      <DynamicFontSize text={currentCard.back} />
-                    </div>
+                    {!isFlipped ? (
+                      <div className="card-front">
+                        <div className="card-content">
+                          <DynamicFontSize text={currentCard.front} />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="card-back">
+                        <div className="card-content">
+                          <DynamicFontSize text={currentCard.back} />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="answer-buttons">
